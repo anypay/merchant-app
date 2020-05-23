@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Anypay Cash Register',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -26,13 +26,13 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: NewInvoicePage(title: 'Anypay Cash Register'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class NewInvoicePage extends StatefulWidget {
+  NewInvoicePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -46,34 +46,57 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _NewInvoicePageState createState() => _NewInvoicePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _NewInvoicePageState extends State<NewInvoicePage> {
+  double _price = 0;
+  String _visiblePrice = 0.toStringAsFixed(2);
 
-  void _incrementCounter() {
+  void _backspace() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _price = (_price * 10).truncateToDouble()/100;
+      _visiblePrice = _price.toStringAsFixed(2);
     });
   }
+
+  void _updatePrice(i) {
+    setState(() {
+      _price = (_price * 1000 + i).truncateToDouble()/100;
+      _visiblePrice = _price.toStringAsFixed(2);
+    });
+  }
+
+  List<Widget> _generateNumberButtons() {
+    return List<Widget>.generate(10, (i)  {
+        int num = (i + 1) % 10;
+      return GestureDetector(
+        onTap: () {
+          _updatePrice(num);
+        },
+        child: Container(
+          child: Text(
+            num.toString(),
+            style: Theme.of(context).textTheme.headline4,
+          ),
+          margin: EdgeInsets.all(8),
+        )
+      );
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
+    // by the _updatePrice method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
+        // Here we take the value from the NewInvoicePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
@@ -98,19 +121,29 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              '\$$_visiblePrice',
+              style: Theme.of(context).textTheme.headline3,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Row(
+              children: <Widget>[
+                ..._generateNumberButtons(),
+                GestureDetector(
+                  onTap: () {
+                    _backspace();
+                  },
+                  child: Text(
+                    "⌫",
+                    style: Theme.of(context).textTheme.headline4,
+                  )
+                )
+              ],
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        tooltip: 'Settings',
+        child: Icon(Icons.settings),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
