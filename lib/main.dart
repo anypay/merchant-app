@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'routes/new_invoice.dart';
+import 'router.dart';
 
-void main() => runApp(MaterialApp(
-  initialRoute: '/',
-  routes: {
-    '/': (context) => NewInvoice(),
-  },
-));
 
+void main() {
+  FluroRouter.setupRouter();
+
+  runApp(MaterialApp(
+    onGenerateRoute: FluroRouter.router.generator,
+    title: 'Anypay Cash Register',
+    initialRoute: '/login',
+  ));
+}

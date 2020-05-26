@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 
 class NewInvoice extends StatelessWidget {
-  static const String route = '/';
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // if (true)
-    return MaterialApp(
-      title: 'Anypay Cash Register',
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: NewInvoicePage(title: 'Anypay Cash Register'),
-    );
+    return NewInvoicePage(title: 'Anypay Cash Register');
   }
+}
 
 
 class NewInvoicePage extends StatefulWidget {
@@ -63,8 +55,6 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       ),
     );
   }
-
-
 
   void _backspace() {
     setState(() {
