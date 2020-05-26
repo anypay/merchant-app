@@ -11,37 +11,43 @@ import 'routes/login.dart';
 class FluroRouter {
   static Router router = Router();
 
-  static Handler _login = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) => Login());
-  static Handler _quickStart = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) => QuickStart());
-  static Handler _newInvoice = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) => NewInvoice());
-  static Handler _createAccount = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) => CreateAccount());
-  static Handler _forgotPassword = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) => ForgotPassword());
-  static Handler _newAddress = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) => NewAddress(params['code'][0]));
+
+  static newHandler(klass, [key]) {
+    return Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      if (key == null) return klass();
+      else return klass(params[key][0]);
+    });
+  }
 
   static void setupRouter() {
     router.define(
       '/login',
-      handler: _login,
+      handler: newHandler(() => Login()),
       transitionType: TransitionType.inFromRight,
     );
     router.define(
       '/quick-start',
-      handler: _quickStart,
+      handler: newHandler(() => QuickStart()),
       transitionType: TransitionType.inFromRight,
     );
     router.define(
       '/registration',
-      handler: _createAccount,
+      handler: newHandler(() => CreateAccount()),
       transitionType: TransitionType.inFromRight,
     );
     router.define(
       '/password-reset',
-      handler: _forgotPassword,
+      handler: newHandler(() => ForgotPassword()),
       transitionType: TransitionType.inFromRight,
     );
     router.define(
       '/new-address/:code',
-      handler: _newAddress,
+      handler: newHandler((code) => NewAddress(code), 'code'),
+      transitionType: TransitionType.inFromRight,
+    );
+    router.define(
+      '/new-invoice',
+      handler: newHandler(() => NewInvoice()),
       transitionType: TransitionType.inFromRight,
     );
   }
