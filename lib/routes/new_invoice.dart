@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:app/preloader.dart';
 
 class NewInvoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Preloader.downloadImages(context);
+
     return NewInvoicePage(title: 'Anypay Cash Register');
   }
 }
@@ -24,34 +27,45 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '\$$_visiblePrice',
-              style: Theme.of(context).textTheme.headline3,
-            ),
-            Row(
-              children: <Widget>[
-                ..._generateNumberButtons(),
-                GestureDetector(
-                  onTap: _backspace,
-                  child: Text("⌫",
-                    style: Theme.of(context).textTheme.headline4,
+        child: Container(
+          width: 300,
+          margin: EdgeInsets.only(top: 40.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '\$$_visiblePrice',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: <Widget>[
+                  ..._generateNumberButtons(),
+                  Container(
+                    width: 100,
+                    margin: EdgeInsets.only(top: 8, bottom: 8),
+                    child: GestureDetector(
+                      onTap: _backspace,
+                      child: Text("⌫",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                        )
+                      )
+                    )
                   )
-                )
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/navigation'),
         child: Icon(Icons.settings),
-        tooltip: 'Settings',
+        tooltip: 'navigation',
       ),
     );
   }
@@ -71,16 +85,21 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   }
 
   List<Widget> _generateNumberButtons() {
-    return List<Widget>.generate(10, (i)  {
-        int num = (i + 1) % 10;
+    return List<Widget>.generate(11, (i)  {
+      int num = (i + 1) % 11;
       return GestureDetector(
         onTap: () { _updatePrice(num); },
         child: Container(
+          width: 100,
           child: Text(
-            num.toString(),
-            style: Theme.of(context).textTheme.headline4,
+            num == 10 ? '' : num.toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+            )
           ),
-          margin: EdgeInsets.all(8),
+          margin: EdgeInsets.only(top: 8, bottom: 8),
         )
       );
     });

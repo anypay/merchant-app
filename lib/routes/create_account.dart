@@ -1,4 +1,6 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:app/client.dart';
 
 class CreateAccount extends StatelessWidget {
   static const String route = '/registration';
@@ -19,13 +21,36 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final _formKey = GlobalKey<FormState>();
+  var _errorMessage = '';
+
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final confirmPassword = TextEditingController();
+
+  void _loadNextPage() {
+    Client.authenticate(email, password).then((response) {
+      if (response['success'])
+        Navigator.pushNamedAndRemoveUntil(context, '/register-business', (Route<dynamic> route) => false);
+      else
+        setState(() { _errorMessage = response['message']; });
+    });
+  }
+
+  void _submitForm() {
+    setState(() { _errorMessage = ""; });
+    if (_formKey.currentState.validate()) {
+      Client.createAccount(email.text, password.text).then((response) {
+        if (response['success'])
+          _loadNextPage();
+        else
+          setState(() { _errorMessage = response['message']; });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -37,39 +62,65 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Text(_errorMessage,
+                      style: TextStyle(color: Colors.red),
+                    ),
                     TextFormField(
+                      controller: email,
                       decoration: InputDecoration(
                         labelText: 'Email'
                       ),
                       validator: (value) {
-                        if (value.isEmpty) return 'please enter some text';
+                        if (value.isEmpty) return 'Please enter some text';
+                        else if (!EmailValidator.validate(value.trim()))
+                          return "That doesn't look like an email address";
                       },
                     ),
                     TextFormField(
+                      obscureText: true,
+                      controller: password,
                       decoration: InputDecoration(
                         labelText: 'Password'
                       ),
                       validator: (value) {
-                        if (value.isEmpty) return 'please enter some text';
+                        if (value.isEmpty) return 'Please enter some text';
+                        else if (confirmPassword.text != value)
+                          return 'Passwords do not match.';
                       },
                     ),
                     TextFormField(
+                      obscureText: true,
+                      controller: confirmPassword,
                       decoration: InputDecoration(
                         labelText: 'Re-type Password'
                       ),
                       validator: (value) {
-                        if (value.isEmpty) return 'please enter some text';
+                        if (value.isEmpty) return 'Please enter some text';
                       },
                     ),
                   ],
                 ),
               ),
             ),
-            RaisedButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              child: Text('Back to Login'),
+            Container(
+              child: RaisedButton(
+                onPressed: () {
+                  _submitForm();
+                },
+                child: Text('Register'),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20.0),
+              child: RaisedButton(
+                onPressed: () {
+                  if (Navigator.canPop(context))
+                    Navigator.pop(context, true);
+                  else
+                    Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+                },
+                child: Text('BACK'),
+              ),
             ),
           ],
         ),

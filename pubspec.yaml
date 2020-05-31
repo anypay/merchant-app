@@ -22,6 +22,9 @@ environment:
 
 dependencies:
   fluro: '^1.6.3'
+  http: '^0.12.1'
+  flutter_secure_storage: '^3.3.3'
+  email_validator: '^1.0.0'
   flutter:
     sdk: flutter
 

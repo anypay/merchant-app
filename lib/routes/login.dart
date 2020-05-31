@@ -1,4 +1,6 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:app/client.dart';
 
 class Login extends StatelessWidget {
   static const String route = '/login';
@@ -19,81 +21,147 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  var _errorMessage = '';
+
+  final email = TextEditingController();
+  final password = TextEditingController();
+
+  void _submitForm() {
+    setState(() { _errorMessage = ""; });
+    if (_formKey.currentState.validate()) {
+      Client.authenticate(email.text, password.text).then((response) {
+        if (response['success'])
+          Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
+        else {
+          setState(() {
+            _errorMessage = response['message'];
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    email.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(
-              width: 300,
-              image: AssetImage('images/anypay-full-logo.png')
-            ),
-
-            Container(
-              width: 300,
-              margin: const EdgeInsets.only(top: 40.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Email'
-                      ),
-                      validator: (value) {
-                        if (value.isEmpty) return 'please enter some text';
-                      },
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Password'
-                      ),
-                      validator: (value) {
-                        if (value.isEmpty) return 'please enter some text';
-                      },
-                    ),
-                  ],
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus)
+          currentFocus.unfocus();
+      },
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Image(
+                  width: 300,
+                  image: AssetImage('images/anypay-full-logo.png')
                 ),
-              )
+
+                Container(
+                  width: 300,
+                  margin: EdgeInsets.only(top: 40.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(_errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        TextFormField(
+                          controller: email,
+                          decoration: InputDecoration(
+                            labelText: 'Email'
+                          ),
+                          validator: (value) {
+                            if (value.isEmpty) return 'Please enter some text';
+                            else if (!EmailValidator.validate(value.trim()))
+                              return "That doesn't look like an email address";
+                          },
+                        ),
+                        TextFormField(
+                          obscureText: true,
+                          controller: password,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                          ),
+                          validator: (value) {
+                            if (value.isEmpty) return 'Please enter some text';
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20.0),
+                  child: Column(
+                    children: <Widget>[
+                      RaisedButton(
+                        onPressed: () {
+                          _submitForm();
+                        },
+                        child: Text('Login'),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 40.0),
+                        child: GestureDetector(
+                          child: Text('Sign Up', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                            fontSize: 18,
+                          )),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/registration');
+                          }
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            GestureDetector(
+                              child: Text('Quick Start', style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                                fontSize: 18,
+                              )),
+                              onTap: () {
+                                Navigator.pushNamed(context, '/quick-start');
+                              }
+                            ),
+                            Text(" | "),
+                            GestureDetector(
+                              child: Text('Forgot Password?', style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                                fontSize: 18,
+                              )),
+                              onTap: () {
+                                Navigator.pushNamed(context, '/password-reset');
+                              }
+                            ),
+                          ]
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                children: <Widget>[
-                  RaisedButton(
-                    onPressed: () {
-                    },
-                    child: Text('Login'),
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/registration');
-                    },
-                    child: Text('Sign Up'),
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/quick-start');
-                    },
-                    child: Text('Quick Start'),
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/password-reset');
-                    },
-                    child: Text('Forgot Password?'),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

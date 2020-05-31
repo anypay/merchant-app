@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
-import 'routes/forgot_password.dart';
-import 'routes/create_account.dart';
-import 'routes/new_address.dart';
-import 'routes/new_invoice.dart';
-import 'routes/quick_start.dart';
-import 'routes/login.dart';
+import 'package:app/routes/edit_business_info.dart';
+import 'package:app/routes/forgot_password.dart';
+import 'package:app/routes/create_account.dart';
+import 'package:app/routes/set_currency.dart';
+import 'package:app/routes/new_address.dart';
+import 'package:app/routes/new_invoice.dart';
+import 'package:app/routes/navigation.dart';
+import 'package:app/routes/addresses.dart';
+import 'package:app/routes/settings.dart';
+import 'package:app/routes/payments.dart';
+import 'package:app/routes/login.dart';
+
+import 'package:app/authentication.dart';
 
 class FluroRouter {
   static Router router = Router();
 
-
   static newHandler(klass, [key]) {
     return Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      Authentication.appContext = context;
       if (key == null) return klass();
       else return klass(params[key][0]);
     });
@@ -23,32 +30,67 @@ class FluroRouter {
     router.define(
       '/login',
       handler: newHandler(() => Login()),
-      transitionType: TransitionType.inFromRight,
-    );
-    router.define(
-      '/quick-start',
-      handler: newHandler(() => QuickStart()),
-      transitionType: TransitionType.inFromRight,
+      transitionType: TransitionType.fadeIn,
     );
     router.define(
       '/registration',
       handler: newHandler(() => CreateAccount()),
-      transitionType: TransitionType.inFromRight,
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/register-business',
+      handler: newHandler(() => EditBusinessInfo()),
+      transitionType: TransitionType.inFromBottom,
     );
     router.define(
       '/password-reset',
       handler: newHandler(() => ForgotPassword()),
-      transitionType: TransitionType.inFromRight,
-    );
-    router.define(
-      '/new-address/:code',
-      handler: newHandler((code) => NewAddress(code), 'code'),
-      transitionType: TransitionType.inFromRight,
+      transitionType: TransitionType.inFromBottom,
     );
     router.define(
       '/new-invoice',
       handler: newHandler(() => NewInvoice()),
-      transitionType: TransitionType.inFromRight,
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/navigation',
+      handler: newHandler(() => Navigation()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/settings',
+      handler: newHandler(() => Settings()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/settings/business-info',
+      handler: newHandler(() => EditBusinessInfo()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/settings/currency',
+      handler: newHandler(() => SetCurrency()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/settings/addresses',
+      handler: newHandler(() => Addresses()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/payments',
+      handler: newHandler(() => Payments()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/quick-start',
+      handler: newHandler(() => Addresses()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/new-address/:code',
+      handler: newHandler((code) => NewAddress(code), 'code'),
+      transitionType: TransitionType.inFromBottom,
     );
   }
 }
