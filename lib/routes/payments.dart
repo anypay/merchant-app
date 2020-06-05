@@ -1,3 +1,4 @@
+import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/client.dart';
 
@@ -18,6 +19,23 @@ class PaymentsPage extends StatefulWidget {
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
+  var page = 0;
+  var payments = [];
+
+  void getNextPage() {
+  }
+
+  @override
+  void initState() {
+    // displayInfo();
+    super.initState();
+    // Authentication.getPayments().then((payments) {
+    //   allPayments = [
+    //     ...allPayments,
+    //     ...payments,
+    //   ];
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {

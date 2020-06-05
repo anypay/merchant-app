@@ -28,6 +28,7 @@ class InvoicePage extends StatefulWidget {
 
 class _InvoicePageState extends State<InvoicePage> {
   _InvoicePageState(this.id);
+  bool choosingCurrency = false;
   bool usePayProtocol = true;
   String currency;
   String uri;
@@ -49,7 +50,9 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _chooseCurrency() {
-    currency = null;
+    print("CHOOSE CURRENCY!");
+    choosingCurrency = true;
+    _rebuild();
   }
 
   void _copyUri() {
@@ -63,7 +66,7 @@ class _InvoicePageState extends State<InvoicePage> {
   void _rebuild() {
     setState(() {
       currency = currency ?? invoice.currency;
-      uri = invoice.uriFor(currency, protocol: usePayProtocol ?? 'pay');
+      uri = invoice.uriFor(currency, protocol: usePayProtocol ? 'pay' : null);
     });
   }
 
@@ -79,40 +82,44 @@ class _InvoicePageState extends State<InvoicePage> {
   Widget _ChooseCurrencyMenu() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: invoice.paymentOptions.map((option) {
-        return Container(
-          width: 235,
-          margin: EdgeInsets.only(bottom: 20.0),
-          child: Row(
-            children: [
-              Container(
-                width: 40,
-                margin: EdgeInsets.only(
-                  top: 10.0,
-                  left: 10.0,
-                  right: 10.0,
-                  bottom: 10.0,
-                ),
-                child: Image.network(
-                  Coins.all[currency]['icon']
-                ),
-              ),
-              Text(
-                currency,
-                style: TextStyle(
-                  fontSize: 40,
-                ),
+      children: <Widget>[
+        ...(invoice.paymentOptions.map((option) {
+          return Container(
+            width: 235,
+            margin: EdgeInsets.only(bottom: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                currency = option['currency'];
+                choosingCurrency = false;
+                _rebuild();
+              },
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    margin: EdgeInsets.all(10.0),
+                    child: Image.network(
+                      Coins.all[option['currency']]['icon']
+                    ),
+                  ),
+                  Text(
+                    option['currency'],
+                    style: TextStyle(
+                      fontSize: 40,
+                    ),
+                  )
+                ]
               )
-            ]
-          )
-        );
-      })
+            )
+          );
+        }))
+      ]
     );
   }
 
   Widget _InvoiceComponent() {
-    if (currency == null)
-
+    if (choosingCurrency)
+      return _ChooseCurrencyMenu();
     else if (invoice.isExpired())
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -144,28 +151,35 @@ class _InvoicePageState extends State<InvoicePage> {
           width: 235,
           margin: EdgeInsets.only(bottom: 20.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Row(
+                children: [
+                  Container(
+                    width: 40,
+                    margin: EdgeInsets.all(10.0),
+                    child: Image.network(
+                      Coins.all[currency]['icon']
+                    ),
+                  ),
+                  Text(
+                    currency,
+                    style: TextStyle(
+                      fontSize: 40,
+                    ),
+                  ),
+                ]
+              ),
               Container(
                 width: 40,
-                margin: EdgeInsets.only(
-                  top: 10.0,
-                  left: 10.0,
-                  right: 10.0,
-                  bottom: 10.0,
-                ),
-                child: Image.network(
-                  Coins.all[currency]['icon']
-                ),
-              ),
-              Text(
-                currency,
-                style: TextStyle(
-                  fontSize: 40,
-                ),
-              )
-              GestureDetector(
-                onTap: _chooseCurrency,
-                child: Icon(Icons.cached),
+                margin: EdgeInsets.all(10.0),
+                child: GestureDetector(
+                  onTap: _chooseCurrency,
+                  child: Icon(
+                      Icons.cached,
+                      size: 40,
+                  ),
+                )
               )
             ]
           ),
@@ -240,7 +254,10 @@ class _InvoicePageState extends State<InvoicePage> {
               margin: EdgeInsets.only(top: 20.0),
               child: RaisedButton(
                 onPressed: () {
-                  if (Navigator.canPop(context))
+                  if (choosingCurrency) {
+                    choosingCurrency = false;
+                    _rebuild();
+                  } else if (Navigator.canPop(context))
                     Navigator.pop(context, true);
                   else
                     Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);

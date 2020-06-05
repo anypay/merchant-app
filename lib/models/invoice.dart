@@ -39,6 +39,8 @@ class Invoice {
   }
 
   String uriFor(currency, {protocol}) {
+    if (protocol == 'pay') return payUri(currency);
+
     var option = paymentOptions.firstWhere((option) {
       return option['currency'] == currency;
     });
