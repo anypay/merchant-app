@@ -1,9 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
 class CreateAccount extends StatelessWidget {
-  static const String route = '/registration';
   @override
   Widget build(BuildContext context) {
     return CreateAccountPage(title: 'Create Account');
@@ -28,7 +28,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final confirmPassword = TextEditingController();
 
   void _loadNextPage() {
-    Client.authenticate(email, password).then((response) {
+    Client.authenticate(email.text, password.text).then((response) {
       if (response['success'])
         Navigator.pushNamedAndRemoveUntil(context, '/register-business', (Route<dynamic> route) => false);
       else
@@ -55,6 +55,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Image(
+              width: 300,
+              image: AssetImage('assets/images/anypay-full-logo.png')
+            ),
             Container(
               width: 300,
               child: Form(
@@ -103,24 +107,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               ),
             ),
             Container(
-              child: RaisedButton(
-                onPressed: () {
-                  _submitForm();
-                },
-                child: Text('Register'),
+              margin: EdgeInsets.only(top: 20.0),
+              child: GestureDetector(
+                child: Text('Register', style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                  fontSize: 18,
+                )),
+                onTap: _submitForm,
               ),
             ),
-            Container(
+            CircleBackButton(
               margin: EdgeInsets.only(top: 20.0),
-              child: RaisedButton(
-                onPressed: () {
-                  if (Navigator.canPop(context))
-                    Navigator.pop(context, true);
-                  else
-                    Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
-                },
-                child: Text('BACK'),
-              ),
+              backPath: '/login',
             ),
           ],
         ),

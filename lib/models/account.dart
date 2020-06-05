@@ -1,3 +1,4 @@
+import 'package:app/currencies.dart';
 import 'dart:convert';
 
 class Account {
@@ -6,6 +7,8 @@ class Account {
   String businessName;
   String denomination;
   String email;
+
+  List coins = [];
 
   Account({
     this.ambassadorEmail,
@@ -17,6 +20,10 @@ class Account {
 
   String toJson() {
     return jsonEncode(toMap());
+  }
+
+  String currencySymbol() {
+    return (Currencies.all[denomination ?? 'USD'])['symbol'];
   }
 
   Map<dynamic, dynamic> toMap() {

@@ -1,25 +1,33 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
 class EditBusinessInfo extends StatelessWidget {
+  EditBusinessInfo({this.allowBack = true});
+
+  final bool allowBack;
+
   @override
   Widget build(BuildContext context) {
-    return EditBusinessInfoPage(title: 'Edit Business Info');
+    return EditBusinessInfoPage(allowBack: allowBack);
   }
 }
 
 class EditBusinessInfoPage extends StatefulWidget {
-  EditBusinessInfoPage({Key key, this.title}) : super(key: key);
+  EditBusinessInfoPage({Key key, this.allowBack}) : super(key: key);
 
-  final String title;
+  final bool allowBack;
 
   @override
-  _EditBusinessInfoPageState createState() => _EditBusinessInfoPageState();
+  _EditBusinessInfoPageState createState() => _EditBusinessInfoPageState(allowBack);
 }
 
 class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
+  _EditBusinessInfoPageState(this.allowBack);
+  final allowBack;
+
   final _formKey = GlobalKey<FormState>();
   final address = TextEditingController();
   final email = TextEditingController();
@@ -28,7 +36,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
   var _errorMessage = '';
   var _successMessage = '';
 
-  void displayInfo() {
+  void _rebuild() {
     setState(() {
       address.text = Authentication.currentAccount.physicalAddress;
       email.text = Authentication.currentAccount.ambassadorEmail;
@@ -38,10 +46,10 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
 
   @override
   void initState() {
-    displayInfo();
+    _rebuild();
     super.initState();
     Authentication.getAccount().then((account) {
-      displayInfo();
+      _rebuild();
     });
   }
 
@@ -57,7 +65,9 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
         'business_name': name.text,
       }).then((response) {
         setState(() {
-          if (response['success'])
+          if (!allowBack)
+            Navigator.pushNamedAndRemoveUntil(context, '/settings/addresses', (Route<dynamic> route) => false);
+          else if (response['success'])
             _successMessage = "Saved!";
           else _errorMessage = response['message'];
         });
@@ -68,8 +78,8 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
+      body: Center(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -108,22 +118,21 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
                             return "That doesn't look like an email address";
                         },
                       ),
-                      RaisedButton(
-                        onPressed: _submitForm,
-                        child: Text('SAVE'),
-                      ),
                       Container(
-                        margin: EdgeInsets.only(top: 20.0),
-                        child: RaisedButton(
-                          onPressed: () {
-                            if (Navigator.canPop(context))
-                              Navigator.pop(context, true);
-                            else
-                              Navigator.pushNamedAndRemoveUntil(context, '/settings', (Route<dynamic> route) => false);
-                          },
-                          child: Text('BACK'),
+                        margin: EdgeInsets.only(top: 40.0),
+                        child: GestureDetector(
+                          child: Text(allowBack ? 'SAVE' : 'Finish', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                            fontSize: 18,
+                          )),
+                          onTap: _submitForm,
                         ),
                       ),
+                      !allowBack ? null : CircleBackButton(
+                        margin: EdgeInsets.only(top: 20.0),
+                        backPath: '/settings',
+                      )
                     ],
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app/back_button.dart';
 import '../coins.dart';
 
 class Addresses extends StatelessWidget {
@@ -28,17 +29,9 @@ class _AddressesPageState extends State<AddressesPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ..._newAddressLinks(),
-            Container(
+            CircleBackButton(
               margin: EdgeInsets.only(top: 20.0),
-              child: RaisedButton(
-                onPressed: () {
-                  if (Navigator.canPop(context))
-                    Navigator.pop(context, true);
-                  else
-                    Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
-                },
-                child: Text('BACK'),
-              ),
+              backPath: '/settings',
             ),
           ]
         ),
@@ -50,6 +43,7 @@ class _AddressesPageState extends State<AddressesPage> {
     return Coins.all.keys.map((code) =>
       Container(
         height: 100,
+        width: 400,
         child: GestureDetector(
           onTap: () => {
             Navigator.pushNamed(context, '/new-address/$code')

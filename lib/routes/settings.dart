@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:app/authentication.dart';
+import 'package:flutter/material.dart';
+import 'package:app/back_button.dart';
 import 'package:app/currencies.dart';
 
 class Settings extends StatelessWidget {
@@ -23,10 +24,8 @@ class _SettingsPageState extends State<SettingsPage> {
   var denomination;
   var symbol;
 
-  void displayInfo() {
+  void _rebuild() {
     setState(() {
-      print("DISPLAY INFO");
-      print(Authentication.currentAccount.denomination);
       denomination = Authentication.currentAccount.denomination ?? 'USD';
       symbol = Currencies.all[denomination]['symbol'];
     });
@@ -34,10 +33,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    displayInfo();
+    _rebuild();
     super.initState();
     Authentication.getAccount().then((account) {
-      displayInfo();
+      _rebuild();
     });
   }
 
@@ -75,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       onTap: () {
                         Navigator.pushNamed(context, '/settings/currency').then((value) {
                           _successMessage = 'Saved!';
-                          displayInfo();
+                          _rebuild();
                         });
                       }
                     ),
@@ -118,22 +117,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       onTap: () {
                         Navigator.pushNamed(context, '/settings/addresses').then((value) {
                           _successMessage = '';
-                          displayInfo();
+                          _rebuild();
                         });
                       }
                     ),
                   ),
-                  Container(
+                  CircleBackButton(
                     margin: EdgeInsets.only(top: 20.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        if (Navigator.canPop(context))
-                          Navigator.pop(context, true);
-                        else
-                          Navigator.pushNamedAndRemoveUntil(context, '/navigation', (Route<dynamic> route) => false);
-                      },
-                      child: Text('BACK'),
-                    ),
+                    backPath: '/navigation',
                   ),
                 ],
               )

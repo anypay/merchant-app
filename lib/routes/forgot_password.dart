@@ -1,9 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
 class ForgotPassword extends StatelessWidget {
-  static const String route = '/password-reset';
   @override
   Widget build(BuildContext context) {
     return ForgotPasswordPage(title: 'Forgot Password');
@@ -76,18 +76,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             return "That doesn't look like an email address";
                         },
                       ),
-                      RaisedButton(
-                        onPressed: _submitForm,
-                        child: Text('SEND EMAIL'),
+                      Container(
+                        margin: EdgeInsets.only(top: 20.0),
+                        child: GestureDetector(
+                          child: Text('SEND EMAIL', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                            fontSize: 18,
+                          )),
+                          onTap: _submitForm,
+                        ),
                       ),
-                      RaisedButton(
-                        onPressed: () {
-                          if (Navigator.canPop(context))
-                            Navigator.pop(context, true);
-                          else
-                            Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
-                        },
-                        child: Text('BACK'),
+                      CircleBackButton(
+                        margin: EdgeInsets.only(top: 20.0),
+                        backPath: '/login',
                       ),
                     ],
                   ),

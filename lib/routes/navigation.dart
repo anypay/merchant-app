@@ -1,5 +1,6 @@
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
 class Navigation extends StatelessWidget {
@@ -79,17 +80,9 @@ class _NavigationPageState extends State<NavigationPage> {
                       }
                     ),
                   ),
-                  Container(
+                  CircleBackButton(
                     margin: EdgeInsets.all(20.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        if (Navigator.canPop(context))
-                          Navigator.pop(context, true);
-                        else
-                          Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
-                      },
-                      child: Text('BACK'),
-                    ),
+                    backPath: '/new-invoice',
                   ),
                 ],
               )

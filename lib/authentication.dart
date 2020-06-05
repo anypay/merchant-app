@@ -13,8 +13,7 @@ class Authentication {
 
   static void setEmail(email) {
     if (currentAccount.email != email)
-      currentAccount = Account(email: email);
-    saveToDisk();
+      setCurrentAccount(Account(email: email));
   }
 
   static Future<Account> getAccount() async {
@@ -36,14 +35,24 @@ class Authentication {
     return await Client.updateAccount(currentAccount.toMap());
   }
 
-  static void setToken(identifier) {
-    token = identifier;
-    saveToDisk();
+  static Future<void> setToken(uid) {
+    token = uid;
+    return saveTokenToDisk();
   }
 
   static void setCurrentAccount(newAccount) {
     currentAccount = newAccount;
-    saveToDisk();
+    saveAccountToDisk();
+    fetchCoins();
+  }
+
+  static void fetchCoins() async {
+    if (isAuthenticated())
+      Client.fetchCoins().then((response) {
+        var coins = response['body']['coins'];
+        coins.removeWhere((coin) => !coin['enabled']);
+        currentAccount.coins = coins;
+      });
   }
 
   static bool isAuthenticated() {
@@ -52,11 +61,16 @@ class Authentication {
 
   static Future<bool> checkForAuth() async {
     return await readFromDisk('token').then((accessToken) {
-      readFromDisk('currentAccount').then((json) {
-        currentAccount = Account.fromJson(json);
-      });
       token = accessToken;
-      return token != null;
+
+      if (accessToken == null)
+        return readFromDisk('currentAccount').then((json) {
+          if (json != null)
+            setCurrentAccount(Account.fromJson(json));
+
+          return true;
+        });
+      else return false;
     });
   }
 
@@ -64,14 +78,20 @@ class Authentication {
     return Storage.read(key);
   }
 
-  static void saveToDisk() async {
-    await Storage.write('token', token);
+  static Future<void> saveTokenToDisk() async {
+    if (token == null)
+      return await Storage.delete('token');
+    else
+      return await Storage.write('token', token);
+  }
+
+  static void saveAccountToDisk() async {
     await Storage.write('currentAccount', currentAccount.toJson());
   }
 
   static void logout() {
-    currentAccount = Account();
     setToken(null);
+    setCurrentAccount(Account());
     Navigator.pushNamedAndRemoveUntil(appContext, '/login', (Route<dynamic> route) => false);
   }
 }

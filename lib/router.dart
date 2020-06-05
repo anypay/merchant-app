@@ -11,7 +11,9 @@ import 'package:app/routes/navigation.dart';
 import 'package:app/routes/addresses.dart';
 import 'package:app/routes/settings.dart';
 import 'package:app/routes/payments.dart';
+import 'package:app/routes/invoice.dart';
 import 'package:app/routes/login.dart';
+import 'package:app/preloader.dart';
 
 import 'package:app/authentication.dart';
 
@@ -21,6 +23,8 @@ class FluroRouter {
   static newHandler(klass, [key]) {
     return Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
       Authentication.appContext = context;
+      Preloader.downloadImages(context);
+
       if (key == null) return klass();
       else return klass(params[key][0]);
     });
@@ -39,12 +43,17 @@ class FluroRouter {
     );
     router.define(
       '/register-business',
-      handler: newHandler(() => EditBusinessInfo()),
+      handler: newHandler(() => EditBusinessInfo(allowBack: false)),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
       '/password-reset',
       handler: newHandler(() => ForgotPassword()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/invoices/:id',
+      handler: newHandler((id) => Invoice(id), 'id'),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(

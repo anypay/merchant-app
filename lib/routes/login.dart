@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:app/client.dart';
 
 class Login extends StatelessWidget {
-  static const String route = '/login';
   @override
   Widget build(BuildContext context) {
     return LoginPage(title: 'Login');
@@ -65,9 +64,8 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Image(
                   width: 300,
-                  image: AssetImage('images/anypay-full-logo.png')
+                  image: AssetImage('assets/images/anypay-full-logo.png')
                 ),
-
                 Container(
                   width: 300,
                   margin: EdgeInsets.only(top: 40.0),
@@ -108,11 +106,15 @@ class _LoginPageState extends State<LoginPage> {
                   margin: EdgeInsets.only(top: 20.0),
                   child: Column(
                     children: <Widget>[
-                      RaisedButton(
-                        onPressed: () {
-                          _submitForm();
-                        },
-                        child: Text('Login'),
+                      Container(
+                        child: GestureDetector(
+                          child: Text('Login', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                            fontSize: 18,
+                          )),
+                          onTap: _submitForm,
+                        ),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 40.0),

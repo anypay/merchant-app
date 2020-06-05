@@ -5,7 +5,11 @@ class Storage {
     return await window.localStorage[key];
   }
 
-  static void write(String key, String value) async {
+  static Future<void> write(String key, String value) async {
     window.localStorage[key] = value;
+  }
+
+  static Future<void> delete(String key) async {
+    window.localStorage.removeItem(key);
   }
 }

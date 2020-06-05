@@ -1,6 +1,8 @@
+import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:app/back_button.dart';
 import 'package:app/client.dart';
-import '../coins.dart';
+import 'package:app/coins.dart';
 
 class NewAddress extends StatelessWidget {
   NewAddress(this.code);
@@ -38,27 +40,29 @@ class _NewAddressPageState extends State<NewAddressPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              children: [
-                Container(
-                  width: 75,
-                  margin: EdgeInsets.only(
-                    top: 10.0,
-                    left: 50.0,
-                    right: 50.0,
-                    bottom: 10.0,
+            Container(
+              width: 300,
+              child: Row(
+                children: [
+                  Container(
+                    width: 75,
+                    margin: EdgeInsets.only(
+                      top: 10.0,
+                      right: 50.0,
+                      bottom: 10.0,
+                    ),
+                    child: Image.network(
+                      Coins.all[code]['icon']
+                    ),
                   ),
-                  child: Image.network(
-                    Coins.all[code]['icon']
-                  ),
-                ),
-                Text(
-                  Coins.all[code]['name'],
-                  style: TextStyle(
-                    fontSize: 22,
-                  ),
-                )
-              ]
+                  Text(
+                    Coins.all[code]['name'],
+                    style: TextStyle(
+                      fontSize: 22,
+                    ),
+                  )
+                ]
+              ),
             ),
             Container(
               width: 300,
@@ -79,9 +83,12 @@ class _NewAddressPageState extends State<NewAddressPage> {
                     onChanged: (text) {
                       Client.setAddress(code, text).then((response) {
                         setState(() {
-                          if (response['success'])
+                          if (response['success']) {
                             _successMessage = 'Saved!';
-                          else _errorMessage = response['message'];
+                            _errorMessage = "";
+                            Authentication.fetchCoins();
+                            Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
+                          } else _errorMessage = response['message'];
                         });
                       });
                     }
@@ -89,17 +96,9 @@ class _NewAddressPageState extends State<NewAddressPage> {
                 ],
               ),
             ),
-            Container(
+            CircleBackButton(
               margin: EdgeInsets.only(top: 20.0),
-              child: RaisedButton(
-                onPressed: () {
-                  if (Navigator.canPop(context))
-                    Navigator.pop(context, true);
-                  else
-                    Navigator.pushNamedAndRemoveUntil(context, '/settings', (Route<dynamic> route) => false);
-                },
-                child: Text('BACK'),
-              ),
+              backPath: '/settings',
             ),
           ],
         ),
