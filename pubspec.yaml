@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_spinkit: "^4.1.2"
   qr_flutter: '^3.2.0'
   basic_utils: '^2.5.3'
   fluro: '^1.6.3'

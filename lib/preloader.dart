@@ -12,7 +12,7 @@ class Preloader {
 
     Coins.all.forEach((code, details) {
       var configuration = createLocalImageConfiguration(context);
-      new NetworkImage(details['icon'])..resolve(configuration);
+      NetworkImage(details['icon'])..resolve(configuration);
     });
   }
 

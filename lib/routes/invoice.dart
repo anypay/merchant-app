@@ -1,5 +1,6 @@
 import 'package:url_launcher/url_launcher.dart'
   if (dart.library.html) 'package:app/web_launcher.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,13 +51,12 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _chooseCurrency() {
-    print("CHOOSE CURRENCY!");
     choosingCurrency = true;
     _rebuild();
   }
 
   void _copyUri() {
-    Clipboard.setData(new ClipboardData(text: uri));
+    Clipboard.setData(ClipboardData(text: uri));
   }
 
   void _openUri() async {
@@ -118,7 +118,9 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   Widget _InvoiceComponent() {
-    if (choosingCurrency)
+    if (invoice == null)
+      return SpinKitCircle(color: qrColor);
+    else if (choosingCurrency)
       return _ChooseCurrencyMenu();
     else if (invoice.isExpired())
       return Column(
@@ -249,7 +251,7 @@ class _InvoicePageState extends State<InvoicePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            invoice == null ? Container() : _InvoiceComponent(),
+            _InvoiceComponent(),
             Container(
               margin: EdgeInsets.only(top: 20.0),
               child: RaisedButton(

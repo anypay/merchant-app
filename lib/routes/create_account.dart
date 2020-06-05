@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:app/client.dart';
 
 class CreateAccount extends StatelessWidget {
-  static const String route = '/registration';
   @override
   Widget build(BuildContext context) {
     return CreateAccountPage(title: 'Create Account');

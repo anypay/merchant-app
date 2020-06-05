@@ -93,7 +93,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/navigation'),
-        child: Icon(Icons.refresh),
+        child: Icon(Icons.menu),
         tooltip: 'navigation',
       ),
     );

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:app/client.dart';
 
 class ForgotPassword extends StatelessWidget {
-  static const String route = '/password-reset';
   @override
   Widget build(BuildContext context) {
     return ForgotPasswordPage(title: 'Forgot Password');
