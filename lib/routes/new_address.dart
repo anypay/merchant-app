@@ -1,3 +1,4 @@
+import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/client.dart';
 import '../coins.dart';
@@ -38,27 +39,29 @@ class _NewAddressPageState extends State<NewAddressPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              children: [
-                Container(
-                  width: 75,
-                  margin: EdgeInsets.only(
-                    top: 10.0,
-                    left: 50.0,
-                    right: 50.0,
-                    bottom: 10.0,
+            Container(
+              width: 300,
+              child: Row(
+                children: [
+                  Container(
+                    width: 75,
+                    margin: EdgeInsets.only(
+                      top: 10.0,
+                      right: 50.0,
+                      bottom: 10.0,
+                    ),
+                    child: Image.network(
+                      Coins.all[code]['icon']
+                    ),
                   ),
-                  child: Image.network(
-                    Coins.all[code]['icon']
-                  ),
-                ),
-                Text(
-                  Coins.all[code]['name'],
-                  style: TextStyle(
-                    fontSize: 22,
-                  ),
-                )
-              ]
+                  Text(
+                    Coins.all[code]['name'],
+                    style: TextStyle(
+                      fontSize: 22,
+                    ),
+                  )
+                ]
+              ),
             ),
             Container(
               width: 300,
@@ -79,9 +82,12 @@ class _NewAddressPageState extends State<NewAddressPage> {
                     onChanged: (text) {
                       Client.setAddress(code, text).then((response) {
                         setState(() {
-                          if (response['success'])
+                          if (response['success']) {
                             _successMessage = 'Saved!';
-                          else _errorMessage = response['message'];
+                            _errorMessage = "";
+                            Authentication.fetchCoins();
+                            Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
+                          } else _errorMessage = response['message'];
                         });
                       });
                     }

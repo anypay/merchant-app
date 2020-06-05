@@ -35,7 +35,7 @@ class _AddressesPageState extends State<AddressesPage> {
                   if (Navigator.canPop(context))
                     Navigator.pop(context, true);
                   else
-                    Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+                    Navigator.pushNamedAndRemoveUntil(context, '/settings', (Route<dynamic> route) => false);
                 },
                 child: Text('BACK'),
               ),
@@ -50,6 +50,7 @@ class _AddressesPageState extends State<AddressesPage> {
     return Coins.all.keys.map((code) =>
       Container(
         height: 100,
+        width: 400,
         child: GestureDetector(
           onTap: () => {
             Navigator.pushNamed(context, '/new-address/$code')

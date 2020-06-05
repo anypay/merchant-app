@@ -1,14 +1,39 @@
-import 'package:http/http.dart' as http;
+import 'package:basic_utils/basic_utils.dart';
 import 'package:app/authentication.dart';
 import 'package:app/models/account.dart';
+import 'package:app/models/invoice.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Client {
   static final host = 'https://api.anypayinc.com';
 
+  static String humanize(str) {
+    if (str != null && str.length > 0)
+      return StringUtils.capitalize(str);
+  }
+     
   static String buildAuthHeader() {
     String token = Authentication.token;
     return 'Basic ' + base64.encode(utf8.encode('$token:'));
+  }
+
+  static Future<Map<dynamic, dynamic>> fetchCoins() async {
+    http.Response response = await http.get(
+      '$host/coins',
+      headers: <String, String>{
+        'authorization': buildAuthHeader(),
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 401)
+      Authentication.logout();
+    else
+      return {
+        'success': response.statusCode == 200,
+        'body': (json.decode(response.body) as Map),
+      };
   }
 
   static Future<Map<dynamic, dynamic>> getAccount() async {
@@ -45,7 +70,7 @@ class Client {
 
     return {
       'success': response.statusCode == 200,
-      'message': body['message'],
+      'message': humanize(body['message']),
     };
   }
 
@@ -63,7 +88,7 @@ class Client {
 
     return {
       'success': response.statusCode == 200,
-      'message': body['message'],
+      'message': humanize(body['message']),
     };
   }
 
@@ -82,7 +107,7 @@ class Client {
 
     return {
       'success': response.statusCode == 200,
-      'message': body['message'],
+      'message': humanize(body['message']),
     };
   }
 
@@ -108,7 +133,7 @@ class Client {
 
     return {
       'success': response.statusCode == 200,
-      'message': body['message'],
+      'message': humanize(body['message']),
     };
   }
 
@@ -128,7 +153,50 @@ class Client {
 
     return {
       'success': response.statusCode == 200,
-      'message': body['message'],
+      'message': humanize(body['message']),
+    };
+  }
+
+  static Future<Map<dynamic, dynamic>> getInvoice(id) async {
+    http.Response response = await http.get(
+      '$host/invoices/$id',
+      headers: <String, String>{
+        'authorization': buildAuthHeader(),
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    final body = (json.decode(response.body) as Map<String, dynamic>);
+    final success = response.statusCode == 200;
+
+    if (response.statusCode == 401)
+      Authentication.logout();
+    else return {
+        'success': success,
+        'message': humanize(body['message']),
+        'invoice': success ? Invoice.fromMap(body) : null,
+      };
+  }
+
+  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency) async {
+    http.Response response = await http.post(
+      '$host/invoices',
+      body: jsonEncode({
+        'amount': amount,
+        'currency': currency,
+      }),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'authorization': buildAuthHeader(),
+      },
+    );
+
+    final body = (json.decode(response.body) as Map);
+
+    return {
+      'success': response.statusCode == 200,
+      'message': humanize(body['message']),
+      'invoiceId': body['uid'],
     };
   }
 }

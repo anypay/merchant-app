@@ -21,8 +21,11 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  qr_flutter: '^3.2.0'
+  basic_utils: '^2.5.3'
   fluro: '^1.6.3'
   http: '^0.12.1'
+  url_launcher: '^5.4.10'
   flutter_secure_storage: '^3.3.3'
   email_validator: '^1.0.0'
   flutter:

@@ -7,6 +7,8 @@ class Account {
   String denomination;
   String email;
 
+  List coins = [];
+
   Account({
     this.ambassadorEmail,
     this.physicalAddress,

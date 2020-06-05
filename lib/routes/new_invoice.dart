@@ -1,11 +1,10 @@
+import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
-import 'package:app/preloader.dart';
+import 'package:app/client.dart';
 
 class NewInvoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Preloader.downloadImages(context);
-
     return NewInvoicePage(title: 'Anypay Cash Register');
   }
 }
@@ -22,7 +21,20 @@ class NewInvoicePage extends StatefulWidget {
 
 class _NewInvoicePageState extends State<NewInvoicePage> {
   String _visiblePrice = 0.toStringAsFixed(2);
+  var _errorMessage = '';
   double _price = 0;
+
+  void _submit() {
+    setState(() { _errorMessage = ""; });
+    if (Authentication.currentAccount.coins.length > 0)
+      Client.createInvoice(_price, 'BSV').then((response) {
+        if (response['success']) {
+          var invoiceId = response['invoiceId'];
+          Navigator.pushNamed(context, '/invoices/$invoiceId');
+        } else setState(() { _errorMessage = response['message']; });
+      });
+    else Navigator.pushNamed(context, '/settings/addresses');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +46,13 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                '\$$_visiblePrice',
-                style: Theme.of(context).textTheme.headline3,
+              Text(_errorMessage, style: TextStyle(color: Colors.red)),
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Text(
+                  _price > 0 ? '\$$_visiblePrice' : "",
+                  style: Theme.of(context).textTheme.headline3,
+                ),
               ),
               Wrap(
                 alignment: WrapAlignment.center,
@@ -44,18 +60,31 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
                   ..._generateNumberButtons(),
                   Container(
                     width: 100,
-                    margin: EdgeInsets.only(top: 8, bottom: 8),
+                    margin: EdgeInsets.only(top: 20, bottom: 20),
                     child: GestureDetector(
                       onTap: _backspace,
-                      child: Text("⌫",
+                      child: Text(_price > 0 ? "⌫" : "",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 50,
+                          fontSize: 31,
                           fontWeight: FontWeight.bold,
                         )
                       )
                     )
-                  )
+                  ),
+                  GestureDetector(
+                    onTap: _submit,
+                    child: Visibility(
+                      visible: _price > 0,
+                      maintainAnimation: true,
+                      maintainState: true,
+                      maintainSize: true,
+                      child: Image(
+                        image: AssetImage('images/next_arrow.png'),
+                        width: 60,
+                      )
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -64,7 +93,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/navigation'),
-        child: Icon(Icons.settings),
+        child: Icon(Icons.refresh),
         tooltip: 'navigation',
       ),
     );
@@ -90,16 +119,17 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       return GestureDetector(
         onTap: () { _updatePrice(num); },
         child: Container(
+          margin: EdgeInsets.only(top: 20, bottom: 25),
           width: 100,
           child: Text(
             num == 10 ? '' : num.toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 50,
+              fontSize: 31,
+              color: Color(0xFF404040),
               fontWeight: FontWeight.bold,
             )
           ),
-          margin: EdgeInsets.only(top: 8, bottom: 8),
         )
       );
     });

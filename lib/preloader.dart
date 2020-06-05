@@ -4,7 +4,12 @@ import 'package:app/coins.dart';
 
 class Preloader {
 
-  static void downloadImages(context) {
+  static bool downloadStarted = false;
+
+  static void downloadImages(context) async {
+    if (downloadStarted) return;
+    downloadStarted = true;
+
     Coins.all.forEach((code, details) {
       var configuration = createLocalImageConfiguration(context);
       new NetworkImage(details['icon'])..resolve(configuration);
