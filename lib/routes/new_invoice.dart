@@ -2,7 +2,10 @@ import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
+import "package:intl/intl.dart";
 import 'dart:math';
+import 'dart:io';
+
 
 class NewInvoice extends StatelessWidget {
   @override
@@ -22,21 +25,26 @@ class NewInvoicePage extends StatefulWidget {
 }
 
 class _NewInvoicePageState extends State<NewInvoicePage> {
-  String _visiblePrice = 0.toStringAsFixed(2);
+  String _visiblePrice = '';
+  int _decimalPlaces = 2;
   var _errorMessage = '';
   String _currencySymbol;
-  double _price = 0;
+  num _price = 0;
 
   void _rebuild() {
     setState(() {
-      _currencySymbol = Authentication.currentAccount.currencySymbol();
+      var data = Authentication.currentAccount.currencyData();
+      _currencySymbol = data['symbol'] ?? '';
+      _decimalPlaces = data['decimal_places'] ?? 2;
+      _setVisiblePrice();
     });
   }
 
   void _submit() {
     setState(() { _errorMessage = ""; });
-    if (Authentication.currentAccount.coins.length > 0)
-      Client.createInvoice(_price, 'BSV').then((response) {
+    var account = Authentication.currentAccount;
+    if (account.coins.length > 0)
+      Client.createInvoice(_price, account.preferredCoinCode()).then((response) {
         if (response['success']) {
           var invoiceId = response['invoiceId'];
           Navigator.pushNamed(context, '/invoices/$invoiceId');
@@ -65,9 +73,9 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
               Text(_errorMessage, style: TextStyle(color: Colors.red)),
               Container(
                 child: Text(
-                  _price > 0 ? '$_currencySymbol$_visiblePrice' : "",
+                  _price > 0 ? '$_visiblePrice' : "",
                   style: TextStyle(
-                    fontSize: _scale(40, minValue: 40),
+                    fontSize: (40 - 1.5*max(_visiblePrice.length-8, 0)).toDouble(),
                   )
                 ),
               ),
@@ -78,6 +86,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
                   _generateButton(
                     text: _price > 0 ? "⌫" : "",
                     onTap: _backspace,
+                    font: 'Default',
                   ),
                   GestureDetector(
                     onTap: _submit,
@@ -113,21 +122,39 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     );
   }
 
+  void _setVisiblePrice() {
+    try {
+      _visiblePrice = NumberFormat.currency(
+        decimalDigits: _decimalPlaces,
+        locale: Platform.localeName,
+        symbol: _currencySymbol,
+      ).format(_price);
+    } catch(e) {
+      // Fallback in case there is an unsupported locale
+      _visiblePrice = _price.toStringAsFixed(_decimalPlaces);
+      _visiblePrice = _visiblePrice.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+      _visiblePrice = "$_currencySymbol$_visiblePrice";
+    }
+  }
+
   void _backspace() {
     setState(() {
-      _price = (_price * 10).truncateToDouble()/100;
-      _visiblePrice = _price.toStringAsFixed(2);
+      var denominator = pow(10, _decimalPlaces);
+      _price = (_price * 0.1 * denominator).truncateToDouble()/denominator;
+      _setVisiblePrice();
     });
   }
 
   void _updatePrice(i) {
     setState(() {
-      _price = (_price * 1000 + i).truncateToDouble()/100;
-      _visiblePrice = _price.toStringAsFixed(2);
+      if (_price >= 92233720368547.76) return;
+      var denominator = pow(10, _decimalPlaces);
+      _price = (_price * 10 * denominator + i).round().toDouble()/denominator;
+      _setVisiblePrice();
     });
   }
 
-  Widget _generateButton({text, onTap}) {
+  Widget _generateButton({text, onTap, font}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

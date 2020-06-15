@@ -23,7 +23,11 @@ class Account {
   }
 
   String currencySymbol() {
-    return (Currencies.all[denomination ?? 'USD'])['symbol'];
+    return currencyData()['symbol'];
+  }
+
+  Map<String, dynamic> currencyData() {
+    return Currencies.all[denomination] ?? {};
   }
 
   Map<dynamic, dynamic> toMap() {

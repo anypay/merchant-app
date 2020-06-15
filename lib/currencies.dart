@@ -343,7 +343,7 @@ class Currencies {
     "HUF": {
       "currency_code": "HUF",
       "currency_name": "Hungarian forint",
-      "decimal_places": 2,
+      "decimal_places": 0,
       "symbol": "Ft"
     },
     "IDR": {
@@ -763,7 +763,7 @@ class Currencies {
     "THB": {
       "currency_code": "THB",
       "currency_name": "Thai baht",
-      "decimal_places": 2,
+      "decimal_places": 0,
       "symbol": "\u0e3f"
     },
     "TJS": {
