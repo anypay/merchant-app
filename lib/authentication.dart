@@ -20,7 +20,6 @@ class Authentication {
     return await Client.getAccount().then((response) {
       if (response['success'])
         setCurrentAccount(Account.fromMap(response['body']));
-      else logout();
 
       return currentAccount;
     });
@@ -49,9 +48,11 @@ class Authentication {
   static Future<void> fetchCoins() async {
     if (isAuthenticated())
       Client.fetchCoins().then((response) {
-        var coins = response['body']['coins'];
-        coins.removeWhere((coin) => !coin['enabled']);
-        currentAccount.coins = coins;
+        if (response['success']) {
+          var coins = response['body']['coins'];
+          coins.removeWhere((coin) => !coin['enabled']);
+          currentAccount.coins = coins;
+        }
       });
   }
 

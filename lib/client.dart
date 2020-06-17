@@ -4,6 +4,7 @@ import 'package:app/models/account.dart';
 import 'package:app/models/invoice.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 
 class Client {
   static final protocol = 'https';
@@ -14,237 +15,173 @@ class Client {
     if (str != null && str.length > 0)
       return StringUtils.capitalize(str);
   }
-     
+
   static String buildAuthHeader() {
     String token = Authentication.token;
     return 'Basic ' + base64.encode(utf8.encode('$token:'));
   }
 
   static Future<Map<dynamic, dynamic>> setInvoiceNotes(invoiceId, notes) async {
-    http.Response response = await http.post(
-      '$host/invoices/$invoiceId/notes',
-      body: jsonEncode({
-        'note': notes,
-      }),
-      headers: <String, String>{
-        'authorization': buildAuthHeader(),
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+    return await makeRequest('post',
+      path: '/invoices/$invoiceId/notes',
+      unauthorized: (() => Authentication.logout()),
+      body: { 'note': notes },
+      requireAuth: true,
     );
-
-    if (response.statusCode == 401)
-      Authentication.logout();
-    else return {
-      'success': response.statusCode == 200,
-      'body': (json.decode(response.body) as Map),
-    };
   }
 
   static Future<Map<dynamic, dynamic>> fetchCoins() async {
-    http.Response response = await http.get(
-      '$host/coins',
-      headers: <String, String>{
-        'authorization': buildAuthHeader(),
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+    return await makeRequest('get',
+      unauthorized: (() => Authentication.logout()),
+      requireAuth: true,
+      path: '/coins',
     );
-
-    if (response.statusCode == 401)
-      Authentication.logout();
-    else return {
-      'success': response.statusCode == 200,
-      'body': (json.decode(response.body) as Map),
-    };
   }
 
   static Future<Map<dynamic, dynamic>> getAccount() async {
-    http.Response response = await http.get(
-      '$host/account',
-      headers: <String, String>{
-        'authorization': buildAuthHeader(),
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+    return await makeRequest('get',
+      unauthorized: (() => Authentication.logout()),
+      requireAuth: true,
+      path: '/account',
     );
-
-    if (response.statusCode == 401)
-      Authentication.logout();
-    else
-      return {
-        'success': response.statusCode == 200,
-        'body': (json.decode(response.body) as Map),
-      };
   }
 
   static Future<Map<dynamic, dynamic>> createAccount(email, password) async {
-    http.Response response = await http.post(
-      '$host/accounts',
-      body: jsonEncode({
+    return await makeRequest('post',
+      path: '/accounts',
+      body: {
         'email': email,
         'password': password,
-      }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
-    final body = (json.decode(response.body) as Map);
-
-    return {
-      'success': response.statusCode == 200,
-      'message': humanize(body['message']),
-    };
   }
 
   static Future<Map<dynamic, dynamic>> updateAccount(data) async {
-    http.Response response = await http.put(
-      '$host/account',
-      body: jsonEncode(data),
-      headers: <String, String>{
-        'authorization': buildAuthHeader(),
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+    return await makeRequest('put',
+      requireAuth: true,
+      path: '/account',
+      body: data,
     );
-
-    final body = (json.decode(response.body) as Map);
-
-    return {
-      'success': response.statusCode == 200,
-      'message': humanize(body['message']),
-    };
   }
 
   static Future<Map<dynamic, dynamic>> resetPassword(email) async {
-    http.Response response = await http.post(
-      '$host/password-resets',
-      body: jsonEncode(<String, String>{
+    return await makeRequest('post',
+      path: '/password-resets',
+      body: {
         'email': email.trim(),
-      }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
-    final body = (json.decode(response.body) as Map);
-
-    return {
-      'success': response.statusCode == 200,
-      'message': humanize(body['message']),
-    };
   }
 
   static Future<Map<dynamic, dynamic>> authenticate(email, password) async {
     email = email.trim().toLowerCase();
     String basicAuth = 'Basic ' + base64.encode(utf8.encode('$email:$password'));
 
-    http.Response response = await http.post(
-      '$host/access_tokens',
-      body: jsonEncode(<String, String>{}),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': basicAuth,
-      },
+    var response = await makeRequest('post',
+      path: '/access_tokens',
+      basicAuth: basicAuth,
     );
 
-    final body = (json.decode(response.body) as Map);
-
-    if (response.statusCode == 200) {
-      Authentication.setToken(body['uid']);
+    if (response['success']) {
+      Authentication.setToken(response['body']['uid']);
       Authentication.setEmail(email);
     }
 
-    return {
-      'success': response.statusCode == 200,
-      'message': humanize(body['message']),
-    };
+    return response;
   }
 
   static Future<Map<dynamic, dynamic>> setAddress(code, address) async {
-    http.Response response = await http.put(
-      '$host/addresses/$code',
-      body: jsonEncode(<String, String>{
-        'address': address,
-      }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': buildAuthHeader(),
-      },
+    return await makeRequest('put',
+      body: { 'address': address },
+      path: '/addresses/$code',
+      requireAuth: true,
     );
-
-    final body = (json.decode(response.body) as Map);
-
-    return {
-      'success': response.statusCode == 200,
-      'message': humanize(body['message']),
-    };
   }
 
   static Future<Map<dynamic, dynamic>> getInvoices({page}) async {
     var perPage = 100;
     var offset = perPage * (page - 1 ?? 0);
 
-    var uri = Uri.https(domain, '/invoices', {
-      'limit': perPage.toString(),
-      'offset': offset.toString(),
-    });
-    http.Response response = await http.get(uri,
-      headers: <String, String>{
-        'authorization': buildAuthHeader(),
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+    var response = await makeRequest('get',
+      unauthorized: (() => Authentication.logout()),
+      uri: Uri.https(domain, '/invoices', {
+        'limit': perPage.toString(),
+        'offset': offset.toString(),
+      }),
+      requireAuth: true,
     );
 
-    var data = (json.decode(response.body)['invoices'] as List<dynamic>);
-    var invoices = data.map((invoice) => Invoice.fromMap(invoice));
+    if (response['success']) {
+      var data = (response['body']['invoices'] as List<dynamic>);
+      var invoices = data.map((invoice) => Invoice.fromMap(invoice));
+      response['invoices'] = invoices.toList();
+    }
 
-    if (response.statusCode == 401)
-      Authentication.logout();
-    else return {
-      'success': response.statusCode == 200,
-      'invoices': invoices.toList(),
-    };
+    return response;
   }
 
 
   static Future<Map<dynamic, dynamic>> getInvoice(id) async {
-    http.Response response = await http.get(
-      '$host/invoices/$id',
-      headers: <String, String>{
-        'authorization': buildAuthHeader(),
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+    var response = await makeRequest('get',
+      unauthorized: (() => Authentication.logout()),
+      path: '/invoices/$id',
+      requireAuth: true,
     );
 
-    final body = (json.decode(response.body) as Map<String, dynamic>);
-    final success = response.statusCode == 200;
+    if (response['success'])
+      response['invoice'] = Invoice.fromMap(response['body']);
 
-    if (response.statusCode == 401)
-      Authentication.logout();
-    else return {
-        'success': success,
-        'message': humanize(body['message']),
-        'invoice': success ? Invoice.fromMap(body) : null,
-      };
+    return response;
   }
 
   static Future<Map<dynamic, dynamic>> createInvoice(amount, currency) async {
-    http.Response response = await http.post(
-      '$host/invoices',
-      body: jsonEncode({
+    var response = await makeRequest('post',
+      requireAuth: true,
+      path: '/invoices',
+      body: {
         'amount': amount,
         'currency': currency,
-      }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': buildAuthHeader(),
       },
     );
 
-    final body = (json.decode(response.body) as Map);
+    if (response['success'])
+      response['invoiceId'] = response['body']['uid'];
 
-    return {
-      'success': response.statusCode == 200,
-      'message': humanize(body['message']),
-      'invoiceId': body['uid'],
-    };
+    return response;
+  }
+
+  static Future<Map<dynamic, dynamic>> makeRequest(method, {path, uri, headers, body, requireAuth, basicAuth, unauthorized}) async {
+    try {
+      http.Request request = http.Request(method, uri ?? Uri.parse('$host$path'));
+      if (requireAuth ?? false) request.headers['authorization'] = buildAuthHeader();
+      if (basicAuth != null) request.headers['authorization'] = basicAuth;
+
+      request.headers['Content-Type'] = 'application/json; charset=UTF-8';
+      request.body = jsonEncode(body ?? {});
+      (headers ?? {}).forEach((key, value) {
+        request.headers[key] = value;
+      });
+
+      http.StreamedResponse streamedResponse = await http.Client().send(request);
+      http.Response response = await http.Response.fromStream(streamedResponse);
+
+      var responseBody = (json.decode(response.body) as Map);
+      var message = responseBody['message'];
+
+      var code = response.statusCode;
+      if (response.statusCode == 401 && unauthorized != null)
+        return unauthorized();
+      else return {
+        'success': response.statusCode == 200,
+        'message': humanize(message ?? ""),
+        'body': responseBody,
+      };
+    } on SocketException catch (_) {
+      return {
+        'message': 'Not connected to the internet',
+        'success': false,
+        'body': { },
+      };
+    }
   }
 }
