@@ -137,33 +137,30 @@ class _InvoicePageState extends State<InvoicePage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        Container(
+          width: 235,
+          margin: EdgeInsets.only(bottom: 20.0),
+          child: GestureDetector(
+            child: _PaymentTitle('anypay'),
+            onTap: () {
+              choosingCurrency = false;
+              usePayProtocol = true;
+              _rebuild();
+            },
+          )
+        ),
         ...(invoice.paymentOptions.map((option) {
           return Container(
             width: 235,
             margin: EdgeInsets.only(bottom: 20.0),
             child: GestureDetector(
+              child: _PaymentTitle(option['currency']),
               onTap: () {
                 currency = option['currency'];
                 choosingCurrency = false;
+                usePayProtocol = false;
                 _rebuild();
               },
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    margin: EdgeInsets.all(10.0),
-                    child: Image.network(
-                      Coins.all[option['currency']]['icon']
-                    ),
-                  ),
-                  Text(
-                    option['currency'],
-                    style: TextStyle(
-                      fontSize: 40,
-                    ),
-                  )
-                ]
-              )
             )
           );
         }))
@@ -276,6 +273,37 @@ class _InvoicePageState extends State<InvoicePage> {
     );
   }
 
+  Widget _PaymentTitle(currency) {
+    if (currency == 'anypay')
+      return Row(
+        children: [
+          Container(
+            width: 60,
+            child: Image(
+              image: AssetImage('assets/images/anypay-logo.png')
+            ),
+          ),
+          Text('Anypay',
+            style: TextStyle(fontSize: 35),
+          ),
+        ]
+      );
+    else return Row(
+      children: [
+        Container(
+          width: 40,
+          margin: EdgeInsets.all(10.0),
+          child: Image.network(
+            Coins.all[currency]['icon']
+          ),
+        ),
+        Text(currency,
+          style: TextStyle(fontSize: 40),
+        ),
+      ]
+    );
+  }
+
   Widget _InvoiceComponent() {
     if (invoice == null)
       if (_errorMessage != null)
@@ -302,31 +330,15 @@ class _InvoicePageState extends State<InvoicePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 40,
-                    margin: EdgeInsets.all(10.0),
-                    child: Image.network(
-                      Coins.all[currency]['icon']
-                    ),
-                  ),
-                  Text(
-                    currency,
-                    style: TextStyle(
-                      fontSize: 40,
-                    ),
-                  ),
-                ]
-              ),
+              _PaymentTitle(usePayProtocol ? 'anypay' : currency),
               Container(
                 width: 40,
-                margin: EdgeInsets.all(10.0),
+                margin: EdgeInsets.only(top: 5.0),
                 child: GestureDetector(
                   onTap: _chooseCurrency,
                   child: Icon(
-                      Icons.cached,
-                      size: 40,
+                    Icons.cached,
+                    size: 40,
                   ),
                 )
               )
