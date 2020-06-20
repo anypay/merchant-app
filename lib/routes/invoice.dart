@@ -37,18 +37,20 @@ class InvoicePage extends StatefulWidget {
 
 class _InvoicePageState extends State<InvoicePage> {
   _InvoicePageState(this.id);
+
+  var notes = TextEditingController();
   bool choosingCurrency = false;
   bool usePayProtocol = true;
   var _successMessage = '';
   Timer periodicRequest;
+  var _errorMessage;
   String notesError;
   String currency;
-  String uri;
   Color qrColor;
+  String uri;
   String id;
 
   var invoice;
-  var notes = TextEditingController();
 
   @override
   void dispose() {
@@ -68,6 +70,7 @@ class _InvoicePageState extends State<InvoicePage> {
 
   void _done() {
     setState(() { notesError = ""; });
+    periodicRequest.cancel();
 
     if (notes.text.length > 0)
       Client.setInvoiceNotes(invoice.uid, notes.text).then((response) {
@@ -106,15 +109,19 @@ class _InvoicePageState extends State<InvoicePage> {
 
   void _rebuild() {
     setState(() {
-      currency = currency ?? invoice.currency;
-      uri = invoice.uriFor(currency, protocol: usePayProtocol ? 'pay' : null);
+      currency = currency ?? invoice?.currency;
+      uri = invoice?.uriFor(currency, protocol: usePayProtocol ? 'pay' : null);
     });
   }
 
   void _fetchInvoice() {
     if (invoice == null || invoice.isUnpaid())
       Client.getInvoice(id).then((response) {
-        invoice = response['invoice'];
+        _errorMessage = null;
+        if (response['success'])
+          invoice = response['invoice'];
+        else _errorMessage = response['message'];
+
         _rebuild();
       });
   }
@@ -271,10 +278,12 @@ class _InvoicePageState extends State<InvoicePage> {
 
   Widget _InvoiceComponent() {
     if (invoice == null)
-      return Container(
-        child: SpinKitCircle(color: qrColor),
-        height: 360,
-      );
+      if (_errorMessage != null)
+        return Text(_errorMessage, style: TextStyle(color: Colors.red));
+      else return Container(
+          child: SpinKitCircle(color: qrColor),
+          height: 360,
+        );
     else if (invoice.isPaid())
       return _PaidScreen();
     else if (choosingCurrency)
