@@ -10,6 +10,10 @@ class CircleBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: margin,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        color: Colors.white,
+      ),
       child: GestureDetector(
         onTap: onTap ?? (() {
           if (Navigator.canPop(context))

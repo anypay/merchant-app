@@ -21,69 +21,70 @@ class PaymentsPage extends StatefulWidget {
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
-  var page = 0;
+  var _showMore = false;
   var allInvoices = [];
+  var _errorMessage;
+  var page = 0;
 
   _getNextPage() {
     page += 1;
     Client.getInvoices(page: page).then((response) {
       setState(() {
-        allInvoices = [
-          ...allInvoices,
-          ...response['invoices']..removeWhere((invoice) => !invoice.complete),
-        ];
+        if (response['success']) {
+          _showMore = response['invoices'].length > 0;
+          allInvoices = [
+            ...allInvoices,
+            ...response['invoices']..removeWhere((invoice) => !invoice.complete),
+          ];
+        } else _errorMessage = response['message'];
       });
     });
   }
 
   @override
   void initState() {
-    // displayInfo();
     super.initState();
     _getNextPage();
   }
 
+  void openPayment(id) {
+    Navigator.pushNamed(context, '/payments/$id');
+  }
+
   List<Widget> _InvoiceList() {
-    if (allInvoices.length == 0)
+    if (_errorMessage != null)
+      return [Text(_errorMessage, textAlign: TextAlign.center, style: TextStyle(color: Colors.red))];
+    else if (allInvoices.length == 0)
       return [
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 20),
           child: SpinKitCircle(color: Colors.blue),
         )
       ];
-    else return allInvoices.map((invoice) {
-      return Container(
-        width: 400,
-        padding: EdgeInsets.only(top: 10.0),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(width: 1.0),
-          ),
-        ),
-        child:Container(
-          margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: Column(
-            children: <Widget>[
-              Text(invoice.amountWithDenomination(),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF707070),
-                  fontSize: 28,
-                ),
-              ),
-              Container( 
-                margin: EdgeInsets.only(bottom: 20),
-                child: Text(invoice.inCurrency(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF707070),
-                    fontSize: 28,
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    else return [
+      ...allInvoices.map((invoice) {
+        var amount = invoice.amountWithDenomination();
+        var currency = invoice.currency;
+        amount = "$amount $currency";
+        return GestureDetector(
+          onTap: () => openPayment(invoice.uid),
+          child: Container(
+            width: 400,
+            padding: EdgeInsets.only(top: 10.0),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(width: 1.0)),
+            ),
+            child: Container(
+              margin: EdgeInsets.only(top: 20, bottom: 20),
+              child: Column(
                 children: <Widget>[
+                  Text(amount,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF707070),
+                      fontSize: 28,
+                    ),
+                  ),
                   Container(
                     margin: EdgeInsets.only(left: 10),
                     child: Text(timeago.format(invoice.completedAt),
@@ -93,13 +94,38 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       ),
                     ),
                   ),
-                ]
-              )
-            ],
+                ],
+              ),
+            ),
+          ),
+        );
+      }),
+      _MoreButton(),
+    ];
+  }
+
+  Widget _MoreButton() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(width: 1.0)),
+      ),
+      margin: EdgeInsets.only(bottom: 40),
+      padding: EdgeInsets.only(top: 20),
+      child: Visibility(
+        visible: _showMore,
+        child: GestureDetector(
+          onTap: _getNextPage,
+          child: Text('More',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+              fontSize: 28,
+            ),
           ),
         ),
-      );
-    }).toList();
+      ),
+    );
   }
 
   Widget _TitleBar() {
@@ -130,33 +156,18 @@ class _PaymentsPageState extends State<PaymentsPage> {
           )
         )
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _TitleBar(),
-              ..._InvoiceList(),
-              Visibility(
-                visible: allInvoices.length > 0,
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 40),
-                  child: GestureDetector(
-                    onTap: () {
-                      _getNextPage();
-                    },
-                    child: Text('More',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                        fontSize: 28,
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _TitleBar(),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: _InvoiceList()
+              ),
+            ),
+          ],
         ),
       ),
     );

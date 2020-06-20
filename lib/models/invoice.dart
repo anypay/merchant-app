@@ -15,6 +15,7 @@ class Invoice {
   bool complete;
   String status;
   String hash;
+  List notes;
   num amount;
   String uri;
   String uid;

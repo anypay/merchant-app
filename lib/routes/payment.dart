@@ -5,6 +5,8 @@ import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
+import "package:intl/intl.dart";
+import "package:app/coins.dart";
 
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -34,35 +36,104 @@ class _PaymentPageState extends State<PaymentPage> {
   final String id;
   var _errorMessage = '';
   var _payment;
-
+  var _notes;
 
   @override
   void initState() {
-    // displayInfo();
     super.initState();
-    _fetchPayment();
-    Client.fetchPayment(id).then((response) {
+    Client.getInvoice(id).then((response) {
       setState(() {
-        if (response['success'])
-          _payment = response['payment'];
-        else _errorMessage = response['message'];
+        if (response['success']) {
+          _payment = response['invoice'];
+          _notes = _payment.notes?.join(", ");
+        } else _errorMessage = response['message'];
       });
     });
   }
 
-  Widget _TitleBar() {
-    return Container(
-      margin: EdgeInsets.only(top: 50.0, bottom: 10.0),
-      width: 300,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text('Payment', style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 40,
-          )),
-        ],
-      )
+  Widget _Payment() {
+    if (_payment == null)
+      return SpinKitCircle(color: Colors.blue);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(_errorMessage, style: TextStyle(color: Colors.red)),
+        Container(
+          margin: EdgeInsets.only(bottom: 40),
+          child: Text(_payment.amountWithDenomination() ?? "",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF404040),
+              fontSize: 44,
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: Text(Coins.all[_payment.currency]['name'],
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF707070),
+              fontSize: 28,
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 40),
+          child: Text(_payment.inCurrency() ?? "",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF707070),
+              fontSize: 28,
+            ),
+          ),
+        ),
+        Container(
+          child: Text(timeago.format(_payment.completedAt),
+            style: TextStyle(
+              color: Color(0xFF707070),
+              fontSize: 20,
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 40),
+          child: Text(
+            DateFormat('E, MMMM d, h:m').format(_payment.completedAt),
+            style: TextStyle(
+              color: Color(0xFF707070),
+              fontSize: 20,
+            ),
+          ),
+        ),
+        Container(
+          child: GestureDetector(
+            onTap: () async {
+              var hash = _payment.hash;
+              await launch("https://whatsonchain.com/tx/$hash");
+            },
+            child: Text('View on blockchain',
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+        Visibility(
+          visible: _notes != null,
+          child: Container(
+            margin: EdgeInsets.only(right: 10),
+            child: Text("Order notes: $_notes",
+              style: TextStyle(
+                color: Color(0xFF707070),
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -78,49 +149,9 @@ class _PaymentPageState extends State<PaymentPage> {
           )
         )
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(_errorMessage, style: TextStyle(color: Colors.red)),
-              Container(
-                margin: EdgeInsets.only(bottom: 40),
-                child: Text(_payment.amountWithDenomination(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF707070),
-                    fontSize: 28,
-                  ),
-                ),
-              ),
-              Container( 
-                margin: EdgeInsets.only(bottom: 20),
-                child: Text(_payment.inCurrency(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF707070),
-                    fontSize: 28,
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                child: GestureDetector(
-                  onTap: () async {
-                    var hash = invoice.hash;
-                    await launch("https://whatsonchain.com/tx/$hash");
-                  },
-                  child: Text('View on blockchain',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: _Payment(),
         ),
       ),
     );

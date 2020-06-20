@@ -11,6 +11,7 @@ import 'package:app/routes/navigation.dart';
 import 'package:app/routes/addresses.dart';
 import 'package:app/routes/settings.dart';
 import 'package:app/routes/payments.dart';
+import 'package:app/routes/payment.dart';
 import 'package:app/routes/invoice.dart';
 import 'package:app/routes/login.dart';
 import 'package:app/preloader.dart';
@@ -89,6 +90,11 @@ class FluroRouter {
     router.define(
       '/payments',
       handler: newHandler(() => Payments()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/payments/:id',
+      handler: newHandler((id) => Payment(id), 'id'),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
