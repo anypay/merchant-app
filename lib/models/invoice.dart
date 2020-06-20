@@ -1,6 +1,8 @@
 import 'package:app/currencies.dart';
 import 'package:app/client.dart';
+import "package:intl/intl.dart";
 import 'dart:convert';
+import 'dart:io';
 
 class Invoice {
   String denominationCurrency;
@@ -33,9 +35,25 @@ class Invoice {
     this.uid,
   });
 
+  int decimalPlaces() {
+    return (Currencies.all[denominationCurrency] ?? {})['decimal_places'] ?? 2;
+  }
+
   String amountWithDenomination() {
-    var symbol = Currencies.all[denominationCurrency]['symbol'];
-    return "$symbol$denominationAmount";
+    var symbol = (Currencies.all[denominationCurrency] ?? {})['symbol'] ?? "";
+
+    try {
+      return NumberFormat.currency(
+        decimalDigits: decimalPlaces(),
+        locale: Platform.localeName,
+        symbol: symbol,
+      ).format(denominationAmount);
+    } catch(e) {
+      // Fallback in case there is an unsupported locale
+      var str = denominationAmount.toStringAsFixed(decimalPlaces());
+      str = str.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+      return "$symbol$str";
+    }
   }
 
   String inCurrency() {

@@ -1,10 +1,10 @@
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
+import 'package:app/models/invoice.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
-import "package:intl/intl.dart";
 import 'dart:math';
-import 'dart:io';
 
 
 class NewInvoice extends StatelessWidget {
@@ -26,26 +26,27 @@ class NewInvoicePage extends StatefulWidget {
 
 class _NewInvoicePageState extends State<NewInvoicePage> {
   String _visiblePrice = '';
-  int _decimalPlaces = 2;
+  bool _submitting = false;
   var _errorMessage = '';
-  String _currencySymbol;
+  Invoice _invoice;
   num _price = 0;
 
   void _rebuild() {
     setState(() {
-      var data = Authentication.currentAccount.currencyData();
-      _currencySymbol = data['symbol'] ?? '';
-      _decimalPlaces = data['decimal_places'] ?? 2;
+      _setInvoice();
       _setVisiblePrice();
     });
   }
 
   void _submit() {
+    if (_submitting) return;
+    _submitting = true;
     setState(() { _errorMessage = ""; });
-    var l = Authentication.currentAccount.coins;
     var account = Authentication.currentAccount;
+
     if (account.coins.length > 0)
       Client.createInvoice(_price, account.preferredCoinCode()).then((response) {
+        setState(() { _submitting = false; });
         if (response['success']) {
           var invoiceId = response['invoiceId'];
           Navigator.pushNamed(context, '/invoices/$invoiceId');
@@ -56,6 +57,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   @override
   void initState() {
+    _rebuild();
     super.initState();
     Authentication.getAccount().then((account) {
       _rebuild();
@@ -89,7 +91,8 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
                     onTap: _backspace,
                     font: 'Default',
                   ),
-                  GestureDetector(
+                  _submitting ?
+                  SpinKitCircle(color: Color(0xFF8c5ca6)) : GestureDetector(
                     onTap: _submit,
                     child: Visibility(
                       visible: _price > 0,
@@ -123,36 +126,31 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     );
   }
 
+  void _setInvoice() {
+    _invoice = Invoice(
+      denominationCurrency: Authentication.currentAccount.denomination,
+      denominationAmount: _price,
+    );
+  }
+
   void _setVisiblePrice() {
-		try {
-			_visiblePrice = NumberFormat.currency(
-				decimalDigits: _decimalPlaces,
-				locale: Platform.localeName,
-				symbol: _currencySymbol,
-			).format(_price);
-		} catch(e) {
-      // Fallback in case there is an unsupported locale
-			_visiblePrice = _price.toStringAsFixed(_decimalPlaces);
-			_visiblePrice = _visiblePrice.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
-			_visiblePrice = "$_currencySymbol$_visiblePrice";
-		}
+    _setInvoice();
+    _visiblePrice = _invoice.amountWithDenomination();
   }
 
   void _backspace() {
-    setState(() {
-      var denominator = pow(10, _decimalPlaces);
-      _price = (_price * 0.1 * denominator).truncateToDouble()/denominator;
-      _setVisiblePrice();
-    });
+    var denominator = pow(10, _invoice.decimalPlaces());
+    _price = (_price * 0.1 * denominator).truncateToDouble()/denominator;
+    _errorMessage = "";
+    _rebuild();
   }
 
   void _updatePrice(i) {
-    setState(() {
-      if (_price >= 92233720368547.76) return;
-      var denominator = pow(10, _decimalPlaces);
-      _price = (_price * 10 * denominator + i).round().toDouble()/denominator;
-      _setVisiblePrice();
-    });
+    if (_price >= 92233720368547.76) return;
+    var denominator = pow(10, _invoice.decimalPlaces());
+    _price = (_price * 10 * denominator + i).round().toDouble()/denominator;
+    _errorMessage = "";
+    _rebuild();
   }
 
   Widget _generateButton({text, onTap, font}) {
