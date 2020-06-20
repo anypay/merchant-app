@@ -361,7 +361,7 @@ class Currencies {
     "INR": {
       "currency_code": "INR",
       "currency_name": "Indian rupee",
-      "decimal_places": 2,
+      "decimal_places": 0,
       "symbol": "\u20b9"
     },
     "IQD": {
