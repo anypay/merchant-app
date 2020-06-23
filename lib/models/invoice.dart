@@ -75,20 +75,22 @@ class Invoice {
     return expiry.isBefore(DateTime.now());
   }
 
-  String payUri([useCurrency]) {
+  String urlStyleUri([useCurrency]) {
     useCurrency = useCurrency ?? currency;
     String host = Client.host;
     String protocol = {
       'BTC': 'bitcoin',
       'BCH': 'bitcoincash',
       'DASH': 'dash',
-    }[useCurrency] ?? 'pay';
+      'BSV': 'pay',
+    }[useCurrency];
 
     return "$protocol:?r=$host/r/$uid";
   }
 
-  String uriFor(currency, {protocol}) {
-    if (protocol == 'pay') return payUri(currency);
+  String uriFor(currency, {format}) {
+    if (format == 'pay') return "pay:?r=${Client.host}/r/$uid";
+    if (format == 'url') return urlStyleUri(currency);
 
     var option = paymentOptions.firstWhere((option) {
       return option['currency'] == currency;
