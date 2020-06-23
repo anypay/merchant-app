@@ -164,8 +164,9 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: _scale(31, minValue: 25),
-            color: Color(0xFF404040),
+            fontFamily: font ?? 'Ubuntu',
             fontWeight: FontWeight.bold,
+            color: Color(0xFF404040),
           )
         ),
       )

@@ -11,9 +11,10 @@ void main() {
     FluroRouter.setupRouter();
 
     runApp(MaterialApp(
-      onGenerateRoute: FluroRouter.router.generator,
-      title: 'Anypay Cash Register',
       initialRoute: auth ? '/new-invoice' : '/login',
+      onGenerateRoute: FluroRouter.router.generator,
+      theme: ThemeData(fontFamily: 'Ubuntu'),
+      title: 'Anypay Cash Register',
     ));
   });
 }
