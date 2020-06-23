@@ -1,5 +1,3 @@
-import 'package:url_launcher/url_launcher.dart'
-  if (dart.library.html) 'package:app/web_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
@@ -92,21 +90,6 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       style: TextStyle(
                         color: Color(0xFF707070),
                         fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: GestureDetector(
-                      onTap: () async {
-                        var hash = invoice.hash;
-                        await launch("https://whatsonchain.com/tx/$hash");
-                      },
-                      child: Text('View on blockchain',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                        ),
                       ),
                     ),
                   ),

@@ -46,7 +46,7 @@ class Authentication {
     fetchCoins();
   }
 
-  static void fetchCoins() async {
+  static Future<void> fetchCoins() async {
     if (isAuthenticated())
       Client.fetchCoins().then((response) {
         var coins = response['body']['coins'];
@@ -61,10 +61,12 @@ class Authentication {
 
   static Future<bool> checkForAuth() async {
     return await readFromDisk('token').then((accessToken) {
+      print("READ TOKEN FROM DISK $accessToken");
       token = accessToken;
 
-      if (accessToken == null)
+      if (accessToken != null)
         return readFromDisk('currentAccount').then((json) {
+          print("READ TOKEN FROM DISK json");
           if (json != null)
             setCurrentAccount(Account.fromJson(json));
 
@@ -79,6 +81,7 @@ class Authentication {
   }
 
   static Future<void> saveTokenToDisk() async {
+    print("Save TOKEN TO DISK: $token");
     if (token == null)
       return await Storage.delete('token');
     else

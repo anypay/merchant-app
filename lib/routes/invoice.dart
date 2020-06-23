@@ -7,8 +7,10 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/back_button.dart';
+import 'package:share/share.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
+
 import 'dart:async';
 
 
@@ -37,6 +39,7 @@ class _InvoicePageState extends State<InvoicePage> {
   _InvoicePageState(this.id);
   bool choosingCurrency = false;
   bool usePayProtocol = true;
+  var _successMessage = '';
   Timer periodicRequest;
   String notesError;
   String currency;
@@ -46,6 +49,13 @@ class _InvoicePageState extends State<InvoicePage> {
 
   var invoice;
   var notes = TextEditingController();
+
+  @override
+  void dispose() {
+    periodicRequest.cancel();
+    notes.dispose();
+    super.dispose();
+  }
 
   List<Color> colors = ([
     0xFF8c5ca6,
@@ -84,10 +94,14 @@ class _InvoicePageState extends State<InvoicePage> {
 
   void _copyUri() {
     Clipboard.setData(ClipboardData(text: uri));
+    setState(() => _successMessage = "Coppied!" ); 
+    Timer(Duration(seconds: 2), () {
+      setState(() => _successMessage = "" ); 
+    });
   }
 
-  void _openUri() async {
-    await launch(uri);
+  void _shareUri() async {
+    await Share.share(uri);
   }
 
   void _rebuild() {
@@ -270,6 +284,9 @@ class _InvoicePageState extends State<InvoicePage> {
     else return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        Text(_successMessage,
+          style: TextStyle(color: Colors.green),
+        ),
         Container(
           width: 235,
           margin: EdgeInsets.only(bottom: 20.0),
@@ -341,17 +358,17 @@ class _InvoicePageState extends State<InvoicePage> {
                 )
               ),
               GestureDetector(
-                onTap: _openUri,
+                onTap: _shareUri,
                 child: Row(
                   children: <Widget>[
-                    Text('Open Wallet', style: TextStyle(
-                      fontSize: 13,
+                    Text('Share', style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontSize: 13,
                     )),
                     Container(
                       padding: EdgeInsets.only(left: 15),
                       child: Image(
-                        image: AssetImage('assets/images/wallet_icon.png'),
+                        image: AssetImage('assets/images/share.png'),
                         width: 20,
                       )
                     )

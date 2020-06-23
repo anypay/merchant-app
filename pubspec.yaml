@@ -31,6 +31,9 @@ dependencies:
   email_validator: '^1.0.0'
   confetti: '^0.5.2'
   timeago: '^2.0.26'
+  intl: "^0.16.1"
+  share: '^0.6.4+3'
+
   flutter:
     sdk: flutter
 

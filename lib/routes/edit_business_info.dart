@@ -36,6 +36,14 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
   var _errorMessage = '';
   var _successMessage = '';
 
+  @override
+  void dispose() {
+    address.dispose();
+    email.dispose();
+    name.dispose();
+    super.dispose();
+  }
+
   void _rebuild() {
     setState(() {
       address.text = Authentication.currentAccount.physicalAddress;

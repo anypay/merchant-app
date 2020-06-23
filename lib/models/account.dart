@@ -30,6 +30,17 @@ class Account {
     return Currencies.all[denomination] ?? {};
   }
 
+  String addressFor(code) {
+    return coins.firstWhere((coin) => coin['code'] == code, orElse: () => {})['address'];
+  }
+
+  String preferredCoinCode() {
+    var codes = coins.map((a) => a['code']);
+    if (codes.contains('BSV'))
+      return 'BSV';
+    else return codes.first;
+  }
+
   Map<dynamic, dynamic> toMap() {
     return {
       'ambassador_email': ambassadorEmail,

@@ -44,15 +44,16 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
 
   Widget _FilterBar() {
     return Container(
+      width: 400,
       child: Row(
         children: <Widget>[
           CircleBackButton(
-            margin: EdgeInsets.only(top: 40.0),
+            margin: EdgeInsets.only(top: 40.0, left: 10.0),
             backPath: '/navigation',
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(top: 40.0, bottom: 5.0),
+              margin: EdgeInsets.only(top: 40.0, bottom: 10.0),
               padding: EdgeInsets.all(10.0),
               child: TextField(
                 decoration: InputDecoration(

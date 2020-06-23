@@ -26,6 +26,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   var _errorMessage = '';
   var _successMessage = '';
 
+  @override
+  void dispose() {
+    email.dispose();
+    super.dispose();
+  }
+
   void _submitForm() {
     setState(() {
       _errorMessage = "";

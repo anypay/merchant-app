@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
+import 'dart:async';
 
 class NewAddress extends StatelessWidget {
   NewAddress(this.code);
@@ -32,6 +33,16 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   var _errorMessage = '';
   var _successMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    Authentication.fetchCoins().then((v) {
+      setState(() {
+        _successMessage = Authentication.currentAccount.addressFor(this.code) ?? "";
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +82,10 @@ class _NewAddressPageState extends State<NewAddressPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(_successMessage,
-                    style: TextStyle(color: Colors.green),
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 12,
+                    ),
                   ),
                   Text(_errorMessage,
                     style: TextStyle(color: Colors.red),
@@ -81,13 +95,20 @@ class _NewAddressPageState extends State<NewAddressPage> {
                       labelText: 'paste $code address'
                     ),
                     onChanged: (text) {
+                      setState(() {
+                        _successMessage = '';
+                        _errorMessage = '';
+                      });
                       Client.setAddress(code, text).then((response) {
                         setState(() {
                           if (response['success']) {
                             _successMessage = 'Saved!';
                             _errorMessage = "";
                             Authentication.fetchCoins();
-                            Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
+
+                            Timer(Duration(seconds: 2), () {
+                              Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
+                            });
                           } else _errorMessage = response['message'];
                         });
                       });

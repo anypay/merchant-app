@@ -42,6 +42,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   void _submit() {
     setState(() { _errorMessage = ""; });
+    var l = Authentication.currentAccount.coins;
     var account = Authentication.currentAccount;
     if (account.coins.length > 0)
       Client.createInvoice(_price, account.preferredCoinCode()).then((response) {
@@ -123,18 +124,18 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   }
 
   void _setVisiblePrice() {
-    try {
-      _visiblePrice = NumberFormat.currency(
-        decimalDigits: _decimalPlaces,
-        locale: Platform.localeName,
-        symbol: _currencySymbol,
-      ).format(_price);
-    } catch(e) {
+		try {
+			_visiblePrice = NumberFormat.currency(
+				decimalDigits: _decimalPlaces,
+				locale: Platform.localeName,
+				symbol: _currencySymbol,
+			).format(_price);
+		} catch(e) {
       // Fallback in case there is an unsupported locale
-      _visiblePrice = _price.toStringAsFixed(_decimalPlaces);
-      _visiblePrice = _visiblePrice.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
-      _visiblePrice = "$_currencySymbol$_visiblePrice";
-    }
+			_visiblePrice = _price.toStringAsFixed(_decimalPlaces);
+			_visiblePrice = _visiblePrice.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+			_visiblePrice = "$_currencySymbol$_visiblePrice";
+		}
   }
 
   void _backspace() {

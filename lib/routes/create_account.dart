@@ -49,6 +49,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   @override
+  void dispose() {
+    confirmPassword.dispose();
+    password.dispose();
+    email.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
