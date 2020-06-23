@@ -1,7 +1,9 @@
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/currencies.dart';
 import 'package:app/client.dart';
 
@@ -45,12 +47,17 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
 
   Widget _FilterBar() {
     return Container(
+      margin: EdgeInsets.only(bottom: 10.0),
       width: 400,
       child: Row(
         children: <Widget>[
-          CircleBackButton(
+          Container(
             margin: EdgeInsets.only(top: 10.0, left: 10.0),
-            backPath: '/navigation',
+            child: (_chosenCurrency == null ?
+              CircleBackButton(
+                backPath: '/navigation',
+              ) : SpinKitCircle(color: AppBuilder.randomColor)
+            )
           ),
           Expanded(
             child: Container(
@@ -81,19 +88,25 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
 
       return Container(
         width: 400,
-        padding: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-          color: _chosenCurrency == currency ? Color(0xFFEEEEEE) : Colors.white,
+          color: Theme.of(context).primaryColorLight.withOpacity(_chosenCurrency == currency ? 0.1 : 0),
           border: Border(
-            top: BorderSide(width: 1.0),
+            top: BorderSide(
+              color: Theme.of(context).primaryColorLight,
+              width: 1.0
+            ),
           ),
         ),
         child: GestureDetector(
-          child: Text(display.join(' - '),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+            padding: EdgeInsets.all(15.0),
+            child: Text(display.join(' - '),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
           ),
           onTap: () {
@@ -103,7 +116,10 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
             }).then((response) {
               setState(() {
                 if (response['success']) _back();
-                else _errorMessage = response['message'];
+                else {
+                  _chosenCurrency = null;
+                  _errorMessage = response['message'];
+                }
               });
             });
           }

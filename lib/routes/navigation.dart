@@ -1,6 +1,7 @@
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
 
 class Navigation extends StatelessWidget {
@@ -40,6 +41,23 @@ class _NavigationPageState extends State<NavigationPage> {
                       color: Colors.grey,
                       fontSize: 18,
                     )),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(20.0),
+                    child: GestureDetector(
+                      child: Text(
+                        AppBuilder.enableDarkMode ? "Light Mode" : "Dark Mode",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                          fontSize: 22,
+                        ),
+                      ),
+                      onTap: () {
+                        AppBuilder.toggleDarkMode();
+                        AppBuilder.of(context).rebuild();
+                      }
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.all(20.0),
