@@ -64,9 +64,17 @@ class _SettingsPageState extends State<SettingsPage> {
                         children: <Widget>[
                           Container(
                             margin: EdgeInsets.all(20.0),
-                            child: Text("Currency ($symbol$denomination)", style: TextStyle(
-                              fontSize: 22,
-                            ))
+                            child: Row(
+                              children: <Widget>[
+                                Text("Currency ", style: TextStyle(
+                                  fontSize: 22,
+                                )),
+                                Text("($symbol$denomination)", style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                )),
+                              ],
+                            )
                           ),
                           Icon(Icons.edit),
                         ],
