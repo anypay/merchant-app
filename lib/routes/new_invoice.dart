@@ -3,6 +3,7 @@ import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
 import 'dart:math';
 
@@ -40,19 +41,28 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   void _submit() {
     if (_submitting) return;
+
     _submitting = true;
+    AppBuilder.randomizeColor();
     setState(() { _errorMessage = ""; });
     var account = Authentication.currentAccount;
 
     if (account.coins.length > 0)
       Client.createInvoice(_price, account.preferredCoinCode()).then((response) {
-        setState(() { _submitting = false; });
         if (response['success']) {
           var invoiceId = response['invoiceId'];
-          Navigator.pushNamed(context, '/invoices/$invoiceId');
-        } else setState(() { _errorMessage = response['message']; });
+          Navigator.pushNamed(context, '/invoices/$invoiceId').then((_) {
+            setState(() { _submitting = false; });
+          });
+        } else setState(() {
+          _errorMessage = response['message'];
+          _submitting = false;
+        });
       });
-    else Navigator.pushNamed(context, '/settings/addresses');
+    else Navigator.pushNamed(context, '/settings/addresses').then((result) {
+     _submitting = false;
+     _rebuild();
+    });
   }
 
   @override
@@ -92,7 +102,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
                     font: 'Default',
                   ),
                   _submitting ?
-                  SpinKitCircle(color: Color(0xFF8c5ca6)) : GestureDetector(
+                  SpinKitCircle(color: AppBuilder.randomColor) : GestureDetector(
                     onTap: _submit,
                     child: Visibility(
                       visible: _price > 0,
@@ -165,7 +175,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
             fontSize: _scale(31, minValue: 25),
             fontFamily: font ?? 'Ubuntu',
             fontWeight: FontWeight.bold,
-            color: Color(0xFF404040),
+            color: Theme.of(context).primaryColorLight,
           )
         ),
       )

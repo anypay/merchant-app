@@ -16,4 +16,3 @@ class Storage {
     return await storage.delete(key: key);
   }
 }
-

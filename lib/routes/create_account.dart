@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
@@ -65,7 +66,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           children: <Widget>[
             Image(
               width: 300,
-              image: AssetImage('assets/images/anypay-full-logo.png')
+              image: AssetImage(AppBuilder.logoImagePath())
             ),
             Container(
               width: 300,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app/app_builder.dart';
 
 class CircleBackButton extends StatelessWidget {
   CircleBackButton({this.backPath, this.onTap, this.margin});
@@ -8,11 +9,15 @@ class CircleBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var imagePath = 'assets/images/close-button.png';
+    if (AppBuilder.enableDarkMode)
+      imagePath = 'assets/images/close-button-light.png';
     return Container(
       margin: margin,
+      height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        color: Colors.white,
+        color: Theme.of(context).canvasColor,
       ),
       child: GestureDetector(
         onTap: onTap ?? (() {
@@ -23,7 +28,7 @@ class CircleBackButton extends StatelessWidget {
         }),
         child: Image(
           width: 50,
-          image: AssetImage('assets/images/close-button.png')
+          image: AssetImage(imagePath),
         ),
       ),
     );

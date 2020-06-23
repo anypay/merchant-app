@@ -7,6 +7,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/back_button.dart';
+import 'package:app/app_builder.dart';
 import 'package:share/share.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
@@ -58,15 +59,6 @@ class _InvoicePageState extends State<InvoicePage> {
     notes.dispose();
     super.dispose();
   }
-
-  List<Color> colors = ([
-    0xFF8c5ca6,
-    0xFF0177c0,
-    0xFF1a8e5a,
-    0xFFcfa015,
-    0xFFc74a43,
-  ]..shuffle()).map((hex) => Color(hex)).toList();
-
 
   void _done() {
     setState(() { notesError = ""; });
@@ -129,7 +121,7 @@ class _InvoicePageState extends State<InvoicePage> {
   @override
   void initState() {
     super.initState();
-    qrColor = colors.first;
+    qrColor = AppBuilder.randomColor;
     periodicRequest = Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
   }
 
@@ -185,7 +177,7 @@ class _InvoicePageState extends State<InvoicePage> {
           minBlastForce: 30,
           numberOfParticles: 20,
           shouldLoop: false,
-          colors: colors,
+          colors: AppBuilder.colors,
         ),
         Container(
           child: Text('PAID!',
@@ -199,7 +191,7 @@ class _InvoicePageState extends State<InvoicePage> {
         Container(
           child: Text(Authentication.currentAccount.businessName ?? "",
             style: TextStyle(
-              color: Color(0xFF707070),
+              color: Theme.of(context).primaryColorDark,
               fontSize: 20,
             ),
           ),
@@ -209,7 +201,7 @@ class _InvoicePageState extends State<InvoicePage> {
           child: Text(invoice.amountWithDenomination(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF707070),
+              color: Theme.of(context).primaryColorDark,
               fontSize: 28,
             ),
           ),
@@ -217,7 +209,7 @@ class _InvoicePageState extends State<InvoicePage> {
         Container(
           child: Text(invoice.inCurrency(),
             style: TextStyle(
-              color: Color(0xFF707070),
+              color: Theme.of(context).primaryColorDark,
               fontSize: 20,
             ),
           ),
@@ -258,7 +250,7 @@ class _InvoicePageState extends State<InvoicePage> {
           child: Text("Invoice Expired",
             style: TextStyle(
               fontSize: 31,
-              color: Color(0xFF404040),
+              color: Theme.of(context).primaryColorLight,
             )
           )
         ),

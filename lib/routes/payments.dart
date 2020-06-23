@@ -81,7 +81,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   Text(amount,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF707070),
+                      color: Theme.of(context).primaryColorDark,
                       fontSize: 28,
                     ),
                   ),
@@ -89,7 +89,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                     margin: EdgeInsets.only(left: 10),
                     child: Text(timeago.format(invoice.completedAt),
                       style: TextStyle(
-                        color: Color(0xFF707070),
+                        color: Theme.of(context).primaryColorDark,
                         fontSize: 20,
                       ),
                     ),

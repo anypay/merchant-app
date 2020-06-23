@@ -64,7 +64,7 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Text(_payment.amountWithDenomination() ?? "",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF404040),
+              color: Theme.of(context).primaryColorLight,
               fontSize: 44,
             ),
           ),
@@ -74,7 +74,7 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Text(Coins.all[_payment.currency]['name'],
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF707070),
+              color: Theme.of(context).primaryColorDark,
               fontSize: 28,
             ),
           ),
@@ -84,7 +84,7 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Text(_payment.inCurrency() ?? "",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF707070),
+              color: Theme.of(context).primaryColorDark,
               fontSize: 28,
             ),
           ),
@@ -92,7 +92,7 @@ class _PaymentPageState extends State<PaymentPage> {
         Container(
           child: Text(timeago.format(_payment.completedAt),
             style: TextStyle(
-              color: Color(0xFF707070),
+              color: Theme.of(context).primaryColorDark,
               fontSize: 20,
             ),
           ),
@@ -102,7 +102,7 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Text(
             DateFormat('E, MMMM d, h:m').format(_payment.completedAt),
             style: TextStyle(
-              color: Color(0xFF707070),
+              color: Theme.of(context).primaryColorDark,
               fontSize: 20,
             ),
           ),
@@ -127,7 +127,7 @@ class _PaymentPageState extends State<PaymentPage> {
             margin: EdgeInsets.only(right: 10),
             child: Text("Order notes: $_notes",
               style: TextStyle(
-                color: Color(0xFF707070),
+                color: Theme.of(context).primaryColorDark,
                 fontSize: 20,
               ),
             ),
