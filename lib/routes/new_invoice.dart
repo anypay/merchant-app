@@ -124,12 +124,21 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       floatingActionButton: Container(
         child: Align(
           alignment: Alignment(-0.85, -0.85),
-          child: GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/navigation').then((value) => _rebuild()),
-            child: Image(
-              image: AssetImage('assets/images/anypay-logo.png'),
-              width: _scale(70),
-            )
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/navigation').then((value) => _rebuild()),
+                child: Container(
+                  margin: EdgeInsets.only(top: 10.0, left: 50.0),
+                  child: Icon(Icons.menu, size: 40.0),
+                )
+              ),
+              Image(
+                image: AssetImage('assets/images/anypay-logo.png'),
+                width: _scale(70),
+              )
+            ]
           )
         )
       ),
