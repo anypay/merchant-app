@@ -42,7 +42,9 @@ class _InvoicePageState extends State<InvoicePage> {
   var notes = TextEditingController();
   bool choosingCurrency = false;
   bool usePayProtocol = true;
+  bool _invoiceReady = false;
   var _successMessage = '';
+  bool useUrlStyle = true;
   Timer periodicRequest;
   var _errorMessage;
   String notesError;
@@ -77,8 +79,8 @@ class _InvoicePageState extends State<InvoicePage> {
     Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
   }
 
-  void _togglePayUri() {
-    usePayProtocol = !usePayProtocol;
+  void _toggleUrlStyle() {
+    useUrlStyle = !useUrlStyle;
     _rebuild();
   }
 
@@ -99,11 +101,24 @@ class _InvoicePageState extends State<InvoicePage> {
     await Share.share(uri);
   }
 
+  String getFormat() {
+    if (usePayProtocol)
+      return 'pay';
+    else if (useUrlStyle)
+      return 'url';
+  }
+
   void _rebuild() {
     setState(() {
       currency = currency ?? invoice?.currency;
-      uri = invoice?.uriFor(currency, protocol: usePayProtocol ? 'pay' : null);
+      uri = invoice?.uriFor(currency, format: getFormat());
     });
+    if (invoice != null && _invoiceReady == false) {
+      Timer(Duration(milliseconds: 10), () {
+        _invoiceReady = true;
+        _rebuild();
+      });
+    }
   }
 
   void _fetchInvoice() {
@@ -151,11 +166,12 @@ class _InvoicePageState extends State<InvoicePage> {
                 currency = option['currency'];
                 choosingCurrency = false;
                 usePayProtocol = false;
+                useUrlStyle = true;
                 _rebuild();
               },
             )
           );
-        }))
+        })),
       ]
     );
   }
@@ -310,88 +326,105 @@ class _InvoicePageState extends State<InvoicePage> {
       return _ChooseCurrencyMenu();
     else if (invoice.isExpired())
       return _ExpiredInvoice();
-    else return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(_successMessage,
-          style: TextStyle(color: Colors.green),
-        ),
-        Container(
-          width: 235,
-          margin: EdgeInsets.only(bottom: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _PaymentTitle(usePayProtocol ? 'anypay' : currency),
-              Container(
-                width: 40,
-                margin: EdgeInsets.only(top: 5.0),
-                child: GestureDetector(
-                  onTap: _chooseCurrency,
-                  child: Icon(
-                    Icons.cached,
-                    size: 40,
-                  ),
-                )
-              )
-            ]
+    else return AnimatedOpacity(
+      opacity: _invoiceReady ? 1.0 : 0.0,
+      duration: Duration(milliseconds: 300),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(_successMessage,
+            style: TextStyle(color: Colors.green),
           ),
-        ),
-        GestureDetector(
-          onTap: _togglePayUri,
-          child: QrImage(
-            foregroundColor: qrColor,
-            version: QrVersions.auto,
-            size: 235.0,
-            data: uri,
-          ),
-        ),
-        Container(
-          width: 235,
-          margin: EdgeInsets.only(top: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              GestureDetector(
-                onTap: _copyUri,
-                child: Row(
-                  children: <Widget>[
-                    Text('Copy', style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                    )),
-                    Container(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Image(
-                        image: AssetImage('assets/images/copy_icon.png'),
-                        width: 20,
-                      )
-                    )
-                  ]
+          Container(
+            width: 235,
+            margin: EdgeInsets.only(bottom: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _PaymentTitle(usePayProtocol ? 'anypay' : currency),
+                Container(
+                  width: 40,
+                  margin: EdgeInsets.only(top: 5.0),
+                  child: GestureDetector(
+                    onTap: _chooseCurrency,
+                    child: Icon(
+                      Icons.cached,
+                      size: 40,
+                    ),
+                  )
                 )
+              ]
+            ),
+          ),
+          Card(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 12.0,
+                color: qrColor,
               ),
-              GestureDetector(
-                onTap: _shareUri,
-                child: Row(
-                  children: <Widget>[
-                    Text('Share', style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    )),
-                    Container(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Image(
-                        image: AssetImage('assets/images/share.png'),
-                        width: 20,
+              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            ),
+            child: Container(
+              color: Colors.white,
+              margin: EdgeInsets.all(12.0),
+              child: GestureDetector(
+                onTap: _toggleUrlStyle,
+                child: QrImage(
+                  foregroundColor: Color(0xFF404040),
+                  version: QrVersions.auto,
+                  size: 235.0,
+                  data: uri,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 235,
+            margin: EdgeInsets.only(top: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: _copyUri,
+                  child: Row(
+                    children: <Widget>[
+                      Text('Copy', style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      )),
+                      Container(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Image(
+                          image: AssetImage('assets/images/copy_icon.png'),
+                          width: 20,
+                        )
                       )
-                    )
-                  ]
+                    ]
+                  )
+                ),
+                GestureDetector(
+                  onTap: _shareUri,
+                  child: Row(
+                    children: <Widget>[
+                      Text('Share', style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      )),
+                      Container(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Image(
+                          image: AssetImage('assets/images/share.png'),
+                          width: 20,
+                        )
+                      )
+                    ]
+                  )
                 )
-              )
-            ]
+              ]
+            )
           )
-        )
-      ]
+        ]
+      )
     );
   }
 
@@ -402,10 +435,13 @@ class _InvoicePageState extends State<InvoicePage> {
         choosingCurrency = false;
         _rebuild();
       };
-    return CircleBackButton(
-      margin: EdgeInsets.only(top: 20.0),
-      backPath: '/new-invoice',
-      onTap: onTap,
+    return Visibility(
+      visible: invoice == null || invoice.isUnpaid(),
+      child: CircleBackButton(
+        margin: EdgeInsets.only(top: 20.0),
+        backPath: '/new-invoice',
+        onTap: onTap,
+      )
     );
   }
 
