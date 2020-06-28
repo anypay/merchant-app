@@ -28,11 +28,15 @@ class Authentication {
 
   static Future<Map<dynamic, dynamic>> updateAccount([data]) async {
     var accountData = currentAccount.toMap();
-    setCurrentAccount(Account.fromMap({
+    var newAccount = Account.fromMap({
       ...accountData,
       ...data
-    }));
-    return await Client.updateAccount(currentAccount.toMap());
+    });
+    return await Client.updateAccount(newAccount.toMap()).then((response) {
+      if (response['success'])
+        setCurrentAccount(newAccount);
+      return response;
+    });
   }
 
   static Future<void> setToken(uid) {
