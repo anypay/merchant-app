@@ -1,5 +1,7 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
@@ -23,8 +25,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final email = TextEditingController();
 
-  var _errorMessage = '';
   var _successMessage = '';
+  var _submitting = false;
+  var _errorMessage = '';
 
   @override
   void dispose() {
@@ -33,13 +36,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   void _submitForm() {
-    setState(() {
-      _errorMessage = "";
-      _successMessage = "";
-    });
+    _closeKeyboard();
     if (_formKey.currentState.validate()) {
+      setState(() {
+        _submitting = true;
+        _errorMessage = "";
+        _successMessage = "";
+      });
       Client.resetPassword(email.text).then((response) {
         setState(() {
+          _submitting = false;
           if (response['success'])
             _successMessage = "Email sent!";
           else {
@@ -50,58 +56,69 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
+  void _closeKeyboard() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus)
+      currentFocus.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 300,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(_successMessage,
-                        style: TextStyle(color: Colors.green),
-                      ),
-                      Text(_errorMessage,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      TextFormField(
-                        controller: email,
-                        decoration: InputDecoration(
-                          labelText: 'Email'
+    return GestureDetector(
+      onTap: _closeKeyboard,
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 300,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(_successMessage,
+                          style: TextStyle(color: AppBuilder.green),
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) return 'Please enter some text';
-                          else if (!EmailValidator.validate(value.trim()))
-                            return "That doesn't look like an email address";
-                        },
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20.0),
-                        child: GestureDetector(
-                          child: Text('SEND EMAIL', style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                            fontSize: 18,
-                          )),
-                          onTap: _submitForm,
+                        Text(_errorMessage,
+                          style: TextStyle(color: AppBuilder.red),
                         ),
-                      ),
-                      CircleBackButton(
-                        margin: EdgeInsets.only(top: 20.0),
-                        backPath: '/login',
-                      ),
-                    ],
+                        TextFormField(
+                          controller: email,
+                          decoration: InputDecoration(
+                            labelText: 'Email'
+                          ),
+                          validator: (value) {
+                            if (value.isEmpty) return 'Please enter some text';
+                            else if (!EmailValidator.validate(value.trim()))
+                              return "That doesn't look like an email address";
+                          },
+                        ),
+                        Container(
+                          margin: (_submitting ? 
+                            EdgeInsets.only(top: 10, bottom: 5) :
+                            EdgeInsets.only(top: 20, bottom: 20)),
+                          child: _submitting ? SpinKitCircle(color: AppBuilder.blue) :
+                            GestureDetector(
+                              child: Text('SEND EMAIL', style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppBuilder.blue,
+                                fontSize: 18,
+                              )),
+                              onTap: _submitForm,
+                            ),
+                        ),
+                        CircleBackButton(
+                          backPath: '/login',
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

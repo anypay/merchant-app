@@ -2,6 +2,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_builder.dart';
 import 'package:app/currencies.dart';
@@ -136,7 +137,7 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              child: Text(_errorMessage, style: TextStyle(color: Colors.red)),
+              child: Text(_errorMessage, style: TextStyle(color: AppBuilder.red)),
               margin: EdgeInsets.only(top: 50.0),
             ),
             _FilterBar(),

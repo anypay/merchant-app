@@ -38,7 +38,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     margin: EdgeInsets.all(20.0),
                     child: Text(Authentication.currentAccount.email ?? "", style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey,
+                      color: AppBuilder.grey,
                       fontSize: 18,
                     )),
                   ),
@@ -49,7 +49,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         AppBuilder.enableDarkMode ? "Light Mode" : "Dark Mode",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: AppBuilder.blue,
                           fontSize: 22,
                         ),
                       ),
@@ -64,7 +64,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     child: GestureDetector(
                       child: Text("Payments", style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: AppBuilder.blue,
                         fontSize: 22,
                       )),
                       onTap: () {
@@ -77,7 +77,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     child: GestureDetector(
                       child: Text("Settings", style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: AppBuilder.blue,
                         fontSize: 22,
                       )),
                       onTap: () {
@@ -90,7 +90,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     child: GestureDetector(
                       child: Text("Logout", style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                        color: AppBuilder.red,
                         fontSize: 22,
                       )),
                       onTap: () {

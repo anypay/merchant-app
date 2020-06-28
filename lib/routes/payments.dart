@@ -2,6 +2,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
@@ -53,12 +54,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
   List<Widget> _InvoiceList() {
     if (_errorMessage != null)
-      return [Text(_errorMessage, textAlign: TextAlign.center, style: TextStyle(color: Colors.red))];
+      return [Text(_errorMessage, textAlign: TextAlign.center, style: TextStyle(color: AppBuilder.red))];
     else if (allInvoices.length == 0)
       return [
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: SpinKitCircle(color: Colors.blue),
+          child: SpinKitCircle(color: AppBuilder.blue),
         )
       ];
     else return [
@@ -119,7 +120,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.blue,
+              color: AppBuilder.blue,
               fontSize: 28,
             ),
           ),
@@ -149,9 +150,9 @@ class _PaymentsPageState extends State<PaymentsPage> {
     return Scaffold(
       floatingActionButton: Container(
         child: Align(
-          alignment: Alignment(-0.85, -0.85),
+          alignment: Alignment(-0.85, -1),
           child: CircleBackButton(
-            margin: EdgeInsets.only(right: 20.0),
+            margin: EdgeInsets.only(right: 20.0, top: 65),
             backPath: '/navigation',
           )
         )

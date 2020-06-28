@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
@@ -21,15 +22,21 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  var _errorMessage = '';
+
+  String _errorMessage = '';
+  bool _submitting = false;
 
   final email = TextEditingController();
   final password = TextEditingController();
 
   void _submitForm() {
-    setState(() { _errorMessage = ""; });
     if (_formKey.currentState.validate()) {
+      setState(() {
+        _submitting = true;
+        _errorMessage = "";
+      });
       Client.authenticate(email.text, password.text).then((response) {
+        _submitting = false;
         if (response['success'])
           Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
         else {
@@ -73,10 +80,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(_errorMessage,
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(color: AppBuilder.red),
                         ),
                         TextFormField(
                           controller: email,
@@ -104,25 +111,27 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 20.0),
+                  margin: EdgeInsets.only(top: _submitting ? 10.0 : 20.0),
                   child: Column(
                     children: <Widget>[
                       Container(
-                        child: GestureDetector(
-                          child: Text('Login', style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                            fontSize: 18,
-                          )),
-                          onTap: _submitForm,
-                        ),
+                        margin: EdgeInsets.only(bottom: _submitting ? 20.0 : 40.0),
+                        child: _submitting ?
+                          SpinKitCircle(color: AppBuilder.blue) :
+                          GestureDetector(
+                            child: Text('Login', style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppBuilder.blue,
+                              fontSize: 18,
+                            )),
+                            onTap: _submitForm,
+                          ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 40.0),
                         child: GestureDetector(
                           child: Text('Sign Up', style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue,
+                            color: AppBuilder.blue,
                             fontSize: 18,
                           )),
                           onTap: () {
@@ -138,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                             GestureDetector(
                               child: Text('Quick Start', style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.green,
+                                color: AppBuilder.green,
                                 fontSize: 18,
                               )),
                               onTap: () {
@@ -149,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                             GestureDetector(
                               child: Text('Forgot Password?', style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blue,
+                                color: AppBuilder.blue,
                                 fontSize: 18,
                               )),
                               onTap: () {
