@@ -22,7 +22,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> setInvoiceNotes(invoiceId, notes) async {
-    return await makeRequest('post',
+    return makeRequest('post',
       path: '/invoices/$invoiceId/notes',
       unauthorized: (() => Authentication.logout()),
       body: { 'note': notes },
@@ -31,7 +31,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchCoins() async {
-    return await makeRequest('get',
+    return makeRequest('get',
       unauthorized: (() => Authentication.logout()),
       requireAuth: true,
       path: '/coins',
@@ -39,7 +39,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> getAccount() async {
-    return await makeRequest('get',
+    return makeRequest('get',
       unauthorized: (() => Authentication.logout()),
       requireAuth: true,
       path: '/account',
@@ -47,17 +47,17 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> createAccount(email, password) async {
-    return await makeRequest('post',
+    return makeRequest('post',
       path: '/accounts',
       body: {
-        'email': email,
+        'email': email.trim().toLowerCase(),
         'password': password,
       },
     );
   }
 
   static Future<Map<dynamic, dynamic>> updateAccount(data) async {
-    return await makeRequest('put',
+    return makeRequest('put',
       requireAuth: true,
       path: '/account',
       body: data,
@@ -65,7 +65,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> resetPassword(email) async {
-    return await makeRequest('post',
+    return makeRequest('post',
       path: '/password-resets',
       body: {
         'email': email.trim(),
@@ -91,7 +91,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> setAddress(code, address) async {
-    return await makeRequest('put',
+    return makeRequest('put',
       body: { 'address': address },
       path: '/addresses/$code',
       requireAuth: true,
