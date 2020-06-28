@@ -6,6 +6,7 @@ import 'dart:io';
 
 class Invoice {
   String denominationCurrency;
+  num denominationAmountPaid;
   num denominationAmount;
   DateTime completedAt;
   List paymentOptions;
@@ -21,6 +22,7 @@ class Invoice {
   String uid;
 
   Invoice({
+    this.denominationAmountPaid,
     this.denominationCurrency,
     this.denominationAmount,
     this.paymentOptions,
@@ -40,18 +42,23 @@ class Invoice {
     return (Currencies.all[denominationCurrency] ?? {})['decimal_places'] ?? 2;
   }
 
-  String amountWithDenomination() {
+  String paidAmountWithDenomination() {
+    return amountWithDenomination(denominationAmountPaid);
+  }
+
+  String amountWithDenomination([amount = null]) {
     var symbol = (Currencies.all[denominationCurrency] ?? {})['symbol'] ?? "";
+    amount ??= denominationAmount;
 
     try {
       return NumberFormat.currency(
         decimalDigits: decimalPlaces(),
         locale: Platform.localeName,
         symbol: symbol,
-      ).format(denominationAmount);
+      ).format(amount);
     } catch(e) {
       // Fallback in case there is an unsupported locale
-      var str = denominationAmount.toStringAsFixed(decimalPlaces());
+      var str = amount.toStringAsFixed(decimalPlaces());
       str = str.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
       return "$symbol$str";
     }
@@ -63,7 +70,11 @@ class Invoice {
   }
 
   bool isUnpaid() {
-    return !isExpired() && !isPaid();
+    return !(isExpired() || isPaid() || isUnderpaid());
+  }
+
+  bool isUnderpaid() {
+    return status == 'underpaid';
   }
 
   bool isPaid() {
@@ -102,6 +113,7 @@ class Invoice {
     var json = body;
     return Invoice(
       completedAt: json['completed_at'] == null ? null : DateTime.parse(json['completed_at']),
+      denominationAmountPaid: json['denomination_amount_paid'],
       denominationCurrency: json['denomination_currency'],
       denominationAmount: json['denomination_amount'],
       paymentOptions: json['payment_options'],

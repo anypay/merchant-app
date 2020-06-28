@@ -63,6 +63,7 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _done() {
+    _closeKeyboard();
     setState(() { notesError = ""; });
     periodicRequest.cancel();
 
@@ -176,84 +177,126 @@ class _InvoicePageState extends State<InvoicePage> {
     );
   }
 
-  Widget _PaidScreen() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Image(
-          width: 150,
-          image: AssetImage('assets/images/anypay-logo.png')
-        ),
-        ConfettiWidget(
-          confettiController: ConfettiController(
-            duration: Duration(seconds: 1),
-          )..play(),
-          blastDirectionality: BlastDirectionality.explosive,
-          maxBlastForce: 60,
-          minBlastForce: 30,
-          numberOfParticles: 20,
-          shouldLoop: false,
-          colors: AppBuilder.colors,
-        ),
-        Container(
-          child: Text('PAID!',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF34b83a),
-              fontSize: 48,
+  Widget _UnderpaidScreen() {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: AppBuilder.red,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.error_outline,
+            size: 120,
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20, bottom: 20),
+            child: Text(invoice.amountWithDenomination(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.lineThrough,
+                color: Theme.of(context).primaryColorLight,
+                fontSize: 28,
+              ),
             ),
           ),
-        ),
-        Container(
-          child: Text(Authentication.currentAccount.businessName ?? "",
-            style: TextStyle(
-              color: Theme.of(context).primaryColorDark,
-              fontSize: 20,
-            ),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: Text(invoice.amountWithDenomination(),
+          Text(invoice.paidAmountWithDenomination(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColorDark,
+              color: Theme.of(context).primaryColorLight,
               fontSize: 28,
             ),
           ),
-        ),
-        Container(
-          child: Text(invoice.inCurrency(),
-            style: TextStyle(
-              color: Theme.of(context).primaryColorDark,
-              fontSize: 20,
+          _BackButton(),
+        ]
+      )
+    );
+  }
+
+  Widget _PaidScreen() {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image(
+            width: 150,
+            image: AssetImage('assets/images/anypay-logo.png')
+          ),
+          ConfettiWidget(
+            confettiController: ConfettiController(
+              duration: Duration(seconds: 1),
+            )..play(),
+            blastDirectionality: BlastDirectionality.explosive,
+            maxBlastForce: 60,
+            minBlastForce: 30,
+            numberOfParticles: 20,
+            shouldLoop: false,
+            colors: AppBuilder.colors,
+          ),
+          Container(
+            child: Text('PAID!',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF34b83a),
+                fontSize: 48,
+              ),
             ),
           ),
-        ),
-        Container(
-          width: 300,
-          child: TextFormField(
-            controller: notes,
-            validator: (value) {
-              if (notesError.length > 0)
-                return notesError;
-            },
-            decoration: InputDecoration(
-              labelText: 'Add note...'
+          Container(
+            child: Text(Authentication.currentAccount.businessName ?? "",
+              style: TextStyle(
+                color: Theme.of(context).primaryColorDark,
+                fontSize: 20,
+              ),
             ),
           ),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 35),
-          child: GestureDetector(
-            onTap: _done,
-            child: Image(
-              image: AssetImage('assets/images/next_arrow.png'),
-              width: 50,
-            )
+          Container(
+            margin: EdgeInsets.only(top: 20, bottom: 20),
+            child: Text(invoice.amountWithDenomination(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColorDark,
+                fontSize: 28,
+              ),
+            ),
           ),
-        )
-      ]
+          Container(
+            child: Text(invoice.inCurrency(),
+              style: TextStyle(
+                color: Theme.of(context).primaryColorDark,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          Container(
+            width: 300,
+            child: TextFormField(
+              controller: notes,
+              validator: (value) {
+                if (notesError.length > 0)
+                  return notesError;
+              },
+              decoration: InputDecoration(
+                labelText: 'Add note...'
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 35),
+            child: GestureDetector(
+              onTap: _done,
+              child: Image(
+                image: AssetImage('assets/images/next_arrow.png'),
+                width: 50,
+              )
+            ),
+          )
+        ]
+      )
     );
   }
 
@@ -315,11 +358,13 @@ class _InvoicePageState extends State<InvoicePage> {
   Widget _InvoiceComponent() {
     if (invoice == null)
       if (_errorMessage != null)
-        return Text(_errorMessage, style: TextStyle(color: Colors.red));
+        return Text(_errorMessage, style: TextStyle(color: AppBuilder.red));
       else return Container(
           child: SpinKitCircle(color: qrColor),
           height: 360,
         );
+    else if (invoice.isUnderpaid())
+      return _UnderpaidScreen();
     else if (invoice.isPaid())
       return _PaidScreen();
     else if (choosingCurrency)
@@ -333,7 +378,7 @@ class _InvoicePageState extends State<InvoicePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(_successMessage,
-            style: TextStyle(color: Colors.green),
+            style: TextStyle(color: AppBuilder.green),
           ),
           Container(
             width: 235,
@@ -365,7 +410,7 @@ class _InvoicePageState extends State<InvoicePage> {
               borderRadius: BorderRadius.all(Radius.circular(15.0)),
             ),
             child: Container(
-              color: Colors.white,
+              color: AppBuilder.white,
               margin: EdgeInsets.all(12.0),
               child: GestureDetector(
                 onTap: _toggleUrlStyle,
@@ -436,25 +481,37 @@ class _InvoicePageState extends State<InvoicePage> {
         _rebuild();
       };
     return Visibility(
-      visible: invoice == null || invoice.isUnpaid(),
+      visible: invoice == null || invoice.isUnpaid() || invoice.isUnderpaid(),
       child: CircleBackButton(
         margin: EdgeInsets.only(top: 20.0),
         backPath: '/new-invoice',
+        opaque: false,
         onTap: onTap,
       )
     );
   }
 
+  void _closeKeyboard() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus)
+      currentFocus.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _InvoiceComponent(),
-            _BackButton(),
-          ],
+    return GestureDetector(
+      onTap: _closeKeyboard,
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _InvoiceComponent(),
+                _BackButton(),
+              ],
+            ),
+          ),
         ),
       ),
     );
