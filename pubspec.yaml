@@ -21,18 +21,19 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  flutter_spinkit: "^4.1.2"
-  qr_flutter: '^3.2.0'
-  basic_utils: '^2.5.3'
-  fluro: '^1.6.3'
-  http: '^0.12.1'
-  url_launcher: '^5.4.10'
   flutter_secure_storage: '^3.3.3'
   email_validator: '^1.0.0'
+  flutter_spinkit: "^4.1.2"
+  url_launcher: '^5.4.10'
+  barcode_scan: '^3.0.1'
+  basic_utils: '^2.5.3'
+  qr_flutter: '^3.2.0'
   confetti: '^0.5.2'
   timeago: '^2.0.26'
-  intl: "^0.16.1"
   share: '^0.6.4+3'
+  fluro: '^1.6.3'
+  http: '^0.12.1'
+  intl: "^0.16.1"
 
   flutter:
     sdk: flutter
