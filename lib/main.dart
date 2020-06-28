@@ -29,7 +29,7 @@ class Anypay extends StatelessWidget {
         primaryColorDark: Color(0xFF707070),
         primaryColorLight: Color(0xFF404040),
         brightness: Brightness.light,
-        accentColor: Colors.blue,
+        accentColor: AppBuilder.blue,
         fontFamily: 'Ubuntu',
       );
       var darkTheme = ThemeData(
@@ -52,7 +52,6 @@ class Anypay extends StatelessWidget {
         initialRoute: isAuthenticated ? '/new-invoice' : '/login',
         onGenerateRoute: FluroRouter.router.generator,
         title: 'Anypay Cash Register',
-        darkTheme: darkTheme,
         theme: theme,
       );
     });
