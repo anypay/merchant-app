@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:app/app_builder.dart';
 
 class CircleBackButton extends StatelessWidget {
-  CircleBackButton({this.backPath, this.onTap, this.margin});
+  CircleBackButton({this.backPath, this.onTap, this.margin, this.opaque});
   final backPath;
+  final opaque;
   final margin;
   final onTap;
 
@@ -17,7 +18,7 @@ class CircleBackButton extends StatelessWidget {
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        color: Theme.of(context).canvasColor,
+        color: (opaque ?? true) ? Theme.of(context).canvasColor : Color(0x00000000),
       ),
       child: GestureDetector(
         onTap: onTap ?? (() {
