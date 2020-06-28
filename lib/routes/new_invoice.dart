@@ -65,10 +65,17 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     });
   }
 
+  void _checkForDarkMode() {
+    AppBuilder.checkForDarkMode(context).then((_) {
+      AppBuilder.of(context).rebuild();
+    });
+  }
+
   @override
   void initState() {
     _rebuild();
     super.initState();
+    _checkForDarkMode();
     Authentication.getAccount().then((account) {
       _rebuild();
     });
@@ -83,7 +90,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(_errorMessage, style: TextStyle(color: Colors.red)),
+              Text(_errorMessage, style: TextStyle(color: AppBuilder.red)),
               Container(
                 child: Text(
                   _price > 0 ? '$_visiblePrice' : "",

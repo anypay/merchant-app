@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
 import "package:intl/intl.dart";
 import "package:app/coins.dart";
@@ -53,12 +54,12 @@ class _PaymentPageState extends State<PaymentPage> {
 
   Widget _Payment() {
     if (_payment == null)
-      return SpinKitCircle(color: Colors.blue);
+      return SpinKitCircle(color: AppBuilder.blue);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(_errorMessage, style: TextStyle(color: Colors.red)),
+        Text(_errorMessage, style: TextStyle(color: AppBuilder.red)),
         Container(
           margin: EdgeInsets.only(bottom: 40),
           child: Text(_payment.amountWithDenomination() ?? "",
@@ -115,7 +116,7 @@ class _PaymentPageState extends State<PaymentPage> {
             },
             child: Text('View on blockchain',
               style: TextStyle(
-                color: Colors.blue,
+                color: AppBuilder.blue,
                 fontSize: 20,
               ),
             ),
@@ -142,9 +143,9 @@ class _PaymentPageState extends State<PaymentPage> {
     return Scaffold(
       floatingActionButton: Container(
         child: Align(
-          alignment: Alignment(-0.85, -0.85),
+          alignment: Alignment(-0.85, -1),
           child: CircleBackButton(
-            margin: EdgeInsets.only(right: 20.0),
+            margin: EdgeInsets.only(right: 20.0, top: 65.0),
             backPath: '/payments',
           )
         )

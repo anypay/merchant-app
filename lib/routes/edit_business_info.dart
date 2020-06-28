@@ -1,6 +1,8 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_builder.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
@@ -33,6 +35,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
   final email = TextEditingController();
   final name = TextEditingController();
 
+  var _submitting = false;
   var _errorMessage = '';
   var _successMessage = '';
 
@@ -63,9 +66,11 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
 
   void _submitForm() {
     setState(() {
+      _submitting = true;
       _errorMessage = "";
       _successMessage = "";
     });
+    _closeKeyboard();
     if (_formKey.currentState.validate()) {
       Authentication.updateAccount({
         'ambassador_email': email.text.toLowerCase(),
@@ -73,6 +78,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
         'business_name': name.text,
       }).then((response) {
         setState(() {
+          _submitting = false;
           if (!allowBack)
             Navigator.pushNamedAndRemoveUntil(context, '/settings/addresses', (Route<dynamic> route) => false);
           else if (response['success'])
@@ -83,69 +89,78 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
     }
   }
 
+  void _closeKeyboard() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus)
+      currentFocus.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 300,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      Text(_successMessage,
-                        style: TextStyle(color: Colors.green),
-                      ),
-                      Text(_errorMessage,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      TextFormField(
-                        controller: name,
-                        decoration: InputDecoration(
-                          labelText: 'Business Name (Optional)'
+    return GestureDetector(
+      onTap: _closeKeyboard,
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 300,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        Text(_successMessage,
+                          style: TextStyle(color: AppBuilder.green),
                         ),
-                      ),
-                      TextFormField(
-                        controller: address,
-                        decoration: InputDecoration(
-                          labelText: 'Business Street Address (Optional)'
+                        Text(_errorMessage,
+                          style: TextStyle(color: AppBuilder.red),
                         ),
-                      ),
-                      TextFormField(
-                        controller: email,
-                        decoration: InputDecoration(
-                          labelText: 'Ambassador Email (Optional)'
+                        TextFormField(
+                          controller: name,
+                          decoration: InputDecoration(
+                            labelText: 'Business Name (Optional)'
+                          ),
                         ),
-                        validator: (value) {
-                          if (!value.isEmpty && !EmailValidator.validate(value.trim()))
-                            return "That doesn't look like an email address";
-                        },
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 40.0),
-                        child: GestureDetector(
-                          child: Text(allowBack ? 'SAVE' : 'Finish', style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                            fontSize: 18,
-                          )),
-                          onTap: _submitForm,
+                        TextFormField(
+                          controller: address,
+                          decoration: InputDecoration(
+                            labelText: 'Business Street Address (Optional)'
+                          ),
                         ),
-                      ),
-                      !allowBack ? null : CircleBackButton(
-                        margin: EdgeInsets.only(top: 20.0),
-                        backPath: '/settings',
-                      )
-                    ],
+                        TextFormField(
+                          controller: email,
+                          decoration: InputDecoration(
+                            labelText: 'Ambassador Email (Optional)'
+                          ),
+                          validator: (value) {
+                            if (!value.isEmpty && !EmailValidator.validate(value.trim()))
+                              return "That doesn't look like an email address";
+                          },
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 40.0),
+                          child: _submitting ? SpinKitCircle(color: AppBuilder.randomColor) : GestureDetector(
+                            child: Text(allowBack ? 'SAVE' : 'Finish', style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppBuilder.blue,
+                              fontSize: 18,
+                            )),
+                            onTap: _submitForm,
+                          ),
+                        ),
+                        !allowBack ? Container() : CircleBackButton(
+                          margin: EdgeInsets.only(top: 20.0),
+                          backPath: '/settings',
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
