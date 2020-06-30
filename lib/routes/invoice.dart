@@ -1,6 +1,7 @@
 import 'package:url_launcher/url_launcher.dart'
   if (dart.library.html) 'package:app/web_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:rect_getter/rect_getter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:app/authentication.dart';
 import 'package:confetti/confetti.dart';
@@ -55,6 +56,9 @@ class _InvoicePageState extends State<InvoicePage> {
 
   var invoice;
 
+
+  var sharePlacement;
+
   @override
   void dispose() {
     periodicRequest.cancel();
@@ -90,16 +94,10 @@ class _InvoicePageState extends State<InvoicePage> {
     _rebuild();
   }
 
-  void _copyUri() {
-    Clipboard.setData(ClipboardData(text: uri));
-    setState(() => _successMessage = "Coppied!" ); 
-    Timer(Duration(seconds: 2), () {
-      setState(() => _successMessage = "" ); 
-    });
-  }
-
   void _shareUri() async {
-    await Share.share(uri);
+    await Share.share(uri,
+      sharePositionOrigin: sharePlacement.getRect()
+    );
   }
 
   String getFormat() {
@@ -423,51 +421,35 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
             ),
           ),
-          Container(
-            width: 235,
-            margin: EdgeInsets.only(top: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: _copyUri,
-                  child: Row(
-                    children: <Widget>[
-                      Text('Copy', style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      )),
-                      Container(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Image(
-                          image: AssetImage('assets/images/copy_icon.png'),
-                          width: 20,
-                        )
-                      )
-                    ]
-                  )
-                ),
-                GestureDetector(
-                  onTap: _shareUri,
-                  child: Row(
-                    children: <Widget>[
-                      Text('Share', style: TextStyle(
+          (sharePlacement = RectGetter.defaultKey(
+            child: Container(
+              width: 235,
+              margin: EdgeInsets.only(top: 20.0),
+              child: GestureDetector(
+                onTap: _shareUri,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Share Payment Request',
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 13,
-                      )),
-                      Container(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Image(
-                          image: AssetImage('assets/images/share.png'),
-                          width: 20,
-                        )
                       )
-                    ]
-                  )
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Image(
+                          image: AppBuilder.enableDarkMode ?
+                            AssetImage('assets/images/share-white.png') :
+                            AssetImage('assets/images/share.png'),
+                        width: 20,
+                      )
+                    )
+                  ]
                 )
-              ]
+              )
             )
-          )
+          ))
         ]
       )
     );
