@@ -2,6 +2,7 @@ import 'package:app/currencies.dart';
 import 'dart:convert';
 
 class Account {
+  bool fetchingCoins = false;
   String ambassadorEmail;
   String physicalAddress;
   String businessName;
