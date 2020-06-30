@@ -35,7 +35,9 @@ class _NewAddressPageState extends State<NewAddressPage> {
   final _formKey = GlobalKey<FormState>();
   final String code;
 
+  var _submittingScan = false;
   var _successMessage = '';
+  var _pendingMessage = '';
   var _paymailAddress = '';
   var _errorMessage = '';
   var _pasting = false;
@@ -61,17 +63,21 @@ class _NewAddressPageState extends State<NewAddressPage> {
   void _scanAddress() async {
     var result = await BarcodeScanner.scan();
 
-    if (result.rawContent != null)
+    if (result.rawContent != null) {
+      _submittingScan = true;
       _setAddress(result.rawContent);
+    }
   }
 
   void _setAddress(address) async {
     setState(() {
+      _pendingMessage = address;
       _successMessage = '';
       _errorMessage = '';
     });
     Client.setAddress(code, address).then((response) {
       setState(() {
+        _submittingScan = false;
         _pasting = false;
         _saving = false;
         if (response['success']) {
@@ -129,6 +135,15 @@ class _NewAddressPageState extends State<NewAddressPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
+                      Container(
+                        width: 320,
+                        child: Text(_pendingMessage,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
                       Container(
                         width: 320,
                         child: Text(_successMessage,
@@ -229,7 +244,10 @@ class _NewAddressPageState extends State<NewAddressPage> {
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.only(right: 20.0, top: 15.0),
-                              child: Icon(
+                              child: _submittingScan ?
+                              SpinKitCircle(
+                                color: AppBuilder.green,
+                              ) : Icon(
                                 Icons.camera_alt,
                                 size: 50,
                               ),
