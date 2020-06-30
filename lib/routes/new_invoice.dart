@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
+import 'dart:async';
 import 'dart:math';
 
 
@@ -40,14 +41,14 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   }
 
   void _submit() {
-    if (_submitting) return;
-
     _submitting = true;
     AppBuilder.randomizeColor();
     setState(() { _errorMessage = ""; });
     var account = Authentication.currentAccount;
 
-    if (account.coins.length > 0)
+    if (account.coins.length == 0 && account.fetchingCoins)
+      Timer(Duration(milliseconds: 500), _submit);
+    else if (account.coins.length > 0)
       Client.createInvoice(_price, account.preferredCoinCode()).then((response) {
         if (response['success']) {
           var invoiceId = response['invoiceId'];

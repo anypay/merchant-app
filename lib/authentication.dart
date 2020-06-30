@@ -52,7 +52,9 @@ class Authentication {
 
   static Future<void> fetchCoins() async {
     if (isAuthenticated())
+      currentAccount.fetchingCoins = true;
       Client.fetchCoins().then((response) {
+        currentAccount.fetchingCoins = false;
         if (response['success']) {
           var coins = response['body']['coins'];
           coins.removeWhere((coin) => !coin['enabled']);
