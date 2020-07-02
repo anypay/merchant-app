@@ -11,7 +11,6 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Authentication.checkForAuth().then((isAuthenticated) {
     FluroRouter.setupRouter();
-
     runApp(Anypay(isAuthenticated));
   });
 }
@@ -51,6 +50,7 @@ class Anypay extends StatelessWidget {
       return MaterialApp(
         initialRoute: isAuthenticated ? '/new-invoice' : '/login',
         onGenerateRoute: FluroRouter.router.generator,
+        navigatorKey: AppBuilder.globalKey,
         title: 'Anypay Cash Register',
         theme: theme,
       );
