@@ -36,19 +36,19 @@ class _NewAddressPageState extends State<NewAddressPage> {
   final String code;
 
   var _submittingScan = false;
-  var _successMessage = '';
-  var _pendingMessage = '';
   var _paymailAddress = '';
-  var _errorMessage = '';
+  var _messageType = '';
   var _pasting = false;
   var _saving = false;
+  var _message = '';
 
   @override
   void initState() {
     super.initState();
     Authentication.fetchCoins().then((v) {
       setState(() {
-        _successMessage = Authentication.currentAccount.addressFor(this.code) ?? "";
+        _message = Authentication.currentAccount.addressFor(this.code) ?? "";
+        _messageType = 'success';
       });
     });
   }
@@ -71,9 +71,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   void _setAddress(address) async {
     setState(() {
-      _pendingMessage = address;
-      _successMessage = '';
-      _errorMessage = '';
+      _messageType = 'pending';
+      _message = address;
     });
     Client.setAddress(code, address).then((response) {
       setState(() {
@@ -81,12 +80,23 @@ class _NewAddressPageState extends State<NewAddressPage> {
         _pasting = false;
         _saving = false;
         if (response['success']) {
-          _successMessage = address;
-          _errorMessage = "";
+          _messageType = 'success';
+          _message = address;
           Authentication.fetchCoins();
-        } else _errorMessage = response['message'];
+        } else {
+          _messageType = 'error';
+          _message = response['message'];
+        }
       });
     });
+  }
+
+  Color _messageColor() {
+    return {
+      'pending': Theme.of(context).primaryColorDark,
+      'success': AppBuilder.green,
+      'error': AppBuilder.red,
+    }[_messageType];
   }
 
   void _closeKeyboard() {
@@ -135,33 +145,21 @@ class _NewAddressPageState extends State<NewAddressPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Container(
-                        width: 320,
-                        child: Text(_pendingMessage,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
+                      ConstrainedBox(
+                        constraints: new BoxConstraints(
+                          minHeight: 5.0,
+                          minWidth: 320,
+                          maxHeight: 80.0,
+                          maxWidth: 320,
                         ),
-                      ),
-                      Container(
-                        width: 320,
-                        child: Text(_successMessage,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: AppBuilder.green,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 320,
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: Text(_errorMessage,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: AppBuilder.red,
-                            fontSize: 16,
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 20),
+                          child: Text(_message,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: _messageColor(),
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
