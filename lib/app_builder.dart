@@ -8,6 +8,7 @@ import 'package:app/native_storage.dart'
 class AppBuilder extends StatefulWidget {
   final Function(BuildContext) builder;
 
+  static final globalKey = new GlobalKey<NavigatorState>();
   static bool enableDarkMode = false;
 
   static String logoImagePath() {

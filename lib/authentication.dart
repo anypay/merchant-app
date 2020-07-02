@@ -1,3 +1,4 @@
+import 'package:app/push_notifications.dart';
 import 'package:app/models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:app/app_builder.dart';
@@ -46,8 +47,14 @@ class Authentication {
 
   static void setCurrentAccount(newAccount) {
     currentAccount = newAccount;
+    ensureNotificationPermission();
     saveAccountToDisk();
     fetchCoins();
+  }
+
+  static void ensureNotificationPermission() {
+    if (isAuthenticated())
+      PushNotificationsManager().init();
   }
 
   static Future<void> fetchCoins() async {
