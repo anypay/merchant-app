@@ -145,17 +145,6 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             GestureDetector(
-                              child: Text('Quick Start', style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppBuilder.green,
-                                fontSize: 18,
-                              )),
-                              onTap: () {
-                                Navigator.pushNamed(context, '/quick-start');
-                              }
-                            ),
-                            Text(" | "),
-                            GestureDetector(
                               child: Text('Forgot Password?', style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: AppBuilder.blue,

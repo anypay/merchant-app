@@ -98,11 +98,6 @@ class FluroRouter {
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/quick-start',
-      handler: newHandler(() => Addresses()),
-      transitionType: TransitionType.inFromBottom,
-    );
-    router.define(
       '/new-address/:code',
       handler: newHandler((code) => NewAddress(code), 'code'),
       transitionType: TransitionType.inFromBottom,
