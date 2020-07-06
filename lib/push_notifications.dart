@@ -2,8 +2,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:app/app_builder.dart';
 import 'package:app/events.dart';
 import 'dart:convert';
 
@@ -47,11 +47,11 @@ class PushNotificationsManager {
         'item_name': data['item_name'],
         'uid': data['invoice_id'],
       });
-			AppBuilder.openDialog("${invoice.paidAmountWithDenomination()} PAID", "Grab n Go ${invoice.itemName ?? "item"}",
+			AppController.openDialog("${invoice.paidAmountWithDenomination()} PAID", "Grab n Go ${invoice.itemName ?? "item"}",
         buttons: [{
           'text': 'Open Invoice',
           'onPressed': () {
-            AppBuilder.openPath("/invoices/${invoice.uid}");
+            AppController.openPath("/invoices/${invoice.uid}");
           },
         }]
       );
@@ -67,11 +67,11 @@ class PushNotificationsManager {
       // onMessage: handlerForWhenAppIsOpen,
       onLaunch: (Map<String, dynamic> message) async {
         var data = message['data'] ?? message;
-        AppBuilder.openPath(data['path']);
+        AppController.openPath(data['path']);
       },
       onResume: (Map<String, dynamic> message) async {
         var data = message['data'] ?? message;
-        AppBuilder.openPath(data['path']);
+        AppController.openPath(data['path']);
       },
     );
 

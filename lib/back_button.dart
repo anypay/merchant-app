@@ -1,5 +1,5 @@
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:app/app_builder.dart';
 
 class CircleBackButton extends StatelessWidget {
   CircleBackButton({this.backPath, this.onTap, this.margin, this.opaque});
@@ -11,7 +11,7 @@ class CircleBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var imagePath = 'assets/images/close-button.png';
-    if (AppBuilder.enableDarkMode)
+    if (AppController.enableDarkMode)
       imagePath = 'assets/images/close-button-light.png';
     return Container(
       margin: margin,

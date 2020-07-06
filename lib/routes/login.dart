@@ -1,7 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
 
 class Login extends StatelessWidget {
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Image(
                   width: 300,
-                  image: AssetImage(AppBuilder.logoImagePath())
+                  image: AssetImage(AppController.logoImagePath())
                 ),
                 Container(
                   width: 300,
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(_errorMessage,
-                          style: TextStyle(color: AppBuilder.red),
+                          style: TextStyle(color: AppController.red),
                         ),
                         TextFormField(
                           controller: email,
@@ -117,11 +117,11 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         margin: EdgeInsets.only(bottom: _submitting ? 20.0 : 40.0),
                         child: _submitting ?
-                          SpinKitCircle(color: AppBuilder.blue) :
+                          SpinKitCircle(color: AppController.blue) :
                           GestureDetector(
                             child: Text('Login', style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: AppBuilder.blue,
+                              color: AppController.blue,
                               fontSize: 18,
                             )),
                             onTap: _submitForm,
@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: GestureDetector(
                           child: Text('Sign Up', style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppBuilder.blue,
+                            color: AppController.blue,
                             fontSize: 18,
                           )),
                           onTap: () {
@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                             GestureDetector(
                               child: Text('Forgot Password?', style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: AppBuilder.blue,
+                                color: AppController.blue,
                                 fontSize: 18,
                               )),
                               onTap: () {

@@ -1,7 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:app/app_builder.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
@@ -80,10 +80,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(_successMessage,
-                          style: TextStyle(color: AppBuilder.green),
+                          style: TextStyle(color: AppController.green),
                         ),
                         Text(_errorMessage,
-                          style: TextStyle(color: AppBuilder.red),
+                          style: TextStyle(color: AppController.red),
                         ),
                         TextFormField(
                           controller: email,
@@ -100,11 +100,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           margin: (_submitting ? 
                             EdgeInsets.only(top: 10, bottom: 5) :
                             EdgeInsets.only(top: 20, bottom: 20)),
-                          child: _submitting ? SpinKitCircle(color: AppBuilder.blue) :
+                          child: _submitting ? SpinKitCircle(color: AppController.blue) :
                             GestureDetector(
                               child: Text('SEND EMAIL', style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: AppBuilder.blue,
+                                color: AppController.blue,
                                 fontSize: 18,
                               )),
                               onTap: _submitForm,

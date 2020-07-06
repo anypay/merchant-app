@@ -1,7 +1,7 @@
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:app/app_builder.dart';
+import 'package:app/app_controller.dart';
 import 'package:app/router.dart';
 
 import 'package:app/native_storage.dart'
@@ -22,13 +22,13 @@ class Anypay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBuilder(builder: (context) {
+    return AppController(builder: (context) {
       var theme;
       var lightTheme = ThemeData(
         primaryColorDark: Color(0xFF707070),
         primaryColorLight: Color(0xFF404040),
         brightness: Brightness.light,
-        accentColor: AppBuilder.blue,
+        accentColor: AppController.blue,
         fontFamily: 'Ubuntu',
       );
       var darkTheme = ThemeData(
@@ -42,7 +42,7 @@ class Anypay extends StatelessWidget {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
       theme = lightTheme;
 
-      if (AppBuilder.enableDarkMode) {
+      if (AppController.enableDarkMode) {
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
         theme = darkTheme;
       }
@@ -50,7 +50,7 @@ class Anypay extends StatelessWidget {
       return MaterialApp(
         initialRoute: isAuthenticated ? '/new-invoice' : '/login',
         onGenerateRoute: FluroRouter.router.generator,
-        navigatorKey: AppBuilder.globalKey,
+        navigatorKey: AppController.globalKey,
         title: 'Anypay Cash Register',
         theme: theme,
       );

@@ -1,9 +1,9 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:app/authentication.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:app/app_builder.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
@@ -96,8 +96,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
   Color _messageColor() {
     return {
       'pending': Theme.of(context).primaryColorDark,
-      'success': AppBuilder.green,
-      'error': AppBuilder.red,
+      'success': AppController.green,
+      'error': AppController.red,
     }[_messageType];
   }
 
@@ -192,7 +192,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                                 margin: EdgeInsets.only(bottom: _saving ? 0 : 30),
                                 child: _saving ? 
                                   SpinKitCircle(
-                                    color: AppBuilder.blue,
+                                    color: AppController.blue,
                                   ) : GestureDetector(
                                     onTap: () {
                                       _saving = true;
@@ -202,7 +202,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                                     child: Text('Save',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: AppBuilder.blue,
+                                        color: AppController.blue,
                                         fontSize: 18,
                                       )
                                     )
@@ -222,7 +222,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                               margin: EdgeInsets.only(right: 20.0),
                               child: _pasting ? 
                               SpinKitCircle(
-                                color: AppBuilder.green,
+                                color: AppController.green,
                               ) : Icon(
                                 Icons.content_paste,
                                 size: 50,
@@ -246,7 +246,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                               margin: EdgeInsets.only(right: 20.0, top: 15.0),
                               child: _submittingScan ?
                               SpinKitCircle(
-                                color: AppBuilder.green,
+                                color: AppController.green,
                               ) : Icon(
                                 Icons.camera_alt,
                                 size: 50,

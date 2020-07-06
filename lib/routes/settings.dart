@@ -1,7 +1,7 @@
 import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
-import 'package:app/app_builder.dart';
+import 'package:app/app_controller.dart';
 import 'package:app/currencies.dart';
 
 class Settings extends StatelessWidget {
@@ -49,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(_successMessage,
-              style: TextStyle(color: AppBuilder.green),
+              style: TextStyle(color: AppController.green),
             ),
             Container(
               width: 300,

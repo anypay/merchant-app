@@ -1,7 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:app/app_builder.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 
@@ -83,7 +83,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               children: <Widget>[
                 Image(
                   width: 300,
-                  image: AssetImage(AppBuilder.logoImagePath())
+                  image: AssetImage(AppController.logoImagePath())
                 ),
                 Container(
                   width: 300,
@@ -94,7 +94,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(_errorMessage,
-                          style: TextStyle(color: AppBuilder.red),
+                          style: TextStyle(color: AppController.red),
                         ),
                         TextFormField(
                           controller: email,
@@ -137,11 +137,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   margin: (_submitting ? 
                     EdgeInsets.only(top: 5, bottom: 10) :
                     EdgeInsets.only(top: 20, bottom: 20)),
-                  child: _submitting ? SpinKitCircle(color: AppBuilder.blue) :
+                  child: _submitting ? SpinKitCircle(color: AppController.blue) :
                     GestureDetector(
                       child: Text('Register', style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: AppBuilder.blue,
+                        color: AppController.blue,
                         fontSize: 18,
                       )),
                       onTap: _submitForm,

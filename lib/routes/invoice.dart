@@ -3,19 +3,16 @@ import 'package:rect_getter/rect_getter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
+import 'package:app/app_controller.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/back_button.dart';
-import 'package:app/app_builder.dart';
 import 'package:share/share.dart';
 import 'package:app/events.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
-
 import 'dart:async';
-
-
 
 class ShowInvoice extends StatelessWidget {
   ShowInvoice(this.id);
@@ -137,7 +134,7 @@ class _InvoicePageState extends State<InvoicePage> {
   @override
   void initState() {
     super.initState();
-    qrColor = AppBuilder.randomColor;
+    qrColor = AppController.randomColor;
     _fetchInvoice();
     periodicRequest = Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
     event = Events.on('invoice.paid', (payload) {
@@ -187,7 +184,7 @@ class _InvoicePageState extends State<InvoicePage> {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: AppBuilder.red,
+        color: AppController.red,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -240,7 +237,7 @@ class _InvoicePageState extends State<InvoicePage> {
             minBlastForce: 30,
             numberOfParticles: 20,
             shouldLoop: false,
-            colors: AppBuilder.colors,
+            colors: AppController.colors,
           ),
           Container(
             child: Text('PAID!',
@@ -363,7 +360,7 @@ class _InvoicePageState extends State<InvoicePage> {
   Widget _InvoiceComponent() {
     if (invoice == null)
       if (_errorMessage != null)
-        return Text(_errorMessage, style: TextStyle(color: AppBuilder.red));
+        return Text(_errorMessage, style: TextStyle(color: AppController.red));
       else return Container(
           child: SpinKitCircle(color: qrColor),
           height: 360,
@@ -383,7 +380,7 @@ class _InvoicePageState extends State<InvoicePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(_successMessage,
-            style: TextStyle(color: AppBuilder.green),
+            style: TextStyle(color: AppController.green),
           ),
           Container(
             width: 235,
@@ -415,7 +412,7 @@ class _InvoicePageState extends State<InvoicePage> {
               borderRadius: BorderRadius.all(Radius.circular(15.0)),
             ),
             child: Container(
-              color: AppBuilder.white,
+              color: AppController.white,
               margin: EdgeInsets.all(12.0),
               child: GestureDetector(
                 onTap: _toggleUrlStyle,
@@ -446,7 +443,7 @@ class _InvoicePageState extends State<InvoicePage> {
                     Container(
                       padding: EdgeInsets.only(left: 15),
                       child: Image(
-                          image: AppBuilder.enableDarkMode ?
+                          image: AppController.enableDarkMode ?
                             AssetImage('assets/images/share-white.png') :
                             AssetImage('assets/images/share.png'),
                         width: 20,

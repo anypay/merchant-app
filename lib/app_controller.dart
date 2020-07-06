@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:app/native_storage.dart'
   if (dart.library.html) 'package:app/web_storage.dart';
 
-class AppBuilder extends StatefulWidget {
+class AppController extends StatefulWidget {
   final Function(BuildContext) builder;
 
   static final globalKey = new GlobalKey<NavigatorState>();
@@ -23,7 +23,7 @@ class AppBuilder extends StatefulWidget {
   }
 
   static void toggleDarkMode([value = null]) {
-    AppBuilder.enableDarkMode = value ?? !AppBuilder.enableDarkMode;
+    AppController.enableDarkMode = value ?? !AppController.enableDarkMode;
     saveDarkModeToDisk();
   }
 
@@ -36,7 +36,7 @@ class AppBuilder extends StatefulWidget {
   }
 
   static Future<void> saveDarkModeToDisk() async {
-    if (AppBuilder.enableDarkMode)
+    if (AppController.enableDarkMode)
       return await Storage.write('enableDarkMode', 'true');
     else return await Storage.write('enableDarkMode', 'false');
   }
@@ -58,7 +58,7 @@ class AppBuilder extends StatefulWidget {
   ].toList();
 
   static void openDialog(title, body, {path: null, buttonText: null, buttons: null}) async {
-    var context = AppBuilder.globalKey.currentState.overlay.context;
+    var context = AppController.globalKey.currentState.overlay.context;
     buttons ??= [];
     showDialog(
       context: context,
@@ -95,19 +95,19 @@ class AppBuilder extends StatefulWidget {
     if (path != null) Navigator.pushNamed(context, path);
   }
 
-  const AppBuilder(
+  const AppController(
       {Key key, this.builder})
   : super(key: key);
 
   @override
-  AppBuilderState createState() => new AppBuilderState();
+  AppControllerState createState() => new AppControllerState();
 
-  static AppBuilderState of(BuildContext context) {
-    return context.ancestorStateOfType(const TypeMatcher<AppBuilderState>());
+  static AppControllerState of(BuildContext context) {
+    return context.ancestorStateOfType(const TypeMatcher<AppControllerState>());
   }
 }
 
-class AppBuilderState extends State<AppBuilder> {
+class AppControllerState extends State<AppController> {
 
   @override
   Widget build(BuildContext context) {
@@ -118,3 +118,4 @@ class AppBuilderState extends State<AppBuilder> {
     setState(() {});
   }
 }
+

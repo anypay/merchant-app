@@ -1,9 +1,9 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
-import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
 import 'dart:async';
 import 'dart:math';
@@ -42,7 +42,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   void _submit() {
     _submitting = true;
-    AppBuilder.randomizeColor();
+    AppController.randomizeColor();
     setState(() { _errorMessage = ""; });
     var account = Authentication.currentAccount;
 
@@ -67,8 +67,8 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   }
 
   void _checkForDarkMode() {
-    AppBuilder.checkForDarkMode(context).then((_) {
-      AppBuilder.of(context).rebuild();
+    AppController.checkForDarkMode(context).then((_) {
+      AppController.of(context).rebuild();
     });
   }
 
@@ -91,7 +91,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(_errorMessage, style: TextStyle(color: AppBuilder.red)),
+              Text(_errorMessage, style: TextStyle(color: AppController.red)),
               Container(
                 child: Text(
                   _price > 0 ? '$_visiblePrice' : "",
@@ -110,7 +110,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
                     font: 'Default',
                   ),
                   _submitting ?
-                  SpinKitCircle(color: AppBuilder.randomColor) : GestureDetector(
+                  SpinKitCircle(color: AppController.randomColor) : GestureDetector(
                     onTap: _submit,
                     child: Visibility(
                       visible: _price > 0,

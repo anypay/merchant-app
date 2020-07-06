@@ -1,7 +1,7 @@
 import 'package:app/authentication.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
-import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
 
 class Navigation extends StatelessWidget {
@@ -38,7 +38,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     margin: EdgeInsets.all(20.0),
                     child: Text(Authentication.currentAccount.email ?? "", style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AppBuilder.grey,
+                      color: AppController.grey,
                       fontSize: 18,
                     )),
                   ),
@@ -46,16 +46,16 @@ class _NavigationPageState extends State<NavigationPage> {
                     margin: EdgeInsets.all(20.0),
                     child: GestureDetector(
                       child: Text(
-                        AppBuilder.enableDarkMode ? "Light Mode" : "Dark Mode",
+                        AppController.enableDarkMode ? "Light Mode" : "Dark Mode",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: AppBuilder.blue,
+                          color: AppController.blue,
                           fontSize: 22,
                         ),
                       ),
                       onTap: () {
-                        AppBuilder.toggleDarkMode();
-                        AppBuilder.of(context).rebuild();
+                        AppController.toggleDarkMode();
+                        AppController.of(context).rebuild();
                       }
                     ),
                   ),
@@ -64,7 +64,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     child: GestureDetector(
                       child: Text("Payments", style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: AppBuilder.blue,
+                        color: AppController.blue,
                         fontSize: 22,
                       )),
                       onTap: () {
@@ -77,7 +77,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     child: GestureDetector(
                       child: Text("Settings", style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: AppBuilder.blue,
+                        color: AppController.blue,
                         fontSize: 22,
                       )),
                       onTap: () {
@@ -90,7 +90,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     child: GestureDetector(
                       child: Text("Logout", style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: AppBuilder.red,
+                        color: AppController.red,
                         fontSize: 22,
                       )),
                       onTap: () {

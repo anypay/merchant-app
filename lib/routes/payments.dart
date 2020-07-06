@@ -1,8 +1,8 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
-import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
 import "package:intl/intl.dart";
 
@@ -55,12 +55,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
   List<Widget> _InvoiceList() {
     if (_errorMessage != null)
-      return [Text(_errorMessage, textAlign: TextAlign.center, style: TextStyle(color: AppBuilder.red))];
+      return [Text(_errorMessage, textAlign: TextAlign.center, style: TextStyle(color: AppController.red))];
     else if (allInvoices.length == 0)
       return [
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: SpinKitCircle(color: AppBuilder.blue),
+          child: SpinKitCircle(color: AppController.blue),
         )
       ];
     else return [
@@ -124,7 +124,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppBuilder.blue,
+              color: AppController.blue,
               fontSize: 28,
             ),
           ),
