@@ -1,3 +1,4 @@
+import 'package:app/authentication.dart';
 import 'package:app/currencies.dart';
 import 'package:app/client.dart';
 import "package:intl/intl.dart";
@@ -10,6 +11,7 @@ class Invoice {
   num denominationAmount;
   DateTime completedAt;
   List paymentOptions;
+  String itemName;
   String currency;
   DateTime expiry;
   String address;
@@ -28,6 +30,7 @@ class Invoice {
     this.paymentOptions,
     this.completedAt,
     this.complete,
+    this.itemName,
     this.currency,
     this.address,
     this.amount,
@@ -47,7 +50,8 @@ class Invoice {
   }
 
   String amountWithDenomination([amount = null]) {
-    var symbol = (Currencies.all[denominationCurrency] ?? {})['symbol'] ?? "";
+    var defaultCurrency = Authentication.currentAccount.denomination;
+    var symbol = (Currencies.all[denominationCurrency ?? defaultCurrency] ?? {})['symbol'] ?? "";
     amount ??= denominationAmount;
 
     try {
@@ -65,7 +69,8 @@ class Invoice {
   }
 
   String inCurrency() {
-    var symbol = Currencies.all[denominationCurrency]['symbol'];
+    var defaultCurrency = Authentication.currentAccount.denomination;
+    var symbol = Currencies.all[denominationCurrency ?? defaultCurrency]['symbol'];
     return "$amount $currency";
   }
 
@@ -113,12 +118,13 @@ class Invoice {
     var json = body;
     return Invoice(
       completedAt: json['completed_at'] == null ? null : DateTime.parse(json['completed_at']),
+      expiry: json['expiry'] == null ? null : DateTime.parse(json['expiry']),
       denominationAmountPaid: json['denomination_amount_paid'],
       denominationCurrency: json['denomination_currency'],
       denominationAmount: json['denomination_amount'],
       paymentOptions: json['payment_options'],
-      expiry: DateTime.parse(json['expiry']),
       complete: json['complete'] ?? false,
+      itemName: json['item_name'],
       currency: json['currency'],
       address: json['address'],
       amount: json['amount'],

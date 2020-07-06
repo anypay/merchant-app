@@ -169,9 +169,14 @@ class Client {
       var message = responseBody['message'];
 
       var code = response.statusCode;
-      if (response.statusCode == 401 && unauthorized != null)
-        return unauthorized();
-      else return {
+      if (response.statusCode == 401 && unauthorized != null) {
+        unauthorized();
+        return {
+          'message': 'Unauthorized',
+          'success': false,
+          'body': { },
+        };
+      } else return {
         'success': response.statusCode == 200,
         'message': humanize(message ?? ""),
         'body': responseBody,

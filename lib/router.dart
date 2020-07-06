@@ -54,7 +54,7 @@ class FluroRouter {
     );
     router.define(
       '/invoices/:id',
-      handler: newHandler((id) => Invoice(id), 'id'),
+      handler: newHandler((id) => ShowInvoice(id), 'id'),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(

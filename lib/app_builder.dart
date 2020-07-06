@@ -1,4 +1,3 @@
-import 'package:app/authentication.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
 
@@ -57,6 +56,44 @@ class AppBuilder extends StatefulWidget {
     blue,
     red,
   ].toList();
+
+  static void openDialog(title, body, {path: null, buttonText: null, buttons: null}) async {
+    var context = AppBuilder.globalKey.currentState.overlay.context;
+    buttons ??= [];
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          title: Text(title),
+          subtitle: Text(body),
+        ),
+        actions: <Widget>[
+          ...buttons.map((button) {
+            return FlatButton(
+              child: Text(button['text']),
+              onPressed: () {
+                Navigator.of(context).pop();
+                button['onPressed']();
+              },
+            );
+          }),
+          FlatButton(
+            child: Text(buttonText ?? 'Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (path != null)
+                openPath(path);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  static void openPath(String path) async {
+    var context = globalKey.currentState.overlay.context;
+    if (path != null) Navigator.pushNamed(context, path);
+  }
 
   const AppBuilder(
       {Key key, this.builder})

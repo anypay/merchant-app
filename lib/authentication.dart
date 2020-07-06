@@ -47,18 +47,19 @@ class Authentication {
 
   static void setCurrentAccount(newAccount) {
     currentAccount = newAccount;
-    ensureNotificationPermission();
+    ensureNotifications();
     saveAccountToDisk();
     fetchCoins();
   }
 
-  static void ensureNotificationPermission() {
-    if (isAuthenticated())
+  static void ensureNotifications() {
+    if (isAuthenticated()) {
       PushNotificationsManager().init();
+    }
   }
 
   static Future<void> fetchCoins() async {
-    if (isAuthenticated())
+    if (isAuthenticated()) {
       currentAccount.fetchingCoins = true;
       Client.fetchCoins().then((response) {
         currentAccount.fetchingCoins = false;
@@ -68,6 +69,7 @@ class Authentication {
           currentAccount.coins = coins;
         }
       });
+    }
   }
 
   static bool isAuthenticated() {

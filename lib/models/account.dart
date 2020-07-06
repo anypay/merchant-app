@@ -23,14 +23,6 @@ class Account {
     return jsonEncode(toMap());
   }
 
-  String currencySymbol() {
-    return currencyData()['symbol'];
-  }
-
-  Map<String, dynamic> currencyData() {
-    return Currencies.all[denomination] ?? {};
-  }
-
   String addressFor(code) {
     return coins.firstWhere((coin) => coin['code'] == code, orElse: () => {})['address'];
   }

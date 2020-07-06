@@ -2,12 +2,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:rect_getter/rect_getter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:app/authentication.dart';
+import 'package:app/models/invoice.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_builder.dart';
 import 'package:share/share.dart';
+import 'package:app/events.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
 
@@ -15,8 +17,8 @@ import 'dart:async';
 
 
 
-class Invoice extends StatelessWidget {
-  Invoice(this.id);
+class ShowInvoice extends StatelessWidget {
+  ShowInvoice(this.id);
 
   final String id;
 
@@ -43,6 +45,7 @@ class _InvoicePageState extends State<InvoicePage> {
   bool usePayProtocol = true;
   bool _invoiceReady = false;
   var _successMessage = '';
+  StreamSubscription event;
   bool useUrlStyle = true;
   Timer periodicRequest;
   var _errorMessage;
@@ -62,6 +65,7 @@ class _InvoicePageState extends State<InvoicePage> {
     periodicRequest.cancel();
     notes.dispose();
     super.dispose();
+    event.cancel();
   }
 
   void _done() {
@@ -134,7 +138,12 @@ class _InvoicePageState extends State<InvoicePage> {
   void initState() {
     super.initState();
     qrColor = AppBuilder.randomColor;
+    _fetchInvoice();
     periodicRequest = Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
+    event = Events.on('invoice.paid', (payload) {
+      invoice = Invoice.fromMap(payload);
+      _rebuild();
+    });
   }
 
   Widget _ChooseCurrencyMenu() {
