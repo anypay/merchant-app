@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_builder.dart';
 import 'package:app/client.dart';
+import "package:intl/intl.dart";
 
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -86,13 +87,16 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       fontSize: 28,
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text(timeago.format(invoice.completedAt),
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                        fontSize: 20,
-                      ),
+                  Text(DateFormat('E, MMMM d, h:mma').format(invoice.completedAt),
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorDark,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(timeago.format(invoice.completedAt),
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorDark,
+                      fontSize: 20,
                     ),
                   ),
                 ],

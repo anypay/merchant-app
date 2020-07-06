@@ -117,8 +117,8 @@ class Invoice {
   factory Invoice.fromMap(Map<String, dynamic> body) {
     var json = body;
     return Invoice(
-      completedAt: json['completed_at'] == null ? null : DateTime.parse(json['completed_at']),
-      expiry: json['expiry'] == null ? null : DateTime.parse(json['expiry']),
+      completedAt: json['completed_at'] == null ? null : DateTime.parse(json['completed_at']).toLocal(),
+      expiry: json['expiry'] == null ? null : DateTime.parse(json['expiry']).toLocal(),
       denominationAmountPaid: json['denomination_amount_paid'],
       denominationCurrency: json['denomination_currency'],
       denominationAmount: json['denomination_amount'],

@@ -101,7 +101,7 @@ class _PaymentPageState extends State<PaymentPage> {
         Container(
           margin: EdgeInsets.only(bottom: 40),
           child: Text(
-            DateFormat('E, MMMM d, h:m').format(_payment.completedAt),
+            DateFormat('E, MMMM d, h:mma').format(_payment.completedAt),
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
               fontSize: 20,
