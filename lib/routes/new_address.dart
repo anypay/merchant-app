@@ -86,6 +86,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
         } else {
           _messageType = 'error';
           _message = response['message'];
+          if (_message.toLowerCase().contains('invalid bch address') && address.length <= 36)
+            _message += "\n(Legacy BCH addresses are not supported)";
         }
       });
     });
