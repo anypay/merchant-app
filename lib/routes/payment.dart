@@ -9,8 +9,6 @@ import 'package:app/client.dart';
 import "package:intl/intl.dart";
 import "package:app/coins.dart";
 
-import 'package:timeago/timeago.dart' as timeago;
-
 class Payment extends StatelessWidget {
   Payment(this.id);
 
@@ -91,7 +89,7 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
         ),
         Container(
-          child: Text(timeago.format(_payment.completedAt),
+          child: Text(_payment.completedAtTimeAgo(),
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
               fontSize: 20,
@@ -101,7 +99,7 @@ class _PaymentPageState extends State<PaymentPage> {
         Container(
           margin: EdgeInsets.only(bottom: 40),
           child: Text(
-            DateFormat('E, MMMM d, h:mma').format(_payment.completedAt),
+            _payment.formatCompletedAt(),
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
               fontSize: 20,

@@ -1,3 +1,4 @@
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:app/authentication.dart';
 import 'package:app/currencies.dart';
 import 'package:app/client.dart';
@@ -112,6 +113,16 @@ class Invoice {
       return option['currency'] == currency;
     });
     return option['uri'];
+  }
+
+  String completedAtTimeAgo() {
+    if (completedAt == null) return '';
+    return timeago.format(completedAt);
+  }
+
+  String formatCompletedAt() {
+    if (completedAt == null) return '';
+    else return DateFormat('E, MMMM d, h:mma').format(completedAt);
   }
 
   factory Invoice.fromMap(Map<String, dynamic> body) {

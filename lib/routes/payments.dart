@@ -6,8 +6,6 @@ import 'package:app/back_button.dart';
 import 'package:app/client.dart';
 import "package:intl/intl.dart";
 
-import 'package:timeago/timeago.dart' as timeago;
-
 class Payments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -91,13 +89,13 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       fontSize: 28,
                     ),
                   ),
-                  Text(DateFormat('E, MMMM d, h:mma').format(invoice.completedAt),
+                  Text(invoice.formatCompletedAt(),
                     style: TextStyle(
                       color: Theme.of(context).primaryColorDark,
                       fontSize: 20,
                     ),
                   ),
-                  Text(timeago.format(invoice.completedAt),
+                  Text(invoice.completedAtTimeAgo(),
                     style: TextStyle(
                       color: Theme.of(context).primaryColorDark,
                       fontSize: 20,
