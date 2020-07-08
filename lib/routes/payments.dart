@@ -23,6 +23,7 @@ class PaymentsPage extends StatefulWidget {
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
+  var _awaitingResponse = true;
   var _showMore = false;
   var allInvoices = [];
   var _errorMessage;
@@ -32,11 +33,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
     page += 1;
     Client.getInvoices(page: page).then((response) {
       setState(() {
+        _awaitingResponse = false;
         if (response['success']) {
           _showMore = response['invoices'].length > 0;
           allInvoices = [
             ...allInvoices,
-            ...response['invoices']..removeWhere((invoice) => !invoice.complete),
+            ...(response['invoices']),
           ];
         } else _errorMessage = response['message'];
       });
@@ -60,7 +62,9 @@ class _PaymentsPageState extends State<PaymentsPage> {
       return [
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: SpinKitCircle(color: AppController.blue),
+          child: _awaitingResponse ?
+            SpinKitCircle(color: AppController.blue) :
+            Text("No payments yet!", textAlign: TextAlign.center),
         )
       ];
     else return [
@@ -155,9 +159,11 @@ class _PaymentsPageState extends State<PaymentsPage> {
       floatingActionButton: Container(
         child: Align(
           alignment: Alignment(-0.85, -1),
-          child: CircleBackButton(
-            margin: EdgeInsets.only(right: 20.0, top: 65),
-            backPath: '/navigation',
+          child: SafeArea(
+            child: CircleBackButton(
+              margin: EdgeInsets.only(right: 20.0, top: 40 + MediaQuery.of(context).padding.top),
+              backPath: '/navigation',
+            )
           )
         )
       ),

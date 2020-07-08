@@ -107,6 +107,7 @@ class Client {
       uri: Uri.https(domain, '/invoices', {
         'limit': perPage.toString(),
         'offset': offset.toString(),
+        'complete': 'true',
       }),
       requireAuth: true,
     );
