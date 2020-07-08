@@ -24,8 +24,7 @@ class CircleBackButton extends StatelessWidget {
         onTap: onTap ?? (() {
           if (Navigator.canPop(context))
             Navigator.pop(context, true);
-          else
-            Navigator.pushNamedAndRemoveUntil(context, backPath, (Route<dynamic> route) => false);
+          else AppController.closeUntilPath(backPath);
         }),
         child: Image(
           width: 50,

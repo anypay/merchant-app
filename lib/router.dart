@@ -14,7 +14,6 @@ import 'package:app/routes/payments.dart';
 import 'package:app/routes/payment.dart';
 import 'package:app/routes/invoice.dart';
 import 'package:app/routes/login.dart';
-import 'package:app/preloader.dart';
 
 import 'package:app/authentication.dart';
 
@@ -23,9 +22,6 @@ class FluroRouter {
 
   static newHandler(klass, [key]) {
     return Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      Authentication.appContext = context;
-      Preloader.downloadImages(context);
-
       if (key == null) return klass();
       else return klass(params[key][0]);
     });

@@ -80,7 +80,7 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _backToNewInvoice() {
-    Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
+    AppController.closeUntilPath('/new-invoice');
   }
 
   void _toggleUrlStyle() {

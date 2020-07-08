@@ -38,12 +38,10 @@ class _LoginPageState extends State<LoginPage> {
       Client.authenticate(email.text, password.text).then((response) {
         _submitting = false;
         if (response['success'])
-          Navigator.pushNamedAndRemoveUntil(context, '/new-invoice', (Route<dynamic> route) => false);
-        else {
-          setState(() {
-            _errorMessage = response['message'];
-          });
-        }
+          AppController.closeUntilPath('/new-invoice');
+        else setState(() {
+          _errorMessage = response['message'];
+        });
       });
     }
   }

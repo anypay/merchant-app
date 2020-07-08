@@ -23,7 +23,7 @@ class AppController extends StatefulWidget {
   }
 
   static void toggleDarkMode([value = null]) {
-    AppController.enableDarkMode = value ?? !AppController.enableDarkMode;
+    enableDarkMode = value ?? !enableDarkMode;
     saveDarkModeToDisk();
   }
 
@@ -36,7 +36,7 @@ class AppController extends StatefulWidget {
   }
 
   static Future<void> saveDarkModeToDisk() async {
-    if (AppController.enableDarkMode)
+    if (enableDarkMode)
       return await Storage.write('enableDarkMode', 'true');
     else return await Storage.write('enableDarkMode', 'false');
   }
@@ -57,8 +57,12 @@ class AppController extends StatefulWidget {
     red,
   ].toList();
 
+  static BuildContext getCurrentContext() {
+    return globalKey.currentState.overlay.context;
+  }
+
   static void openDialog(title, body, {path: null, buttonText: null, buttons: null}) async {
-    var context = AppController.globalKey.currentState.overlay.context;
+    var context = getCurrentContext();
     buttons ??= [];
     showDialog(
       context: context,
@@ -90,9 +94,12 @@ class AppController extends StatefulWidget {
     );
   }
 
+  static void closeUntilPath(String path) {
+    Navigator.pushNamedAndRemoveUntil(getCurrentContext(), path, (Route<dynamic> route) => false);
+  }
+
   static void openPath(String path) async {
-    var context = globalKey.currentState.overlay.context;
-    if (path != null) Navigator.pushNamed(context, path);
+    if (path != null) Navigator.pushNamed(getCurrentContext(), path);
   }
 
   const AppController(

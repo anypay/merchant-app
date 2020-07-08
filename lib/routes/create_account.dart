@@ -34,7 +34,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   void _loadNextPage() {
     Client.authenticate(email.text, password.text).then((response) {
       if (response['success'])
-        Navigator.pushNamedAndRemoveUntil(context, '/register-business', (Route<dynamic> route) => false);
+        AppController.closeUntilPath('/register-business');
       else
         setState(() { _errorMessage = response['message']; });
     });

@@ -1,15 +1,15 @@
 import 'package:app/push_notifications.dart';
 import 'package:app/models/account.dart';
+import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:app/app_builder.dart';
+import 'package:app/preloader.dart';
 import 'package:app/client.dart';
+import 'package:app/coins.dart';
 
 import 'package:app/native_storage.dart'
   if (dart.library.html) 'package:app/web_storage.dart';
 
 class Authentication {
-  static BuildContext appContext;
-
   static Account currentAccount = Account();
   static String token;
 
@@ -109,6 +109,6 @@ class Authentication {
   static void logout() {
     setToken(null);
     setCurrentAccount(Account());
-    Navigator.pushNamedAndRemoveUntil(appContext, '/login', (Route<dynamic> route) => false);
+    AppController.closeUntilPath('/login');
   }
 }
