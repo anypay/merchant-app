@@ -149,7 +149,6 @@ class _InvoicePageState extends State<InvoicePage> {
       children: <Widget>[
         Container(
           width: 235,
-          margin: EdgeInsets.only(bottom: 20.0),
           child: GestureDetector(
             child: _PaymentTitle('anypay'),
             onTap: () {
@@ -162,7 +161,6 @@ class _InvoicePageState extends State<InvoicePage> {
         ...(invoice.paymentOptions.map((option) {
           return Container(
             width: 235,
-            margin: EdgeInsets.only(bottom: 20.0),
             child: GestureDetector(
               child: _PaymentTitle(option['currency']),
               onTap: () {
@@ -328,33 +326,41 @@ class _InvoicePageState extends State<InvoicePage> {
 
   Widget _PaymentTitle(currency) {
     if (currency == 'anypay')
-      return Row(
-        children: [
-          Container(
-            width: 60,
-            child: Image(
-              image: AssetImage('assets/images/anypay-logo.png')
+      return Container(
+        margin: EdgeInsets.only(bottom: 20.0),
+        child: Row(
+          children: [
+            Container(
+              width: 60,
+              child: Image(
+                image: AssetImage('assets/images/anypay-logo.png')
+              ),
             ),
-          ),
-          Text('Anypay',
-            style: TextStyle(fontSize: 35),
-          ),
-        ]
+            Text('Anypay',
+              style: TextStyle(fontSize: 35),
+            ),
+          ]
+        )
       );
-    else return Row(
-      children: [
-        Container(
-          width: 40,
-          margin: EdgeInsets.all(10.0),
-          child: Image.network(
-            Coins.all[currency]['icon']
-          ),
-        ),
-        Text(currency,
-          style: TextStyle(fontSize: 40),
-        ),
-      ]
-    );
+    else if (Coins.all[currency] != null)
+      return Container(
+        margin: EdgeInsets.only(bottom: 20.0),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              margin: EdgeInsets.all(10.0),
+              child: Image.network(
+                Coins.all[currency]['icon']
+              ),
+            ),
+            Text(currency,
+              style: TextStyle(fontSize: 40),
+            ),
+          ]
+        )
+      );
+    else return Container();
   }
 
   Widget _InvoiceComponent() {
@@ -384,14 +390,13 @@ class _InvoicePageState extends State<InvoicePage> {
           ),
           Container(
             width: 235,
-            margin: EdgeInsets.only(bottom: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _PaymentTitle(usePayProtocol ? 'anypay' : currency),
                 Container(
                   width: 40,
-                  margin: EdgeInsets.only(top: 5.0),
+                  margin: EdgeInsets.only(top: 5.0, bottom: 20.0),
                   child: GestureDetector(
                     onTap: _chooseCurrency,
                     child: Icon(

@@ -61,12 +61,21 @@ class Authentication {
   static Future<void> fetchCoins() async {
     if (isAuthenticated()) {
       currentAccount.fetchingCoins = true;
-      Client.fetchCoins().then((response) {
+      await Client.fetchCoins().then((response) {
         currentAccount.fetchingCoins = false;
         if (response['success']) {
           var coins = response['body']['coins'];
+          Coins.all = {};
+          coins.forEach((coin) {
+            if (coin['supported'] == true)
+              Coins.all[coin['code']] = {
+                'name': coin['name'],
+                'icon': coin['icon']
+              };
+          });
           coins.removeWhere((coin) => !coin['enabled']);
           currentAccount.coins = coins;
+          Preloader.downloadImages();
         }
       });
     }

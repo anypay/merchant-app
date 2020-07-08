@@ -1,3 +1,6 @@
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:app/app_controller.dart';
+import 'package:app/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import '../coins.dart';
@@ -22,25 +25,38 @@ class _AddressesPageState extends State<AddressesPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    if (Coins.all.length == 0)
+      Authentication.fetchCoins().then((_) => setState(() {}));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ..._newAddressLinks(),
-            CircleBackButton(
-              margin: EdgeInsets.only(top: 20.0),
-              backPath: '/settings',
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ..._newAddressLinks(),
+                CircleBackButton(
+                  margin: EdgeInsets.only(top: 20.0),
+                  backPath: '/settings',
+                ),
+              ]
             ),
-          ]
+          ),
         ),
       ),
     );
   }
 
   List<Widget> _newAddressLinks() {
-    return Coins.all.keys.map((code) =>
+    if (Coins.all.length == 0)
+      return [SpinKitCircle(color: AppController.blue)];
+    else return Coins.all.keys.map((code) =>
       Container(
         height: 100,
         width: 400,
