@@ -49,6 +49,7 @@ class _InvoicePageState extends State<InvoicePage> {
   var _successMessage = '';
   StreamSubscription event;
   bool useUrlStyle = true;
+  bool _disposed = false;
   Timer periodicRequest;
   var _errorMessage;
   String notesError;
@@ -64,10 +65,11 @@ class _InvoicePageState extends State<InvoicePage> {
 
   @override
   void dispose() {
-    periodicRequest.cancel();
+    event.cancel();
     notes.dispose();
     super.dispose();
-    event.cancel();
+    _disposed = true;
+    periodicRequest.cancel();
   }
 
   void _copyUri() {
@@ -144,7 +146,8 @@ class _InvoicePageState extends State<InvoicePage> {
           invoice = response['invoice'];
         else _errorMessage = response['message'];
 
-        _rebuild();
+        // Checking if disposed to prevent memory leaks
+        if (!_disposed) _rebuild();
       });
   }
 
