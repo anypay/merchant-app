@@ -137,7 +137,7 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _fetchInvoice() {
-    if (invoice == null || invoice.isUnpaid())
+    if (invoice == null || (invoice.isUnpaid() && !invoice.isExpired()))
       Client.getInvoice(id).then((response) {
         _errorMessage = null;
         if (response['success'])
@@ -540,7 +540,7 @@ class _InvoicePageState extends State<InvoicePage> {
         _rebuild();
       };
     return Visibility(
-      visible: invoice == null || invoice.isUnpaid() || invoice.isUnderpaid(),
+      visible: invoice == null || !invoice.isExpired() && (invoice.isUnpaid() || invoice.isUnderpaid()),
       child: CircleBackButton(
         margin: EdgeInsets.only(top: 20.0),
         backPath: '/new-invoice',

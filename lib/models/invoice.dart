@@ -76,7 +76,7 @@ class Invoice {
   }
 
   bool isUnpaid() {
-    return !(isExpired() || isPaid() || isUnderpaid());
+    return status == 'unpaid';
   }
 
   bool isUnderpaid() {
