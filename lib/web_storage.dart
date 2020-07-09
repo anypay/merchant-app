@@ -10,6 +10,6 @@ class Storage {
   }
 
   static Future<void> delete(String key) async {
-    window.localStorage.removeItem(key);
+    window.localStorage[key] = null;
   }
 }

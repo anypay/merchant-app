@@ -1,5 +1,6 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
 import 'package:app/app_controller.dart';
@@ -25,7 +26,7 @@ class PushNotificationsManager {
   Future<void> init() async {
     if (!_initialized) {
       await _initializeSocket();
-      await _initializeFireBase();
+      if (!kIsWeb) await _initializeFireBase();
 
       _initialized = true;
     }

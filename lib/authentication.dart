@@ -87,6 +87,8 @@ class Authentication {
 
   static Future<bool> checkForAuth() async {
     return await readFromDisk('token').then((accessToken) {
+      if (accessToken == 'null') accessToken = null;
+
       token = accessToken;
 
       if (accessToken != null)

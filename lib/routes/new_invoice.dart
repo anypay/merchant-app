@@ -1,4 +1,5 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
 import 'package:app/app_controller.dart';
@@ -27,6 +28,7 @@ class NewInvoicePage extends StatefulWidget {
 }
 
 class _NewInvoicePageState extends State<NewInvoicePage> {
+  String _backspaceCharacter = kIsWeb ? "<" : "⌫";
   String _visiblePrice = '';
   bool _submitting = false;
   var _errorMessage = '';
@@ -105,7 +107,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
                 children: <Widget>[
                   ..._generateNumberButtons(),
                   _generateButton(
-                    text: _price > 0 ? "⌫" : "",
+                    text: _price > 0 ? _backspaceCharacter : "",
                     onTap: _backspace,
                     font: 'Default',
                   ),

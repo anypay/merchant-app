@@ -1,4 +1,5 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:rect_getter/rect_getter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:app/authentication.dart';
@@ -13,6 +14,10 @@ import 'package:app/events.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
 import 'dart:async';
+
+import 'package:url_launcher/url_launcher.dart'
+  if (dart.library.html) 'package:app/web_launcher.dart';
+
 
 class ShowInvoice extends StatelessWidget {
   ShowInvoice(this.id);
@@ -63,6 +68,18 @@ class _InvoicePageState extends State<InvoicePage> {
     notes.dispose();
     super.dispose();
     event.cancel();
+  }
+
+  void _copyUri() {
+    Clipboard.setData(ClipboardData(text: uri));
+    setState(() => _successMessage = "Coppied!" );
+    Timer(Duration(seconds: 2), () {
+      setState(() => _successMessage = "" );
+    });
+  }
+
+  void _openUri() async {
+    await launch(uri);
   }
 
   void _done() {
@@ -212,6 +229,56 @@ class _InvoicePageState extends State<InvoicePage> {
           _BackButton(),
         ]
       )
+    );
+  }
+
+  Widget _WebShareOptions() {
+    return Container(
+      width: 235,
+      margin: EdgeInsets.only(top: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          GestureDetector(
+            onTap: _copyUri,
+            child: Row(
+              children: <Widget>[
+                Text('Copy', style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                )),
+                Container(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Image(
+                    image: AppController.enableDarkMode ?
+                      AssetImage('assets/images/copy_icon-white.png') :
+                      AssetImage('assets/images/copy_icon.png'),
+                    width: 20,
+                  )
+                )
+              ]
+            )
+          ),
+          GestureDetector(
+            onTap: _openUri,
+            child: Row(
+              children: <Widget>[
+                Text('Open Wallet', style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                )),
+                Container(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Image(
+                    image: AssetImage('assets/images/copy_icon.png'),
+                    width: 20,
+                  )
+                )
+              ]
+            )
+          ),
+        ]
+      ),
     );
   }
 
@@ -430,6 +497,7 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
             ),
           ),
+          kIsWeb ? _WebShareOptions() :
           (sharePlacement = RectGetter.defaultKey(
             child: Container(
               width: 235,
