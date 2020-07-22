@@ -11,13 +11,19 @@ class Address {
   String note;
   String value;
   String currency;
+  String paymail;
 
   Address({
     this.id,
     this.note,
     this.value,
+    this.paymail,
     this.currency,
   });
+
+  String toString() {
+    return paymail ?? value;
+  }
 
   factory Address.fromMap(Map<String, dynamic> body) {
     var json = body;
@@ -25,6 +31,7 @@ class Address {
       id: json['id'],
       note: json['note'],
       value: json['value'],
+      paymail: json['paymail'],
       currency: json['currency'],
     );
   }

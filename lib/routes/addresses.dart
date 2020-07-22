@@ -71,7 +71,7 @@ class _AddressesPageState extends State<AddressesPage> {
                 margin: EdgeInsets.only(
                   top: 10.0,
                   left: 50.0,
-                  right: 50.0,
+                  right: 40.0,
                   bottom: 10.0,
                 ),
                 child: Image.network(

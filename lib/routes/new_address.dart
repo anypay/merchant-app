@@ -5,6 +5,7 @@ import 'package:app/app_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
+import 'package:app/models/address.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
 import 'dart:async';
@@ -51,10 +52,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
     if (!_disposed)
       setState(() {
         _address = Authentication.currentAccount.addressFor(this.code);
-        print("ADDRESS: $_address");
         _note = _address?.note ?? "";
-        print("ADDRESS NOTE: $_note");
-        _message = _address?.value ?? "";
+        _message = _address?.toString();
         _messageType = 'success';
       });
   }
@@ -115,9 +114,10 @@ class _NewAddressPageState extends State<NewAddressPage> {
           _pasting = false;
           _saving = false;
           if (response['success']) {
+            Authentication.fetchCoins();
+            _address = Address.fromMap({ 'value': address });
             _messageType = 'success';
             _message = address;
-            Authentication.fetchCoins();
           } else {
             _messageType = 'error';
             _message = response['message'];
@@ -153,8 +153,9 @@ class _NewAddressPageState extends State<NewAddressPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 300,
+                  width: MediaQuery.of(context).size.width,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
                         width: 75,
@@ -221,9 +222,9 @@ class _NewAddressPageState extends State<NewAddressPage> {
                               ),
                             ),
                             Visibility(
-                              visible: _paymailAddress.length > 0,
+                              visible: _paymailAddress.length > 0 && _paymailAddress != _address?.toString(),
                               child: Container(
-                                margin: EdgeInsets.only(bottom: 0),
+                                margin: EdgeInsets.only(bottom: _address == null ? 20 : 0),
                                 child: _saving ? 
                                   SpinKitCircle(
                                     color: AppController.blue,
