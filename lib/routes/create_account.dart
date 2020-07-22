@@ -95,6 +95,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       children: <Widget>[
                         Text(_errorMessage,
                           style: TextStyle(color: AppController.red),
+                          textAlign: TextAlign.center,
                         ),
                         TextFormField(
                           controller: email,
