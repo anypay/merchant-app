@@ -167,6 +167,15 @@ class Client {
     return response;
   }
 
+  static Future<Map<dynamic, dynamic>> setInvoiceNotes(invoiceId, notes) async {
+    return makeRequest('post',
+      path: '/invoices/$invoiceId/notes',
+      unauthorized: (() => Authentication.logout()),
+      body: { 'note': notes },
+      requireAuth: true,
+    );
+  }
+
   static Future<Map<dynamic, dynamic>> makeRequest(method, {path, uri, headers, body, requireAuth, basicAuth, unauthorized}) async {
     try {
       http.Request request = http.Request(method, uri ?? Uri.parse('$host$path'));
