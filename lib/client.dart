@@ -202,6 +202,12 @@ class Client {
           'success': false,
           'body': { },
         };
+      } else if ([400, 500].contains(response.statusCode)) {
+        return {
+          'success': false,
+          'message': "Something went wrong, please try again later",
+          'body': { },
+        };
       } else return {
         'success': response.statusCode == 200,
         'message': humanize(message ?? ""),
