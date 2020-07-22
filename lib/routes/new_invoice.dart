@@ -30,8 +30,8 @@ class NewInvoicePage extends StatefulWidget {
 class _NewInvoicePageState extends State<NewInvoicePage> {
   String _backspaceCharacter = kIsWeb ? "<" : "⌫";
   String _visiblePrice = '';
-  bool _submitting = false;
   String _errorMessage = '';
+  bool _submitting = false;
   Invoice _invoice;
   num _price = 0;
 
@@ -45,7 +45,13 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(_errorMessage, style: TextStyle(color: AppController.red)),
+                Container(
+                  width: 200,
+                  child: Text(_errorMessage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: AppController.red),
+                  ),
+                ),
                 _VisiblePrice(),
                 _Buttons(),
               ],

@@ -22,7 +22,7 @@ class Address {
   });
 
   String toString() {
-    return paymail ?? value;
+    return paymail ?? value ?? '';
   }
 
   factory Address.fromMap(Map<String, dynamic> body) {

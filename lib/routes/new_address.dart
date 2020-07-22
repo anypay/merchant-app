@@ -74,7 +74,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                         ),
                         child: Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: SelectableText(_message,
+                          child: SelectableText(_message ?? '',
                             toolbarOptions: ToolbarOptions(
                               copy: true,
                             ),
@@ -171,7 +171,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
           _pasting = false;
           _saving = false;
           if (response['success']) {
-            Authentication.fetchCoins();
+            Authentication.fetchCoins().then((v) => _rebuild());
             _address = Address.fromMap({ 'value': address });
             _messageType = 'success';
             _message = address;
