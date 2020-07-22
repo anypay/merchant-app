@@ -21,11 +21,42 @@ class PaymentsPage extends StatefulWidget {
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
-  var _awaitingResponse = true;
-  var _showMore = false;
+  bool _awaitingResponse = true;
+  bool _showMore = false;
   var allInvoices = [];
-  var _errorMessage;
-  var page = 0;
+  String _errorMessage;
+  num page = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: Container(
+        child: Align(
+          alignment: Alignment(-0.85, -1),
+          child: SafeArea(
+            child: CircleBackButton(
+              margin: EdgeInsets.only(right: 20.0, top: 40 + MediaQuery.of(context).padding.top),
+              backPath: '/navigation',
+            )
+          )
+        )
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _TitleBar(),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: _InvoiceList()
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   _getNextPage() {
     page += 1;
@@ -67,58 +98,62 @@ class _PaymentsPageState extends State<PaymentsPage> {
       ];
     else return [
       ...allInvoices.map((invoice) {
-        var amount = invoice.amountWithDenomination();
-        var currency = invoice.currency;
-        amount = "$amount $currency";
-        return GestureDetector(
-          onTap: () => openPayment(invoice.uid),
-          child: Container(
-            width: 400,
-            padding: EdgeInsets.only(top: 10.0),
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(width: 1.0)),
-            ),
-            child: Container(
-              margin: EdgeInsets.only(top: 20, bottom: 20),
-              child: Column(
-                children: <Widget>[
-                  Text(amount,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColorDark,
-                      fontSize: 28,
-                    ),
-                  ),
-                  Visibility(
-                    visible: invoice.orderNotes().length > 0,
-                    child: Text(invoice.orderNotes(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColorDark,
-                        fontSize: 28,
-                      ),
-                    ),
-                  ),
-                  Text(invoice.formatCompletedAt(),
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                      fontSize: 20,
-                    ),
-                  ),
-                  Text(invoice.completedAtTimeAgo(),
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+        return _Invoice(invoice);
       }),
       _MoreButton(),
     ];
+  }
+
+  Widget _Invoice(invoice) {
+    var amount = invoice.amountWithDenomination();
+    var currency = invoice.currency;
+    amount = "$amount $currency";
+    return GestureDetector(
+      onTap: () => openPayment(invoice.uid),
+      child: Container(
+        width: 400,
+        padding: EdgeInsets.only(top: 10.0),
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(width: 1.0)),
+        ),
+        child: Container(
+          margin: EdgeInsets.only(top: 20, bottom: 20),
+          child: Column(
+            children: <Widget>[
+              Text(amount,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColorDark,
+                  fontSize: 28,
+                ),
+              ),
+              Visibility(
+                visible: invoice.orderNotes().length > 0,
+                child: Text(invoice.orderNotes(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: 28,
+                  ),
+                ),
+              ),
+              Text(invoice.formatCompletedAt(),
+                style: TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                  fontSize: 20,
+                ),
+              ),
+              Text(invoice.completedAtTimeAgo(),
+                style: TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _MoreButton() {
@@ -158,37 +193,6 @@ class _PaymentsPageState extends State<PaymentsPage> {
           )),
         ],
       )
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Container(
-        child: Align(
-          alignment: Alignment(-0.85, -1),
-          child: SafeArea(
-            child: CircleBackButton(
-              margin: EdgeInsets.only(right: 20.0, top: 40 + MediaQuery.of(context).padding.top),
-              backPath: '/navigation',
-            )
-          )
-        )
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _TitleBar(),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: _InvoiceList()
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

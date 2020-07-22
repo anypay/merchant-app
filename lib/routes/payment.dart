@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart'
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
+import 'package:app/models/invoice.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
@@ -33,9 +34,29 @@ class _PaymentPageState extends State<PaymentPage> {
   _PaymentPageState(this.id);
 
   final String id;
-  var _errorMessage = '';
-  var _payment;
-  var _notes;
+  String _errorMessage = '';
+  Invoice _payment;
+  String _notes;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: Container(
+        child: Align(
+          alignment: Alignment(-0.85, -1),
+          child: CircleBackButton(
+            margin: EdgeInsets.only(right: 20.0, top: 65.0),
+            backPath: '/payments',
+          )
+        )
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: _Payment(),
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -136,29 +157,5 @@ class _PaymentPageState extends State<PaymentPage> {
       ],
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Container(
-        child: Align(
-          alignment: Alignment(-0.85, -1),
-          child: CircleBackButton(
-            margin: EdgeInsets.only(right: 20.0, top: 65.0),
-            backPath: '/payments',
-          )
-        )
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: _Payment(),
-        ),
-      ),
-    );
-  }
 }
-
-
-
-
 

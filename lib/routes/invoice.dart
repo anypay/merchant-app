@@ -42,26 +42,44 @@ class InvoicePage extends StatefulWidget {
 class _InvoicePageState extends State<InvoicePage> {
   _InvoicePageState(this.id);
 
-  var notes = TextEditingController();
+  TextEditingController notes = TextEditingController();
   bool choosingCurrency = false;
   bool usePayProtocol = true;
   bool _invoiceReady = false;
-  var _successMessage = '';
+  String _successMessage = '';
   StreamSubscription event;
   bool useUrlStyle = true;
   bool _disposed = false;
   Timer periodicRequest;
-  var _errorMessage;
+  String _errorMessage;
   String notesError;
   String currency;
   Color qrColor;
   String uri;
   String id;
 
-  var invoice;
+  Invoice invoice;
+  RectGetter sharePlacement;
 
-
-  var sharePlacement;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _closeKeyboard,
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _InvoiceComponent(),
+                _BackButton(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -557,26 +575,6 @@ class _InvoicePageState extends State<InvoicePage> {
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus)
       currentFocus.unfocus();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _closeKeyboard,
-      child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _InvoiceComponent(),
-                _BackButton(),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
 

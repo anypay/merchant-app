@@ -31,6 +31,46 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
 
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _closeKeyboard,
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image(
+                  width: 300,
+                  image: AssetImage(AppController.logoImagePath())
+                ),
+                _textFields(),
+                Container(
+                  margin: (_submitting ? 
+                    EdgeInsets.only(top: 5, bottom: 10) :
+                    EdgeInsets.only(top: 20, bottom: 20)),
+                  child: _submitting ? SpinKitCircle(color: AppController.blue) :
+                    GestureDetector(
+                      child: Text('Register', style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppController.blue,
+                        fontSize: 18,
+                      )),
+                      onTap: _submitForm,
+                    ),
+                ),
+                CircleBackButton(
+                  backPath: '/login',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _loadNextPage() {
     Client.authenticate(email.text, password.text).then((response) {
       if (response['success'])
@@ -71,89 +111,53 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       currentFocus.unfocus();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _closeKeyboard,
-      child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image(
-                  width: 300,
-                  image: AssetImage(AppController.logoImagePath())
-                ),
-                Container(
-                  width: 300,
-                  margin: EdgeInsets.only(top: 10),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(_errorMessage,
-                          style: TextStyle(color: AppController.red),
-                          textAlign: TextAlign.center,
-                        ),
-                        TextFormField(
-                          controller: email,
-                          decoration: InputDecoration(
-                            labelText: 'Email'
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) return 'Please enter some text';
-                            else if (!EmailValidator.validate(value.trim()))
-                              return "That doesn't look like an email address";
-                          },
-                        ),
-                        TextFormField(
-                          obscureText: true,
-                          controller: password,
-                          decoration: InputDecoration(
-                            labelText: 'Password'
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) return 'Please enter some text';
-                            else if (confirmPassword.text != value)
-                              return 'Passwords do not match.';
-                          },
-                        ),
-                        TextFormField(
-                          obscureText: true,
-                          controller: confirmPassword,
-                          decoration: InputDecoration(
-                            labelText: 'Re-type Password'
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) return 'Please enter some text';
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: (_submitting ? 
-                    EdgeInsets.only(top: 5, bottom: 10) :
-                    EdgeInsets.only(top: 20, bottom: 20)),
-                  child: _submitting ? SpinKitCircle(color: AppController.blue) :
-                    GestureDetector(
-                      child: Text('Register', style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppController.blue,
-                        fontSize: 18,
-                      )),
-                      onTap: _submitForm,
-                    ),
-                ),
-                CircleBackButton(
-                  backPath: '/login',
-                ),
-              ],
+  Widget _textFields() {
+    return Container(
+      width: 300,
+      margin: EdgeInsets.only(top: 10),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(_errorMessage,
+              style: TextStyle(color: AppController.red),
+              textAlign: TextAlign.center,
             ),
-          ),
+            TextFormField(
+              controller: email,
+              decoration: InputDecoration(
+                labelText: 'Email'
+              ),
+              validator: (value) {
+                if (value.isEmpty) return 'Please enter some text';
+                else if (!EmailValidator.validate(value.trim()))
+                  return "That doesn't look like an email address";
+              },
+            ),
+            TextFormField(
+              obscureText: true,
+              controller: password,
+              decoration: InputDecoration(
+                labelText: 'Password'
+              ),
+              validator: (value) {
+                if (value.isEmpty) return 'Please enter some text';
+                else if (confirmPassword.text != value)
+                  return 'Passwords do not match.';
+              },
+            ),
+            TextFormField(
+              obscureText: true,
+              controller: confirmPassword,
+              decoration: InputDecoration(
+                labelText: 'Re-type Password'
+              ),
+              validator: (value) {
+                if (value.isEmpty) return 'Please enter some text';
+              },
+            ),
+          ],
         ),
       ),
     );

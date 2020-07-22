@@ -36,17 +36,74 @@ class _NewAddressPageState extends State<NewAddressPage> {
   final _formKey = GlobalKey<FormState>();
   final String code;
 
-  var _submittingScan = false;
-  var _paymailAddress = '';
-  var _savingNote = false;
-  var _disposed = false;
-  var _messageType = '';
-  var _pasting = false;
-  var _noteError = '';
-  var _saving = false;
-  var _message = '';
-  var _note = '';
-  var _address;
+  bool _submittingScan = false;
+  bool _savingNote = false;
+  bool _disposed = false;
+  bool _pasting = false;
+  bool _saving = false;
+
+  String _paymailAddress = '';
+  String _messageType = '';
+  String _noteError = '';
+  String _message = '';
+  String _note = '';
+  Address _address;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _closeKeyboard,
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _Title(),
+                Container(
+                  width: 330,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      ConstrainedBox(
+                        constraints: new BoxConstraints(
+                          minHeight: 5.0,
+                          minWidth: 330,
+                          maxHeight: 80.0,
+                          maxWidth: 330,
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: SelectableText(_message,
+                            toolbarOptions: ToolbarOptions(
+                              copy: true,
+                            ),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: _messageColor(),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      _PaymailField(),
+                      _NoteField(),
+                      _Paste(),
+                      _Scan(),
+                    ],
+                  ),
+                ),
+                CircleBackButton(
+                  margin: EdgeInsets.only(top: 20.0),
+                  backPath: '/settings',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   void _rebuild() {
     if (!_disposed)
@@ -142,223 +199,187 @@ class _NewAddressPageState extends State<NewAddressPage> {
       currentFocus.unfocus();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _closeKeyboard,
-      child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 75,
-                        margin: EdgeInsets.only(
-                          top: 10.0,
-                          right: 20.0,
-                          bottom: 10.0,
-                        ),
-                        child: Image.network(
-                          Coins.all[code]['icon']
-                        ),
-                      ),
-                      Text(
-                        Coins.all[code]['name'],
-                        style: TextStyle(
-                          fontSize: 30,
-                        ),
-                      )
-                    ]
-                  ),
-                ),
-                Container(
-                  width: 330,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ConstrainedBox(
-                        constraints: new BoxConstraints(
-                          minHeight: 5.0,
-                          minWidth: 330,
-                          maxHeight: 80.0,
-                          maxWidth: 330,
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: SelectableText(_message,
-                            toolbarOptions: ToolbarOptions(
-                              copy: true,
-                            ),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: _messageColor(),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: code == 'BSV',
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: 250,
-                              margin: EdgeInsets.only(bottom: 10),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  labelText: 'paymail address'
-                                ),
-                                onChanged: (text) {
-                                  setState(() {
-                                    _paymailAddress = text;
-                                  });
-                                }
-                              ),
-                            ),
-                            Visibility(
-                              visible: _paymailAddress.length > 0 && _paymailAddress != _address?.toString(),
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: _address == null ? 20 : 0),
-                                child: _saving ? 
-                                  SpinKitCircle(
-                                    color: AppController.blue,
-                                  ) : GestureDetector(
-                                    onTap: () {
-                                      _saving = true;
-                                      _closeKeyboard();
-                                      _setAddress(_paymailAddress);
-                                    },
-                                    child: Text('Save',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppController.blue,
-                                        fontSize: 18,
-                                      )
-                                    )
-                                  )
-                              )
-                            ),
-                          ],
-                        ),
-                      ),
-                      Visibility(
-                        visible: _address != null,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: 250,
-                              margin: EdgeInsets.only(bottom: _note.length > 0 ? 10 : 20),
-                              child: TextFormField(
-                                // controller: _address?.note,
-                                initialValue: _note,
-                                validator: (value) {
-                                  if (_noteError.length > 0)
-                                    return _noteError;
-                                },
-                                decoration: InputDecoration(
-                                  labelText: 'Add note...'
-                                ),
-                                onChanged: (text) {
-                                  setState(() {
-                                    _note = text;
-                                  });
-                                }
-                              ),
-                            ),
-                            Visibility(
-                              visible: _note.length > 0 && _note != _address?.note,
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: _savingNote ? 0 : 20),
-                                child: _savingNote ? 
-                                  SpinKitCircle(
-                                    color: AppController.blue,
-                                  ) : GestureDetector(
-                                    onTap: () {
-                                      _saving = true;
-                                      _closeKeyboard();
-                                      _setNote();
-                                    },
-                                    child: Text('Save Note',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppController.blue,
-                                        fontSize: 18,
-                                      )
-                                    )
-                                  )
-                                )
-                              )
-                          ]
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: _pasteAddress,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(right: 20.0),
-                              child: _pasting ? 
-                              SpinKitCircle(
-                                color: AppController.green,
-                              ) : Icon(
-                                Icons.content_paste,
-                                size: 50,
-                              ),
-                            ),
-                            Text('Paste',
-                              style: TextStyle(
-                                fontSize: 50,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: _scanAddress,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(right: 20.0, top: 15.0),
-                              child: _submittingScan ?
-                              SpinKitCircle(
-                                color: AppController.green,
-                              ) : Icon(
-                                Icons.camera_alt,
-                                size: 50,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(right: 20.0, top: 15.0),
-                              child: Text('Scan',
-                                style: TextStyle(
-                                  fontSize: 50,
-                                ),
-                              )
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                CircleBackButton(
-                  margin: EdgeInsets.only(top: 20.0),
-                  backPath: '/settings',
-                ),
-              ],
+  Widget _Title() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 75,
+            margin: EdgeInsets.only(
+              top: 10.0,
+              right: 20.0,
+              bottom: 10.0,
+            ),
+            child: Image.network(
+              Coins.all[code]['icon']
             ),
           ),
-        ),
+          Text(
+            Coins.all[code]['name'],
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          )
+        ]
+      ),
+    );
+  }
+
+  Widget _Scan() {
+    return GestureDetector(
+      onTap: _scanAddress,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 20.0, top: 15.0),
+            child: _submittingScan ?
+            SpinKitCircle(
+              color: AppController.green,
+            ) : Icon(
+              Icons.camera_alt,
+              size: 50,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 20.0, top: 15.0),
+            child: Text('Scan',
+              style: TextStyle(
+                fontSize: 50,
+              ),
+            )
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _Paste() {
+    return GestureDetector(
+      onTap: _pasteAddress,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 20.0),
+            child: _pasting ? 
+            SpinKitCircle(
+              color: AppController.green,
+            ) : Icon(
+              Icons.content_paste,
+              size: 50,
+            ),
+          ),
+          Text('Paste',
+            style: TextStyle(
+              fontSize: 50,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _NoteField() {
+    return Visibility(
+      visible: _address != null,
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 250,
+            margin: EdgeInsets.only(bottom: _note.length > 0 ? 10 : 20),
+            child: TextFormField(
+              // controller: _address?.note,
+              initialValue: _note,
+              validator: (value) {
+                if (_noteError.length > 0)
+                  return _noteError;
+              },
+              decoration: InputDecoration(
+                labelText: 'Add note...'
+              ),
+              onChanged: (text) {
+                setState(() {
+                  _note = text;
+                });
+              }
+            ),
+          ),
+          Visibility(
+            visible: _note.length > 0 && _note != _address?.note,
+            child: Container(
+              margin: EdgeInsets.only(bottom: _savingNote ? 0 : 20),
+              child: _savingNote ? 
+                SpinKitCircle(
+                  color: AppController.blue,
+                ) : GestureDetector(
+                  onTap: () {
+                    _saving = true;
+                    _closeKeyboard();
+                    _setNote();
+                  },
+                  child: Text('Save Note',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppController.blue,
+                      fontSize: 18,
+                    )
+                  )
+                )
+              )
+            )
+        ]
+      ),
+    );
+  }
+
+  Widget _PaymailField() {
+    return Visibility(
+      visible: code == 'BSV',
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 250,
+            margin: EdgeInsets.only(bottom: 10),
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: 'paymail address'
+              ),
+              onChanged: (text) {
+                setState(() {
+                  _paymailAddress = text;
+                });
+              }
+            ),
+          ),
+          Visibility(
+            visible: _paymailAddress.length > 0 && _paymailAddress != _address?.toString(),
+            child: Container(
+              margin: EdgeInsets.only(bottom: _address == null ? 20 : 0),
+              child: _saving ? 
+                SpinKitCircle(
+                  color: AppController.blue,
+                ) : GestureDetector(
+                  onTap: () {
+                    _saving = true;
+                    _closeKeyboard();
+                    _setAddress(_paymailAddress);
+                  },
+                  child: Text('Save',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppController.blue,
+                      fontSize: 18,
+                    )
+                  )
+                )
+            )
+          ),
+        ],
       ),
     );
   }

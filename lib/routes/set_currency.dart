@@ -24,9 +24,33 @@ class SetCurrencyPage extends StatefulWidget {
 }
 
 class _SetCurrencyPageState extends State<SetCurrencyPage> {
-  var visibleCurrencies = Currencies.all;
-  var _errorMessage = '';
-  var _chosenCurrency;
+  Map<String, dynamic> visibleCurrencies = Currencies.all;
+  String _errorMessage = '';
+  String _chosenCurrency;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              child: Text(_errorMessage, style: TextStyle(color: AppController.red)),
+              margin: EdgeInsets.only(top: 50.0),
+            ),
+            _FilterBar(),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: _CurrencyList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   _back() {
     if (Navigator.canPop(context))
@@ -126,30 +150,6 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
         ),
       );
     }).toList();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: Text(_errorMessage, style: TextStyle(color: AppController.red)),
-              margin: EdgeInsets.only(top: 50.0),
-            ),
-            _FilterBar(),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: _CurrencyList(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 

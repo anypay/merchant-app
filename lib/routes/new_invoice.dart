@@ -31,9 +31,31 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   String _backspaceCharacter = kIsWeb ? "<" : "⌫";
   String _visiblePrice = '';
   bool _submitting = false;
-  var _errorMessage = '';
+  String _errorMessage = '';
   Invoice _invoice;
   num _price = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            width: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(_errorMessage, style: TextStyle(color: AppController.red)),
+                _VisiblePrice(),
+                _Buttons(),
+              ],
+            ),
+          ),
+        ),
+      ),
+      floatingActionButton: _navButton(),
+    );
+  }
 
   void _rebuild() {
     setState(() {
@@ -84,76 +106,66 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: 300,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(_errorMessage, style: TextStyle(color: AppController.red)),
-                Container(
-                  child: Text(
-                    _price > 0 ? '$_visiblePrice' : "",
-                    style: TextStyle(
-                      fontSize: (40 - 1.5*max(_visiblePrice.length-8, 0)).toDouble(),
-                    )
-                  ),
-                ),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  children: <Widget>[
-                    ..._generateNumberButtons(),
-                    _generateButton(
-                      text: _price > 0 ? _backspaceCharacter : "",
-                      onTap: _backspace,
-                      font: 'Default',
-                    ),
-                    _submitting ?
-                    SpinKitCircle(color: AppController.randomColor) : GestureDetector(
-                      onTap: _submit,
-                      child: Visibility(
-                        visible: _price > 0,
-                        maintainAnimation: true,
-                        maintainState: true,
-                        maintainSize: true,
-                        child: Image(
-                          image: AssetImage('assets/images/next_arrow.png'),
-                          width: _scale(50),
-                        )
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      floatingActionButton: Container(
-        child: Align(
-          alignment: Alignment(-0.85, -0.85),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/navigation').then((value) => _rebuild()),
-                child: Container(
-                  margin: EdgeInsets.only(top: 10.0, left: 50.0),
-                  child: Icon(Icons.menu, size: 40.0),
-                )
-              ),
-              Image(
-                image: AssetImage('assets/images/anypay-logo.png'),
-                width: _scale(70),
-              )
-            ]
-          )
+  Widget _VisiblePrice() {
+    return Container(
+      child: Text(
+        _price > 0 ? '$_visiblePrice' : "",
+        style: TextStyle(
+          fontSize: (40 - 1.5*max(_visiblePrice.length-8, 0)).toDouble(),
         )
       ),
+    );
+  }
+
+  Widget _Buttons() {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      children: <Widget>[
+        ..._generateNumberButtons(),
+        _generateButton(
+          text: _price > 0 ? _backspaceCharacter : "",
+          onTap: _backspace,
+          font: 'Default',
+        ),
+        _submitting ?
+        SpinKitCircle(color: AppController.randomColor) : GestureDetector(
+          onTap: _submit,
+          child: Visibility(
+            visible: _price > 0,
+            maintainAnimation: true,
+            maintainState: true,
+            maintainSize: true,
+            child: Image(
+              image: AssetImage('assets/images/next_arrow.png'),
+              width: _scale(50),
+            )
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _navButton() {
+    return Container(
+      child: Align(
+        alignment: Alignment(-0.85, -0.85),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/navigation').then((value) => _rebuild()),
+              child: Container(
+                margin: EdgeInsets.only(top: 10.0, left: 50.0),
+                child: Icon(Icons.menu, size: 40.0),
+              )
+            ),
+            Image(
+              image: AssetImage('assets/images/anypay-logo.png'),
+              width: _scale(70),
+            )
+          ]
+        )
+      )
     );
   }
 
