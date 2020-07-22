@@ -1,4 +1,5 @@
 import 'package:app/push_notifications.dart';
+import 'package:app/models/address.dart';
 import 'package:app/models/account.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,12 @@ class Authentication {
           currentAccount.coins = coins;
           Preloader.downloadImages();
         }
+      });
+
+      await Client.fetchAccountAddresses().then((response) {
+        response['body']['addresses'].forEach((address) {
+          currentAccount.addresses[address['currency']] = Address.fromMap(address);
+        });
       });
     }
   }

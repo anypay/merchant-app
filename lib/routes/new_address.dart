@@ -37,20 +37,39 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   var _submittingScan = false;
   var _paymailAddress = '';
+  var _savingNote = false;
+  var _disposed = false;
   var _messageType = '';
   var _pasting = false;
+  var _noteError = '';
   var _saving = false;
   var _message = '';
+  var _note = '';
+  var _address;
+
+  void _rebuild() {
+    if (!_disposed)
+      setState(() {
+        _address = Authentication.currentAccount.addressFor(this.code);
+        print("ADDRESS: $_address");
+        _note = _address?.note ?? "";
+        print("ADDRESS NOTE: $_note");
+        _message = _address?.value ?? "";
+        _messageType = 'success';
+      });
+  }
 
   @override
   void initState() {
     super.initState();
-    Authentication.fetchCoins().then((v) {
-      setState(() {
-        _message = Authentication.currentAccount.addressFor(this.code) ?? "";
-        _messageType = 'success';
-      });
-    });
+    _rebuild();
+    Authentication.fetchCoins().then((v) => _rebuild());
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 
   void _pasteAddress() async {
@@ -69,27 +88,43 @@ class _NewAddressPageState extends State<NewAddressPage> {
     }
   }
 
+  void _setNote() async {
+    setState(() {
+      _savingNote = true;
+    });
+    Client.setAddressNote(_address.id, _note).then((response) {
+      if (!_disposed)
+        setState(() {
+          if (response['success']) {
+            _savingNote = false;
+            _address.note = _note;
+          } else _noteError = response['message'];
+        });
+    });
+  }
+
   void _setAddress(address) async {
     setState(() {
       _messageType = 'pending';
       _message = address;
     });
     Client.setAddress(code, address).then((response) {
-      setState(() {
-        _submittingScan = false;
-        _pasting = false;
-        _saving = false;
-        if (response['success']) {
-          _messageType = 'success';
-          _message = address;
-          Authentication.fetchCoins();
-        } else {
-          _messageType = 'error';
-          _message = response['message'];
-          if (_message.toLowerCase().contains('invalid bch address') && address.length <= 36)
-            _message += "\n(Legacy BCH addresses are not supported)";
-        }
-      });
+      if (!_disposed)
+        setState(() {
+          _submittingScan = false;
+          _pasting = false;
+          _saving = false;
+          if (response['success']) {
+            _messageType = 'success';
+            _message = address;
+            Authentication.fetchCoins();
+          } else {
+            _messageType = 'error';
+            _message = response['message'];
+            if (_message.toLowerCase().contains('invalid bch address') && address.length <= 36)
+              _message += "\n(Legacy BCH addresses are not supported)";
+          }
+        });
     });
   }
 
@@ -142,21 +177,23 @@ class _NewAddressPageState extends State<NewAddressPage> {
                   ),
                 ),
                 Container(
-                  width: 320,
-                  margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                  width: 330,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       ConstrainedBox(
                         constraints: new BoxConstraints(
                           minHeight: 5.0,
-                          minWidth: 320,
+                          minWidth: 330,
                           maxHeight: 80.0,
-                          maxWidth: 320,
+                          maxWidth: 330,
                         ),
                         child: Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: Text(_message,
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: SelectableText(_message,
+                            toolbarOptions: ToolbarOptions(
+                              copy: true,
+                            ),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: _messageColor(),
@@ -185,11 +222,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
                             ),
                             Visibility(
                               visible: _paymailAddress.length > 0,
-                              maintainAnimation: true,
-                              maintainState: true,
-                              maintainSize: true,
                               child: Container(
-                                margin: EdgeInsets.only(bottom: _saving ? 0 : 30),
+                                margin: EdgeInsets.only(bottom: 0),
                                 child: _saving ? 
                                   SpinKitCircle(
                                     color: AppController.blue,
@@ -210,6 +244,56 @@ class _NewAddressPageState extends State<NewAddressPage> {
                               )
                             ),
                           ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: _address != null,
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              width: 250,
+                              margin: EdgeInsets.only(bottom: _note.length > 0 ? 10 : 20),
+                              child: TextFormField(
+                                // controller: _address?.note,
+                                initialValue: _note,
+                                validator: (value) {
+                                  if (_noteError.length > 0)
+                                    return _noteError;
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Add note...'
+                                ),
+                                onChanged: (text) {
+                                  setState(() {
+                                    _note = text;
+                                  });
+                                }
+                              ),
+                            ),
+                            Visibility(
+                              visible: _note.length > 0 && _note != _address?.note,
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: _savingNote ? 0 : 20),
+                                child: _savingNote ? 
+                                  SpinKitCircle(
+                                    color: AppController.blue,
+                                  ) : GestureDetector(
+                                    onTap: () {
+                                      _saving = true;
+                                      _closeKeyboard();
+                                      _setNote();
+                                    },
+                                    child: Text('Save Note',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppController.blue,
+                                        fontSize: 18,
+                                      )
+                                    )
+                                  )
+                                )
+                              )
+                          ]
                         ),
                       ),
                       GestureDetector(

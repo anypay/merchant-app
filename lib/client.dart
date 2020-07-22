@@ -29,6 +29,23 @@ class Client {
     );
   }
 
+  static Future<Map<dynamic, dynamic>> fetchAccountAddresses() async {
+    return makeRequest('get',
+      unauthorized: (() => Authentication.logout()),
+      path: '/account_addresses',
+      requireAuth: true,
+    );
+  }
+
+  static Future<Map<dynamic, dynamic>> setAddressNote(addressId, note) async {
+    return makeRequest('put',
+      path: '/addresses/$addressId/notes',
+      unauthorized: (() => Authentication.logout()),
+      body: { 'note': note },
+      requireAuth: true,
+    );
+  }
+
   static Future<Map<dynamic, dynamic>> getAccount() async {
     return makeRequest('get',
       unauthorized: (() => Authentication.logout()),

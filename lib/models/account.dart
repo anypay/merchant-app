@@ -1,7 +1,9 @@
 import 'package:app/currencies.dart';
+import 'package:app/models/address.dart';
 import 'dart:convert';
 
 class Account {
+  Map<String, dynamic> addresses = {};
   bool fetchingCoins = false;
   String ambassadorEmail;
   String physicalAddress;
@@ -23,8 +25,8 @@ class Account {
     return jsonEncode(toMap());
   }
 
-  String addressFor(code) {
-    return coins.firstWhere((coin) => coin['code'] == code, orElse: () => {})['address'];
+  Address addressFor(code) {
+    return addresses[code];
   }
 
   String preferredCoinCode() {
