@@ -70,7 +70,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         Container(
           margin: EdgeInsets.only(bottom: 10),
-          child: Text(Coins.all[_payment.currency]['name'],
+          child: Text((Coins.all[_payment.currency] ?? {})['name'] ?? '',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColorDark,

@@ -412,7 +412,7 @@ class _InvoicePageState extends State<InvoicePage> {
           ]
         )
       );
-    else if (Coins.all[currency] != null)
+    else if (Coins.supported[currency] != null)
       return Container(
         margin: EdgeInsets.only(bottom: 20.0),
         child: Row(
@@ -421,7 +421,7 @@ class _InvoicePageState extends State<InvoicePage> {
               width: 40,
               margin: EdgeInsets.all(10.0),
               child: Image.network(
-                Coins.all[currency]['icon']
+                Coins.supported[currency]['icon']
               ),
             ),
             Text(currency,

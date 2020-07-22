@@ -56,7 +56,7 @@ class _AddressesPageState extends State<AddressesPage> {
   List<Widget> _newAddressLinks() {
     if (Coins.all.length == 0)
       return [SpinKitCircle(color: AppController.blue)];
-    else return Coins.all.keys.map((code) =>
+    else return Coins.supported.keys.map((code) =>
       Container(
         height: 100,
         width: 400,
@@ -75,11 +75,11 @@ class _AddressesPageState extends State<AddressesPage> {
                   bottom: 10.0,
                 ),
                 child: Image.network(
-                  Coins.all[code]['icon']
+                  Coins.supported[code]['icon']
                 ),
               ),
               Text(
-                Coins.all[code]['name'],
+                Coins.supported[code]['name'],
                 style: TextStyle(
                   fontSize: 22,
                 ),

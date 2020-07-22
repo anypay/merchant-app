@@ -67,8 +67,12 @@ class Authentication {
           var coins = response['body']['coins'];
           Coins.all = {};
           coins.forEach((coin) {
-            if (coin['supported'] == true)
-              Coins.all[coin['code']] = {
+            Coins.all[coin['code']] = {
+              'name': coin['name'],
+              'icon': coin['icon']
+            };
+            if (coin['supported'] == true || coin['code'] == 'BSV')
+              Coins.supported[coin['code']] = {
                 'name': coin['name'],
                 'icon': coin['icon']
               };
