@@ -89,6 +89,16 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       fontSize: 28,
                     ),
                   ),
+                  Visibility(
+                    visible: invoice.orderNotes().length > 0,
+                    child: Text(invoice.orderNotes(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColorDark,
+                        fontSize: 28,
+                      ),
+                    ),
+                  ),
                   Text(invoice.formatCompletedAt(),
                     style: TextStyle(
                       color: Theme.of(context).primaryColorDark,

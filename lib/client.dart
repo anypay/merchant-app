@@ -21,15 +21,6 @@ class Client {
     return 'Basic ' + base64.encode(utf8.encode('$token:'));
   }
 
-  static Future<Map<dynamic, dynamic>> setInvoiceNotes(invoiceId, notes) async {
-    return makeRequest('post',
-      path: '/invoices/$invoiceId/notes',
-      unauthorized: (() => Authentication.logout()),
-      body: { 'note': notes },
-      requireAuth: true,
-    );
-  }
-
   static Future<Map<dynamic, dynamic>> fetchCoins() async {
     return makeRequest('get',
       unauthorized: (() => Authentication.logout()),

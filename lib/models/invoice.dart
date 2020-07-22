@@ -34,6 +34,7 @@ class Invoice {
     this.itemName,
     this.currency,
     this.address,
+    this.notes,
     this.amount,
     this.status,
     this.expiry,
@@ -41,6 +42,13 @@ class Invoice {
     this.uri,
     this.uid,
   });
+
+  String orderNotes() {
+    var _notes = (notes ?? []).map((note) => note['content']).join(", ");
+    if (notes != null && notes.length > 0)
+      return "Order notes: $_notes";
+    else return "";
+  }
 
   int decimalPlaces() {
     return (Currencies.all[denominationCurrency] ?? {})['decimal_places'] ?? 2;
@@ -140,6 +148,7 @@ class Invoice {
       address: json['address'],
       amount: json['amount'],
       status: json['status'],
+      notes: json['notes'],
       hash: json['hash'],
       uri: json['uri'],
       uid: json['uid'],

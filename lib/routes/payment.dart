@@ -44,7 +44,7 @@ class _PaymentPageState extends State<PaymentPage> {
       setState(() {
         if (response['success']) {
           _payment = response['invoice'];
-          _notes = _payment.notes?.join(", ");
+          _notes = _payment.orderNotes();
         } else _errorMessage = response['message'];
       });
     });
@@ -106,6 +106,19 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
           ),
         ),
+        Visibility(
+          visible: _notes.length > 0,
+          child: Container(
+            margin: EdgeInsets.only(right: 10),
+            child: Text(_notes,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).primaryColorDark,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
         Container(
           child: GestureDetector(
             onTap: () async {
@@ -115,18 +128,6 @@ class _PaymentPageState extends State<PaymentPage> {
             child: Text('View on blockchain',
               style: TextStyle(
                 color: AppController.blue,
-                fontSize: 20,
-              ),
-            ),
-          ),
-        ),
-        Visibility(
-          visible: _notes != null,
-          child: Container(
-            margin: EdgeInsets.only(right: 10),
-            child: Text("Order notes: $_notes",
-              style: TextStyle(
-                color: Theme.of(context).primaryColorDark,
                 fontSize: 20,
               ),
             ),

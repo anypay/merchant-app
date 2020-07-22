@@ -88,46 +88,48 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          width: 300,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(_errorMessage, style: TextStyle(color: AppController.red)),
-              Container(
-                child: Text(
-                  _price > 0 ? '$_visiblePrice' : "",
-                  style: TextStyle(
-                    fontSize: (40 - 1.5*max(_visiblePrice.length-8, 0)).toDouble(),
-                  )
+        child: SingleChildScrollView(
+          child: Container(
+            width: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(_errorMessage, style: TextStyle(color: AppController.red)),
+                Container(
+                  child: Text(
+                    _price > 0 ? '$_visiblePrice' : "",
+                    style: TextStyle(
+                      fontSize: (40 - 1.5*max(_visiblePrice.length-8, 0)).toDouble(),
+                    )
+                  ),
                 ),
-              ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                children: <Widget>[
-                  ..._generateNumberButtons(),
-                  _generateButton(
-                    text: _price > 0 ? _backspaceCharacter : "",
-                    onTap: _backspace,
-                    font: 'Default',
-                  ),
-                  _submitting ?
-                  SpinKitCircle(color: AppController.randomColor) : GestureDetector(
-                    onTap: _submit,
-                    child: Visibility(
-                      visible: _price > 0,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      maintainSize: true,
-                      child: Image(
-                        image: AssetImage('assets/images/next_arrow.png'),
-                        width: _scale(50),
-                      )
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  children: <Widget>[
+                    ..._generateNumberButtons(),
+                    _generateButton(
+                      text: _price > 0 ? _backspaceCharacter : "",
+                      onTap: _backspace,
+                      font: 'Default',
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    _submitting ?
+                    SpinKitCircle(color: AppController.randomColor) : GestureDetector(
+                      onTap: _submit,
+                      child: Visibility(
+                        visible: _price > 0,
+                        maintainAnimation: true,
+                        maintainState: true,
+                        maintainSize: true,
+                        child: Image(
+                          image: AssetImage('assets/images/next_arrow.png'),
+                          width: _scale(50),
+                        )
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
