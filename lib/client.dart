@@ -55,6 +55,14 @@ class Client {
     );
   }
 
+  static Future<Map<dynamic, dynamic>> setFireBaseToken(data) async {
+    return makeRequest('put',
+      path: '/firebase_token',
+      requireAuth: true,
+      body: data,
+    );
+  }
+
   static Future<Map<dynamic, dynamic>> resetPassword(email) async {
     return makeRequest('post',
       path: '/password-resets',
