@@ -108,7 +108,7 @@ class Invoice {
       'BCH': 'bitcoincash',
       'DASH': 'dash',
       'BSV': 'pay',
-    }[useCurrency];
+    }[useCurrency] ?? 'pay';
 
     return "$protocol:?r=$host/r/$uid";
   }
@@ -117,10 +117,13 @@ class Invoice {
     if (format == 'pay') return "pay:?r=${Client.host}/r/$uid";
     if (format == 'url') return urlStyleUri(currency);
 
-    var option = paymentOptions.firstWhere((option) {
+    return paymentOptionFor(currency)['uri'];
+  }
+
+  Map<String, dynamic> paymentOptionFor(currency) {
+    return paymentOptions.firstWhere((option) {
       return option['currency'] == currency;
-    });
-    return option['uri'];
+    }) ?? {};
   }
 
   String completedAtTimeAgo() {
