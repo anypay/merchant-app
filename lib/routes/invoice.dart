@@ -131,7 +131,9 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _shareUri() async {
-    await Share.share(uri,
+    var shareUri = "https://anypayapp.com/invoices/${invoice?.uid}";
+
+    await Share.share(shareUri,
       sharePositionOrigin: sharePlacement.getRect()
     );
   }
