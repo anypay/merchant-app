@@ -30,7 +30,7 @@ class _NavigationPageState extends State<NavigationPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: 300,
+              width: MediaQuery.of(context).size.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
