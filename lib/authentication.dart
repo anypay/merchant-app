@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:app/preloader.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
+import 'dart:async';
 
 import 'package:app/native_storage.dart'
   if (dart.library.html) 'package:app/web_storage.dart';
@@ -55,7 +56,7 @@ class Authentication {
 
   static void ensureNotifications() {
     if (isAuthenticated()) {
-      PushNotificationsManager().init();
+      Timer(Duration(milliseconds: 1000), () => PushNotificationsManager().init());
     }
   }
 
