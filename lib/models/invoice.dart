@@ -11,6 +11,7 @@ class Invoice {
   num denominationAmountPaid;
   num denominationAmount;
   DateTime completedAt;
+  String blockchainUrl;
   List paymentOptions;
   String itemName;
   String currency;
@@ -29,6 +30,7 @@ class Invoice {
     this.denominationCurrency,
     this.denominationAmount,
     this.paymentOptions,
+    this.blockchainUrl,
     this.completedAt,
     this.complete,
     this.itemName,
@@ -42,6 +44,17 @@ class Invoice {
     this.uri,
     this.uid,
   });
+
+  String getBlockchainUrl() {
+    if (blockchainUrl != null && blockchainUrl.length > 0)
+      return blockchainUrl;
+    else if (currency == 'BSV')
+      return "https://whatsonchain.com/tx/$hash";
+    else if (currency == 'BCH')
+      return "https://explorer.bitcoin.com/bch/tx/$hash";
+    else if (currency == 'DASH')
+      return "https://chainz.cryptoid.info/dash/tx.dws?$hash";
+  }
 
   String orderNotes() {
     var _notes = (notes ?? []).map((note) => note['content']).join(", ");
@@ -145,6 +158,7 @@ class Invoice {
       denominationCurrency: json['denomination_currency'],
       denominationAmount: json['denomination_amount'],
       paymentOptions: json['payment_options'],
+      blockchainUrl: json['blockchain_url'],
       complete: json['complete'] ?? false,
       itemName: json['item_name'],
       currency: json['currency'],

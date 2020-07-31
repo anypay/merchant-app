@@ -140,16 +140,18 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
           ),
         ),
-        Container(
-          child: GestureDetector(
-            onTap: () async {
-              var hash = _payment.hash;
-              await launch("https://whatsonchain.com/tx/$hash");
-            },
-            child: Text('View on blockchain',
-              style: TextStyle(
-                color: AppController.blue,
-                fontSize: 20,
+        Visibility(
+          visible: _payment.getBlockchainUrl() != null,
+          child: Container(
+            child: GestureDetector(
+              onTap: () async {
+                await launch(_payment.getBlockchainUrl());
+              },
+              child: Text('View on blockchain',
+                style: TextStyle(
+                  color: AppController.blue,
+                  fontSize: 20,
+                ),
               ),
             ),
           ),
