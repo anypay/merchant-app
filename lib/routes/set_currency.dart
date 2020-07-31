@@ -32,21 +32,21 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: Text(_errorMessage, style: TextStyle(color: AppController.red)),
-              margin: EdgeInsets.only(top: 50.0),
-            ),
-            _FilterBar(),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: _CurrencyList(),
+        child: Container(
+          margin: EdgeInsets.only(top: AppController.topPadding()),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(_errorMessage, style: TextStyle(color: AppController.red)),
+              _FilterBar(),
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: _CurrencyList(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -71,7 +71,7 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
 
   Widget _FilterBar() {
     return Container(
-      margin: EdgeInsets.only(bottom: 10.0),
+      margin: EdgeInsets.only(bottom: AppController.scale(10.0)),
       width: 400,
       child: Row(
         children: <Widget>[

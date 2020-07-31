@@ -201,6 +201,7 @@ class _InvoicePageState extends State<InvoicePage> {
         ...(invoice.paymentOptions.map((option) {
           return Container(
             width: 235,
+            margin: EdgeInsets.only(top: 10),
             child: GestureDetector(
               child: _PaymentTitle(option['currency']),
               onTap: () {
@@ -417,7 +418,6 @@ class _InvoicePageState extends State<InvoicePage> {
   Widget _PaymentTitle(currency) {
     if (currency == 'anypay')
       return Container(
-        margin: EdgeInsets.only(bottom: 20.0),
         child: Row(
           children: [
             Container(
@@ -439,10 +439,9 @@ class _InvoicePageState extends State<InvoicePage> {
           children: [
             Container(
               width: 40,
-              margin: EdgeInsets.all(10.0),
-              child: Image.network(
-                Coins.supported[currency]['icon']
-              ),
+              height: 40,
+              margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 15, bottom: 15),
+              child: Image.network(Coins.supported[currency]['icon']),
             ),
             Text(currency,
               style: TextStyle(fontSize: 40),
@@ -459,7 +458,7 @@ class _InvoicePageState extends State<InvoicePage> {
         return Text(_errorMessage, style: TextStyle(color: AppController.red));
       else return Container(
           child: SpinKitCircle(color: qrColor),
-          height: 360,
+          height: AppController.scale(360),
         );
     else if (invoice.isUnderpaid())
       return _UnderpaidScreen();
@@ -514,7 +513,7 @@ class _InvoicePageState extends State<InvoicePage> {
                 child: QrImage(
                   foregroundColor: Color(0xFF404040),
                   version: QrVersions.auto,
-                  size: 235.0,
+                  size: AppController.scale(200, maxValue: 280, minValue: 100),
                   data: uri,
                 ),
               ),
@@ -524,7 +523,7 @@ class _InvoicePageState extends State<InvoicePage> {
           (sharePlacement = RectGetter.defaultKey(
             child: Container(
               width: 235,
-              margin: EdgeInsets.only(top: 20.0),
+              margin: EdgeInsets.only(top: AppController.scale(20.0)),
               child: GestureDetector(
                 onTap: _shareUri,
                 child: Row(
@@ -565,7 +564,7 @@ class _InvoicePageState extends State<InvoicePage> {
     return Visibility(
       visible: invoice == null || !invoice.isExpired() && (invoice.isUnpaid() || invoice.isUnderpaid()),
       child: CircleBackButton(
-        margin: EdgeInsets.only(top: 20.0),
+        margin: EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
         backPath: '/new-invoice',
         opaque: false,
         onTap: onTap,

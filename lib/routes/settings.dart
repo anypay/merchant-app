@@ -38,29 +38,31 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(_successMessage,
-              style: TextStyle(color: AppController.green),
-            ),
-            Container(
-              width: 300,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _SelectCurrencyLink(context),
-                  _BusinessInfoLink(context),
-                  _AddressesLink(context),
-                  CircleBackButton(
-                    margin: EdgeInsets.only(top: 20.0),
-                    backPath: '/navigation',
-                  ),
-                ],
-              )
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(_successMessage,
+                style: TextStyle(color: AppController.green),
+              ),
+              Container(
+                width: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    _SelectCurrencyLink(context),
+                    _BusinessInfoLink(context),
+                    _AddressesLink(context),
+                    CircleBackButton(
+                      margin: EdgeInsets.only(top: 20.0),
+                      backPath: '/navigation',
+                    ),
+                  ],
+                )
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -81,7 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(20.0),
+              margin: EdgeInsets.all(AppController.scale(20.0)),
               child: Text("Addresses", style: TextStyle(
                 fontSize: 22,
               ))
@@ -107,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(20.0),
+              margin: EdgeInsets.all(AppController.scale(20.0)),
               child: Row(
                 children: <Widget>[
                   Text("Currency ", style: TextStyle(
@@ -141,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(20.0),
+              margin: EdgeInsets.all(AppController.scale(20.0)),
               child: Text("Business Info", style: TextStyle(
                 fontSize: 22,
               )),

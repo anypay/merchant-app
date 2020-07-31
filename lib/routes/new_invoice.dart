@@ -133,18 +133,25 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
           onTap: _backspace,
           font: 'Default',
         ),
-        _submitting ?
-        SpinKitCircle(color: AppController.randomColor) : GestureDetector(
-          onTap: _submit,
-          child: Visibility(
-            visible: _price > 0,
-            maintainAnimation: true,
-            maintainState: true,
-            maintainSize: true,
-            child: Image(
-              image: AssetImage('assets/images/next_arrow.png'),
-              width: _scale(50),
-            )
+        Container(
+          margin: EdgeInsets.only(top: AppController.scale(10)),
+          height: AppController.scale(50, minValue: 40),
+          child: _submitting ?
+          SpinKitCircle(
+              size: AppController.scale(50, minValue: 40),
+              color: AppController.randomColor,
+          ) : GestureDetector(
+            onTap: _submit,
+            child: Visibility(
+              visible: _price > 0,
+              maintainAnimation: true,
+              maintainState: true,
+              maintainSize: true,
+              child: Image(
+                image: AssetImage('assets/images/next_arrow.png'),
+                width: AppController.scale(50, minValue: 40),
+              )
+            ),
           ),
         ),
       ],
@@ -161,13 +168,13 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/navigation').then((value) => _rebuild()),
               child: Container(
-                margin: EdgeInsets.only(top: 10.0, left: 50.0),
-                child: Icon(Icons.menu, size: 40.0),
+                margin: EdgeInsets.only(top: 10.0, left: AppController.leftPadding() + 30),
+                child: Icon(Icons.menu, size: 20+AppController.scale(20.0)),
               )
             ),
             Image(
               image: AssetImage('assets/images/anypay-logo.png'),
-              width: _scale(70),
+              width: 20 + AppController.scale(40),
             )
           ]
         )
@@ -206,12 +213,13 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: _scaledVerticalMargin(30),
+        margin: EdgeInsets.only(top: AppController.scale(35)),
+        height: AppController.scale(60),
         width: 100,
         child: Text(text,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: _scale(31, minValue: 25),
+            fontSize: AppController.scale(31, minValue: 25),
             fontFamily: font ?? 'Ubuntu',
             fontWeight: FontWeight.bold,
             color: Theme.of(context).primaryColorLight,
@@ -228,19 +236,6 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
         onTap: () { _updatePrice(num); },
       );
     });
-  }
-
-  double _scale(num value, {num maxValue, num minValue}) {
-    var screenData = MediaQuery.of(context);
-    value = value * screenData.size.height/650;
-    value = min(value, maxValue ?? double.maxFinite);
-    value = max(value, minValue ?? 0);
-    return value;
-  }
-
-  EdgeInsets _scaledVerticalMargin(num value, {num maxValue, num minValue}) {
-    value = _scale(value, maxValue: maxValue, minValue: minValue);
-    return EdgeInsets.only(top: value, bottom: value);
   }
 
 }

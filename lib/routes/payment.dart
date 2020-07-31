@@ -43,9 +43,9 @@ class _PaymentPageState extends State<PaymentPage> {
     return Scaffold(
       floatingActionButton: Container(
         child: Align(
-          alignment: Alignment(-0.85, -1),
+          alignment: Alignment(-0.83, -1),
           child: CircleBackButton(
-            margin: EdgeInsets.only(right: 20.0, top: 65.0),
+            margin: EdgeInsets.only(right: 20.0, top: 35 + AppController.topPadding()),
             backPath: '/payments',
           )
         )

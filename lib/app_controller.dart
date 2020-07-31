@@ -1,5 +1,6 @@
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import 'package:app/native_storage.dart'
   if (dart.library.html) 'package:app/web_storage.dart';
@@ -41,6 +42,14 @@ class AppController extends StatefulWidget {
     else return await Storage.write('enableDarkMode', 'false');
   }
 
+  static double topPadding() {
+    return MediaQuery.of(getCurrentContext()).padding.top;
+  }
+
+  static double leftPadding() {
+    return MediaQuery.of(getCurrentContext()).padding.left;
+  }
+
   static Color yellow = Color(0xFFcfa015);
   static Color purple = Color(0xFF8c5ca6);
   static Color green = Color(0xFF1a8e5a);
@@ -59,6 +68,14 @@ class AppController extends StatefulWidget {
 
   static BuildContext getCurrentContext() {
     return globalKey.currentState.overlay.context;
+  }
+
+  static double scale(num value, {num maxValue, num minValue}) {
+    var screenData = MediaQuery.of(getCurrentContext());
+    value = value * screenData.size.height/650;
+    value = min(value, maxValue ?? double.maxFinite);
+    value = max(value, minValue ?? 0);
+    return value.toDouble();
   }
 
   static void openDialog(title, body, {path: null, buttonText: null, buttons: null}) async {

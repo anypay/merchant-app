@@ -26,34 +26,37 @@ class _NavigationPageState extends State<NavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  _AccountEmailAddress(),
-                  _ToggleDarkMode(),
-                  ..._Links(),
-                  CircleBackButton(
-                    margin: EdgeInsets.all(20.0),
-                    backPath: '/new-invoice',
-                  ),
-                ],
-              )
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    _AccountEmailAddress(),
+                    _ToggleDarkMode(),
+                    ..._Links(),
+                    CircleBackButton(
+                      margin: EdgeInsets.all(AppController.scale(20.0)),
+                      backPath: '/new-invoice',
+                    ),
+                  ],
+                )
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   List<Widget> _Links() {
+    var margin = AppController.scale(20.0);
     return [
       Container(
-        margin: EdgeInsets.all(20.0),
+        margin: EdgeInsets.all(margin),
         child: GestureDetector(
           child: Text("Payments", style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -66,7 +69,7 @@ class _NavigationPageState extends State<NavigationPage> {
         ),
       ),
       Container(
-        margin: EdgeInsets.all(20.0),
+        margin: EdgeInsets.all(margin),
         child: GestureDetector(
           child: Text("Settings", style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -79,7 +82,7 @@ class _NavigationPageState extends State<NavigationPage> {
         ),
       ),
       Container(
-        margin: EdgeInsets.all(20.0),
+        margin: EdgeInsets.all(margin),
         child: GestureDetector(
           child: Text("Logout", style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -95,8 +98,9 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 
   Widget _ToggleDarkMode() {
+    var margin = AppController.scale(20.0);
     return Container(
-      margin: EdgeInsets.all(20.0),
+      margin: EdgeInsets.all(margin),
       child: GestureDetector(
         child: Text(
           AppController.enableDarkMode ? "Light Mode" : "Dark Mode",
@@ -115,8 +119,9 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 
   Widget _AccountEmailAddress() {
+    var margin = AppController.scale(20.0);
     return Container(
-      margin: EdgeInsets.all(20.0),
+      margin: EdgeInsets.all(margin),
       child: Text(Authentication.currentAccount.email ?? "", style: TextStyle(
         fontWeight: FontWeight.bold,
         color: AppController.grey,

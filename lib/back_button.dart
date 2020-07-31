@@ -13,11 +13,12 @@ class CircleBackButton extends StatelessWidget {
     var imagePath = 'assets/images/close-button.png';
     if (AppController.enableDarkMode)
       imagePath = 'assets/images/close-button-light.png';
+    var size = AppController.scale(50, minValue: 40, maxValue: 50);
     return Container(
       margin: margin,
-      height: 50,
+      height: size,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(size / 2),
         color: (opaque ?? true) ? Theme.of(context).canvasColor : Color(0x00000000),
       ),
       child: GestureDetector(
@@ -27,7 +28,7 @@ class CircleBackButton extends StatelessWidget {
           else AppController.closeUntilPath(backPath);
         }),
         child: Image(
-          width: 50,
+          width: size,
           image: AssetImage(imagePath),
         ),
       ),

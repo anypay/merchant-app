@@ -32,10 +32,10 @@ class _PaymentsPageState extends State<PaymentsPage> {
     return Scaffold(
       floatingActionButton: Container(
         child: Align(
-          alignment: Alignment(-0.85, -1),
+          alignment: Alignment(-0.83, -1),
           child: SafeArea(
             child: CircleBackButton(
-              margin: EdgeInsets.only(right: 20.0, top: 40 + MediaQuery.of(context).padding.top),
+              margin: EdgeInsets.only(right: 20.0, top: 35 + AppController.topPadding()),
               backPath: '/navigation',
             )
           )
@@ -117,7 +117,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           border: Border(top: BorderSide(width: 1.0)),
         ),
         child: Container(
-          margin: EdgeInsets.only(top: 20, bottom: 20),
+          margin: EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
               Text(amount,
@@ -130,6 +130,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
               Visibility(
                 visible: invoice.orderNotes().length > 0,
                 child: Text(invoice.orderNotes(),
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).primaryColorDark,
@@ -182,7 +183,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
   Widget _TitleBar() {
     return Container(
-      margin: EdgeInsets.only(top: 50.0, bottom: 10.0),
+      margin: EdgeInsets.only(top: 10 + AppController.topPadding(), bottom: 10.0),
       width: 300,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
