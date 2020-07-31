@@ -73,7 +73,7 @@ class Authentication {
               'name': coin['name'],
               'icon': coin['icon']
             };
-            if (coin['supported'] == true || ['BSV', 'BCH', 'USDH', 'BTC', 'DASH'].contains(coin['code']))
+            if (coin['supported'] == true)
               Coins.supported[coin['code']] = {
                 'name': coin['name'],
                 'icon': coin['icon']
