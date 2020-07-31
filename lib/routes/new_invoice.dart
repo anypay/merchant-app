@@ -28,7 +28,6 @@ class NewInvoicePage extends StatefulWidget {
 }
 
 class _NewInvoicePageState extends State<NewInvoicePage> {
-  String _backspaceCharacter = kIsWeb ? "<" : "⌫";
   String _visiblePrice = '';
   String _errorMessage = '';
   bool _submitting = false;
@@ -129,9 +128,10 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       children: <Widget>[
         ..._generateNumberButtons(),
         _generateButton(
-          text: _price > 0 ? _backspaceCharacter : "",
+          text: "",
           onTap: _backspace,
-          font: 'Default',
+          font: 'San Francisco',
+          icon: _price > 0 ? AppController.backspaceImagePath() : null,
         ),
         Container(
           margin: EdgeInsets.only(top: AppController.scale(10)),
@@ -209,14 +209,14 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     _rebuild();
   }
 
-  Widget _generateButton({text, onTap, font}) {
+  Widget _generateButton({text, onTap, font, icon}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(top: AppController.scale(35)),
         height: AppController.scale(60),
         width: 100,
-        child: Text(text,
+        child: icon == null ? Text(text,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: AppController.scale(31, minValue: 25),
@@ -224,7 +224,13 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
             fontWeight: FontWeight.bold,
             color: Theme.of(context).primaryColorLight,
           )
-        ),
+        ) : Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            margin: EdgeInsets.only(top: AppController.scale(8) - 2),
+            child: Image.asset(icon, width: 10 + AppController.scale(24))
+          )
+        )
       )
     );
   }
