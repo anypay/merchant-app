@@ -22,8 +22,6 @@ class AddressesPage extends StatefulWidget {
 }
 
 class _AddressesPageState extends State<AddressesPage> {
-  final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();

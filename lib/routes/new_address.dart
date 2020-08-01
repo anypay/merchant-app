@@ -32,7 +32,6 @@ class NewAddressPage extends StatefulWidget {
 class _NewAddressPageState extends State<NewAddressPage> {
   _NewAddressPageState(this.code);
 
-  final _formKey = GlobalKey<FormState>();
   final String code;
 
   bool _submittingScan = false;
