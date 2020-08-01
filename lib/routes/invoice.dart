@@ -126,7 +126,8 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _chooseCurrency() {
-    choosingCurrency = true;
+    if (Authentication.currentAccount.coins.length > 1)
+      choosingCurrency = true;
     _rebuild();
   }
 
@@ -174,8 +175,9 @@ class _InvoicePageState extends State<InvoicePage> {
   @override
   void initState() {
     super.initState();
-    qrColor = AppController.randomColor;
     _fetchInvoice();
+    qrColor = AppController.randomColor;
+    usePayProtocol = Authentication.currentAccount.coins.length > 1;
     periodicRequest = Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
     event = Events.on('invoice.paid', (payload) {
       invoice = Invoice.fromMap(payload);
@@ -416,10 +418,10 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   Widget _PaymentTitle(currency) {
-    if (currency == 'anypay')
+    if (currency == 'anypay' || Coins.supported[currency] != null)
       return Container(
         child: Row(
-          children: [
+          children: currency == 'anypay' ? [
             Container(
               width: 60,
               child: Image(
@@ -429,14 +431,7 @@ class _InvoicePageState extends State<InvoicePage> {
             Text('Anypay',
               style: TextStyle(fontSize: 35),
             ),
-          ]
-        )
-      );
-    else if (Coins.supported[currency] != null)
-      return Container(
-        margin: EdgeInsets.only(bottom: 20.0),
-        child: Row(
-          children: [
+          ] : [
             Container(
               width: 40,
               height: 40,
@@ -477,24 +472,28 @@ class _InvoicePageState extends State<InvoicePage> {
           Text(_successMessage,
             style: TextStyle(color: AppController.green),
           ),
-          Container(
-            width: 235,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _PaymentTitle(usePayProtocol ? 'anypay' : currency),
-                Container(
-                  width: 40,
-                  margin: EdgeInsets.only(top: 5.0, bottom: 20.0),
-                  child: GestureDetector(
-                    onTap: _chooseCurrency,
-                    child: Icon(
-                      Icons.cached,
-                      size: 40,
-                    ),
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: _chooseCurrency,
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _PaymentTitle(usePayProtocol ? 'anypay' : currency),
+                  Visibility(
+                    visible: Authentication.currentAccount.coins.length > 1,
+                    child: Container(
+                      width: 40,
+                      height: 60,
+                      margin: EdgeInsets.all(15.0),
+                      child: Icon(
+                        Icons.cached,
+                        size: 40,
+                      ),
+                    )
                   )
-                )
-              ]
+                ]
+              ),
             ),
           ),
           Card(
