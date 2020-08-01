@@ -46,6 +46,9 @@ $ rm -rf ~/Library/Developer/Xcode/DerivedData/
 $ cd ios;rm -rf Pods/ Podfile Podfile.lock ; pod install; cd ..
 $ flutter build ios
 
+( those commands as a one liner ):
+flutter clean; flutter pub get; rm -rf ~/Library/Developer/Xcode/DerivedData/; cd ios;rm -rf Pods/ Podfile Podfile.lock ; pod install; cd ..; flutter build ios
+
 $ open ios/Runner.xcworkspace
 
 - Select Product > Destination > Generic iOS Device
