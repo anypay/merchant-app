@@ -19,7 +19,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" preservesSuperviewLayoutMargins="YES" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="ebt-AS-GEh">
-                                <rect key="frame" x="40" y="5" width="334.00000000000023" height="886.00000000000023"/>
+                                <rect key="frame" x="40" y="100" width="262.5" height="696"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ebt-AS-GEh" secondAttribute="height" multiplier="167:443" id="9Z5-y6-a71"/>
                                 </constraints>
@@ -29,8 +29,10 @@
                         <constraints>
                             <constraint firstItem="ebt-AS-GEh" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="AQR-eF-blb"/>
                             <constraint firstItem="ebt-AS-GEh" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Izj-Bc-LOc"/>
+                            <constraint firstAttribute="bottom" secondItem="ebt-AS-GEh" secondAttribute="bottom" constant="100" id="U7H-3O-DDe"/>
                             <constraint firstItem="ebt-AS-GEh" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="20" id="Wwm-zS-rUe"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ebt-AS-GEh" secondAttribute="trailing" constant="20" id="luU-rm-2aw"/>
+                            <constraint firstItem="ebt-AS-GEh" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="100" id="mnu-uo-OxI"/>
                         </constraints>
                     </view>
                 </viewController>
