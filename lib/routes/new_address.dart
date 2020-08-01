@@ -1,5 +1,4 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:barcode_scan/barcode_scan.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/services.dart';
@@ -67,9 +66,9 @@ class _NewAddressPageState extends State<NewAddressPage> {
                     children: <Widget>[
                       ConstrainedBox(
                         constraints: new BoxConstraints(
+                          maxHeight: 80.0,
                           minHeight: 5.0,
                           minWidth: 330,
-                          maxHeight: 80.0,
                           maxWidth: 330,
                         ),
                         child: Container(
@@ -130,18 +129,19 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   void _pasteAddress() async {
     ClipboardData clipboard = await Clipboard.getData('text/plain');
+    if (clipboard.text == null || clipboard.text == '') return;
     setState(() { _pasting = true; });
     var address = clipboard.text;
     _setAddress(address);
   }
 
   void _scanAddress() async {
-    var result = await BarcodeScanner.scan();
-
-    if (result.rawContent != null) {
-      _submittingScan = true;
-      _setAddress(result.rawContent);
-    }
+    Navigator.pushNamed(context, '/scan-address').then((address) {
+      if (address is String) {
+        _submittingScan = true;
+        _setAddress(address);
+      }
+    });
   }
 
   void _setNote() async {
