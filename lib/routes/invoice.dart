@@ -192,6 +192,7 @@ class _InvoicePageState extends State<InvoicePage> {
         Container(
           width: 235,
           child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
             child: _PaymentTitle('anypay'),
             onTap: () {
               choosingCurrency = false;
@@ -205,6 +206,7 @@ class _InvoicePageState extends State<InvoicePage> {
             width: 235,
             margin: EdgeInsets.only(top: 10),
             child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
               child: _PaymentTitle(option['currency']),
               onTap: () {
                 currency = option['currency'];
@@ -266,6 +268,7 @@ class _InvoicePageState extends State<InvoicePage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: _copyUri,
             child: Row(
               children: <Widget>[
@@ -286,6 +289,7 @@ class _InvoicePageState extends State<InvoicePage> {
             )
           ),
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: _openUri,
             child: Row(
               children: <Widget>[
@@ -508,6 +512,7 @@ class _InvoicePageState extends State<InvoicePage> {
               color: AppController.white,
               margin: EdgeInsets.all(12.0),
               child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTap: _toggleUrlStyle,
                 child: QrImage(
                   foregroundColor: Color(0xFF404040),
@@ -524,6 +529,7 @@ class _InvoicePageState extends State<InvoicePage> {
               width: 235,
               margin: EdgeInsets.only(top: AppController.scale(20.0)),
               child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTap: _shareUri,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

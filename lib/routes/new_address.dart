@@ -229,6 +229,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   Widget _Scan() {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: _scanAddress,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -259,6 +260,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   Widget _Paste() {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: _pasteAddress,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -317,6 +319,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                 SpinKitCircle(
                   color: AppController.blue,
                 ) : GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     _saving = true;
                     _closeKeyboard();
@@ -364,6 +367,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                 SpinKitCircle(
                   color: AppController.blue,
                 ) : GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     _saving = true;
                     _closeKeyboard();

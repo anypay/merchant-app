@@ -58,6 +58,7 @@ class _NavigationPageState extends State<NavigationPage> {
       Container(
         margin: EdgeInsets.all(margin),
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           child: Text("Payments", style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AppController.blue,
@@ -71,6 +72,7 @@ class _NavigationPageState extends State<NavigationPage> {
       Container(
         margin: EdgeInsets.all(margin),
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           child: Text("Settings", style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AppController.blue,
@@ -84,6 +86,7 @@ class _NavigationPageState extends State<NavigationPage> {
       Container(
         margin: EdgeInsets.all(margin),
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           child: Text("Logout", style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AppController.red,
@@ -102,6 +105,7 @@ class _NavigationPageState extends State<NavigationPage> {
     return Container(
       margin: EdgeInsets.all(margin),
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         child: Text(
           AppController.enableDarkMode ? "Light Mode" : "Dark Mode",
           style: TextStyle(

@@ -79,6 +79,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -105,6 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -139,6 +141,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(20.0),
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
