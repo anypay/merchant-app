@@ -54,3 +54,13 @@ $ open ios/Runner.xcworkspace
 
 
 
+
+
+# Building for Android:
+
+
+# Do some set up:
+    #TODO write setup for android building
+
+# and run:
+$ flutter build apk --split-per-abi
