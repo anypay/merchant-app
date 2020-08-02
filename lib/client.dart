@@ -76,7 +76,9 @@ class Client {
     return makeRequest('put',
       path: '/firebase_token',
       requireAuth: true,
-      body: data,
+      body: {
+        'firebase_token': data
+      },
     );
   }
 
@@ -197,6 +199,8 @@ class Client {
       var message = responseBody['message'];
 
       var code = response.statusCode;
+      // For debugging: 
+      // print("PATH: $path, BODY: ${jsonEncode(body ?? {})}, CODE: $code");
       if (response.statusCode == 401 && unauthorized != null) {
         unauthorized();
         return {
