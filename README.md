@@ -16,11 +16,9 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
-# Building for android:
 
 
-
-# Building for ios
+# SETUP for ios DEVICES:
 
 $ open ios/Runner.xcodeproj/
 
@@ -45,11 +43,23 @@ $ flutter pub get
 $ rm -rf ~/Library/Developer/Xcode/DerivedData/
 $ cd ios;rm -rf Pods/ Podfile Podfile.lock ; pod install; cd ..
 $ flutter build ios
+$ open ios/Runner.xcworkspace
+
+
+
+
 
 ( those commands as a one liner ):
-flutter clean; flutter pub get; rm -rf ~/Library/Developer/Xcode/DerivedData/; cd ios;rm -rf Pods/ Podfile Podfile.lock ; pod install; cd ..; flutter build ios
+flutter clean; flutter pub get; rm -rf ~/Library/Developer/Xcode/DerivedData/; cd ios;rm -rf Pods/ Podfile Podfile.lock ; pod install; cd ..; flutter build ios; open ios/Runner.xcworkspace
 
+
+
+# Building for iOS:
+# (usually these steps will work, but sometimes you need to go back and run the steps above 
+
+$ flutter build ios
 $ open ios/Runner.xcworkspace
+
 
 - Select Product > Destination > Generic iOS Device
 - Select Product > Archive
