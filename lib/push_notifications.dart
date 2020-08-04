@@ -39,13 +39,13 @@ class PushNotificationsManager {
     var invoice = Invoice.fromMap({
       'denomination_amount_paid': data['amount'],
       'item_name': data['item_name'],
-      'uid': data['invoice_id'],
+      'uid': data['invoice_uid'],
     });
     AppController.openDialog("${invoice.paidAmountWithDenomination()} PAID", "Grab n Go ${invoice.itemName ?? "item"}",
       buttons: [{
         'text': 'Open Invoice',
         'onPressed': () {
-          AppController.openPath("/invoices/${invoice.uid}");
+          AppController.openPath("/payments/${invoice.uid}");
         },
       }]
     );
