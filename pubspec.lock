@@ -43,6 +43,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.2"
+  barcode_scan:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "85c1fa428eef7337a1b7f5a902d9692aacd82d6c"
+      resolved-ref: "85c1fa428eef7337a1b7f5a902d9692aacd82d6c"
+      url: "https://github.com/BananaNeil/flutter_barcode_reader.git"
+    source: git
+    version: "3.0.1"
   basic_utils:
     dependency: "direct main"
     description:
@@ -513,15 +522,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  qr_code_scanner:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "0.0.12-kiatuki.2"
-      resolved-ref: "25803f71b2e925a1498e7a9330e54e2707cc8b85"
-      url: "https://github.com/kiatuki/qr_code_scanner.git"
-    source: git
-    version: "0.0.12"
   qr_flutter:
     dependency: "direct main"
     description:

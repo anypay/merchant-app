@@ -5,7 +5,6 @@ import 'package:app/routes/edit_business_info.dart';
 import 'package:app/routes/forgot_password.dart';
 import 'package:app/routes/create_account.dart';
 import 'package:app/routes/set_currency.dart';
-import 'package:app/routes/scan_address.dart';
 import 'package:app/routes/new_address.dart';
 import 'package:app/routes/new_invoice.dart';
 import 'package:app/routes/navigation.dart';
@@ -92,11 +91,6 @@ class FluroRouter {
     router.define(
       '/payments/:id',
       handler: newHandler((id) => Payment(id), 'id'),
-      transitionType: TransitionType.inFromBottom,
-    );
-    router.define(
-      '/scan-address',
-      handler: newHandler(() => ScanAddress()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(

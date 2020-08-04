@@ -29,6 +29,10 @@ dependencies:
   flutter_spinkit: '^4.1.2'
   build_runner: '^1.10.0'
   url_launcher: '^5.4.10'
+  barcode_scan: #'^3.0.1'
+    git: 
+      url: https://github.com/BananaNeil/flutter_barcode_reader.git
+      ref: 85c1fa428eef7337a1b7f5a902d9692aacd82d6c
   basic_utils: '^2.5.3'
   rect_getter: '^0.1.0'
   qr_flutter: '^3.2.0'
@@ -39,10 +43,6 @@ dependencies:
   fluro: '^1.6.3'
   http: '^0.12.1'
   intl: '^0.16.1'
-  qr_code_scanner:
-    git:
-      url: https://github.com/kiatuki/qr_code_scanner.git
-      ref: 0.0.12-kiatuki.2
 
   flutter:
     sdk: flutter
