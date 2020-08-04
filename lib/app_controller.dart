@@ -10,6 +10,7 @@ class AppController extends StatefulWidget {
 
   static final globalKey = new GlobalKey<NavigatorState>();
   static bool enableDarkMode = false;
+  static bool dialogIsOpen = false;
 
   static String logoImagePath() {
     var modifier = enableDarkMode ? '-white' : '';
@@ -84,6 +85,9 @@ class AppController extends StatefulWidget {
   }
 
   static void openDialog(title, body, {path: null, buttonText: null, buttons: null}) async {
+    if (dialogIsOpen) return;
+    dialogIsOpen = true;
+
     var context = getCurrentContext();
     buttons ??= [];
     showDialog(
@@ -98,6 +102,7 @@ class AppController extends StatefulWidget {
             return FlatButton(
               child: Text(button['text']),
               onPressed: () {
+                dialogIsOpen = false;
                 Navigator.of(context).pop();
                 button['onPressed']();
               },
@@ -106,6 +111,7 @@ class AppController extends StatefulWidget {
           FlatButton(
             child: Text(buttonText ?? 'Ok'),
             onPressed: () {
+              dialogIsOpen = false;
               Navigator.of(context).pop();
               if (path != null)
                 openPath(path);
