@@ -320,14 +320,15 @@ class _InvoicePageState extends State<InvoicePage> {
 
   Widget _PaidScreen() {
     return Container(
-      height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image(
-            width: 150,
-            image: AssetImage('assets/images/anypay-logo.png')
+          Container(
+            child: Image(
+              width: AppController.scale(140),
+              image: AssetImage('assets/images/anypay-logo.png')
+            ),
           ),
           ConfettiWidget(
             confettiController: ConfettiController(
@@ -345,7 +346,7 @@ class _InvoicePageState extends State<InvoicePage> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF34b83a),
-                fontSize: 48,
+                fontSize: AppController.scale(48, minValue: 44),
               ),
             ),
           ),
@@ -358,7 +359,7 @@ class _InvoicePageState extends State<InvoicePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 40, bottom: 5),
+            margin: EdgeInsets.only(top: AppController.scale(35), bottom: 5),
             child: Text(invoice.amountWithDenomination(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -368,7 +369,7 @@ class _InvoicePageState extends State<InvoicePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 40),
+            margin: EdgeInsets.only(bottom: AppController.scale(35)),
             child: Text(invoice.inCurrency(),
               style: TextStyle(
                 color: Theme.of(context).primaryColorDark,
@@ -416,7 +417,7 @@ class _InvoicePageState extends State<InvoicePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 35),
+            margin: EdgeInsets.only(top: AppController.scale(30), bottom: 20),
             child: _submitting ?
               SpinKitCircle(
                   size: AppController.scale(50, minValue: 40),
