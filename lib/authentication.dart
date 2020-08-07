@@ -66,7 +66,7 @@ class Authentication {
       await Client.fetchCoins().then((response) {
         currentAccount.fetchingCoins = false;
         if (response['success']) {
-          var coins = response['body']['coins'];
+          var coins = response['body']['coins'] ?? [];
           Coins.all = {};
           coins.forEach((coin) {
             Coins.all[coin['code']] = {
