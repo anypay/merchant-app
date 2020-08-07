@@ -47,8 +47,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "85c1fa428eef7337a1b7f5a902d9692aacd82d6c"
-      resolved-ref: "85c1fa428eef7337a1b7f5a902d9692aacd82d6c"
+      ref: "5fcb042969e997bd1ea93c963f4ecec92c823ab0"
+      resolved-ref: "5fcb042969e997bd1ea93c963f4ecec92c823ab0"
       url: "https://github.com/BananaNeil/flutter_barcode_reader.git"
     source: git
     version: "3.0.1"

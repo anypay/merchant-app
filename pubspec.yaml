@@ -30,9 +30,11 @@ dependencies:
   build_runner: '^1.10.0'
   url_launcher: '^5.4.10'
   barcode_scan: #'^3.0.1'
+    # Patched to allow for camera flipping (and back compatibility on devices)
+    # path: ../flutter_barcode_reader
     git: 
       url: https://github.com/BananaNeil/flutter_barcode_reader.git
-      ref: 85c1fa428eef7337a1b7f5a902d9692aacd82d6c
+      ref: 5fcb042969e997bd1ea93c963f4ecec92c823ab0
   basic_utils: '^2.5.3'
   rect_getter: '^0.1.0'
   qr_flutter: '^3.2.0'
