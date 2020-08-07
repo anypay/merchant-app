@@ -1,5 +1,6 @@
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'dart:math';
 
 import 'package:app/native_storage.dart'
@@ -11,6 +12,7 @@ class AppController extends StatefulWidget {
   static final globalKey = new GlobalKey<NavigatorState>();
   static bool enableDarkMode = false;
   static bool dialogIsOpen = false;
+  static String openedPath;
 
   static String logoImagePath() {
     var modifier = enableDarkMode ? '-white' : '';
@@ -127,7 +129,10 @@ class AppController extends StatefulWidget {
   }
 
   static void openPath(String path) async {
-    if (path != null) Navigator.pushNamed(getCurrentContext(), path);
+    if (path != null && openedPath != path)
+      Navigator.pushNamed(getCurrentContext(), path);
+    Timer(Duration(milliseconds: 5000), () => openedPath = null);
+    openedPath = path;
   }
 
   const AppController(
