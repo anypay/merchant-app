@@ -1,5 +1,5 @@
  extern const unsigned char RunnerVersionString[];
  extern const double RunnerVersionNumber;
 
- const unsigned char RunnerVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:Runner  PROJECT:Runner-" "\n";
- const double RunnerVersionNumber __attribute__ ((used)) = (double)0.;
+ const unsigned char RunnerVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:Runner  PROJECT:Runner-2.0.3" "\n";
+ const double RunnerVersionNumber __attribute__ ((used)) = (double)2.0;
