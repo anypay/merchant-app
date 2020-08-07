@@ -56,10 +56,13 @@ class Invoice {
       return "https://chainz.cryptoid.info/dash/tx.dws?$hash";
   }
 
+  String noteText() {
+    return (notes ?? []).map((note) => note['content']).join(", ");
+  }
+
   String orderNotes() {
-    var _notes = (notes ?? []).map((note) => note['content']).join(", ");
     if (notes != null && notes.length > 0)
-      return "Order notes: $_notes";
+      return "Order notes: ${noteText()}";
     else return "";
   }
 

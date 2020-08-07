@@ -47,6 +47,7 @@ class _InvoicePageState extends State<InvoicePage> {
   bool usePayProtocol = true;
   bool _invoiceReady = false;
   String _successMessage = '';
+  bool _submitting = false;
   StreamSubscription event;
   bool useUrlStyle = true;
   bool _disposed = false;
@@ -103,12 +104,17 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _done() {
+    if (_submitting) return;
     _closeKeyboard();
-    setState(() { notesError = ""; });
+    setState(() {
+      _submitting = true;
+      notesError = "";
+    });
     periodicRequest.cancel();
 
     if (notes.text.length > 0)
       Client.setInvoiceNotes(invoice.uid, notes.text).then((response) {
+        _submitting = false;
         if (response['success'])
           _backToNewInvoice();
         else setState(() => notesError = 'something went wrong!');
@@ -352,7 +358,7 @@ class _InvoicePageState extends State<InvoicePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 20, bottom: 20),
+            margin: EdgeInsets.only(top: 40, bottom: 5),
             child: Text(invoice.amountWithDenomination(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -362,11 +368,38 @@ class _InvoicePageState extends State<InvoicePage> {
             ),
           ),
           Container(
+            margin: EdgeInsets.only(bottom: 40),
             child: Text(invoice.inCurrency(),
               style: TextStyle(
                 color: Theme.of(context).primaryColorDark,
                 fontSize: 20,
               ),
+            ),
+          ),
+          Visibility(
+            visible: (invoice.notes ?? []).length > 0,
+            child: Column(
+              children: [
+                Text("Order Notes:",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: 20,
+                  ),
+                ),
+                Container(
+                  width: 300,
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text(invoice.noteText(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Container(
@@ -384,13 +417,17 @@ class _InvoicePageState extends State<InvoicePage> {
           ),
           Container(
             margin: EdgeInsets.only(top: 35),
-            child: GestureDetector(
-              onTap: _done,
-              child: Image(
-                image: AssetImage('assets/images/next_arrow.png'),
-                width: 50,
-              )
-            ),
+            child: _submitting ?
+              SpinKitCircle(
+                  size: AppController.scale(50, minValue: 40),
+                  color: AppController.randomColor,
+              ) : GestureDetector(
+                onTap: _done,
+                child: Image(
+                  image: AssetImage('assets/images/next_arrow.png'),
+                  width: 50,
+                )
+              ),
           )
         ]
       )
@@ -567,7 +604,7 @@ class _InvoicePageState extends State<InvoicePage> {
         _rebuild();
       };
     return Visibility(
-      visible: invoice == null || !invoice.isExpired() && (invoice.isUnpaid() || invoice.isUnderpaid()),
+      visible: invoice == null || (!invoice.isExpired() && invoice.isUnpaid()) || invoice.isUnderpaid(),
       child: CircleBackButton(
         margin: EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
         backPath: '/new-invoice',
