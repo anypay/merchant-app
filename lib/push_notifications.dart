@@ -45,7 +45,7 @@ class PushNotificationsManager {
       buttons: [{
         'text': 'Open Invoice',
         'onPressed': () {
-          AppController.openPath("/payments/${invoice.uid}");
+          AppController.openPath(data['path'] ?? "/payments/${invoice.uid}");
         },
       }]
     );
