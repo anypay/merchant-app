@@ -43,12 +43,14 @@ class _InvoicePageState extends State<InvoicePage> {
   _InvoicePageState(this.id);
 
   TextEditingController notes = TextEditingController();
+  bool _showLinkToWalletHelp = false;
   bool choosingCurrency = false;
+  String _successMessage = '';
   bool usePayProtocol = true;
   bool _invoiceReady = false;
-  String _successMessage = '';
   bool _submitting = false;
   StreamSubscription event;
+  Timer havingTroubleTimer;
   bool useUrlStyle = true;
   bool _disposed = false;
   Timer periodicRequest;
@@ -67,12 +69,22 @@ class _InvoicePageState extends State<InvoicePage> {
     return GestureDetector(
       onTap: _closeKeyboard,
       child: Scaffold(
+        floatingActionButton: Visibility(
+          visible: _showInvoice(),
+          child: GestureDetector(
+            onTap: _openHelpUrl,
+            child: Image(
+              image: AssetImage(AppController.havingIssuesImagePath()),
+              width: AppController.scale(40),
+            )
+          )
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _InvoiceComponent(),
+                _PageContent(),
                 _BackButton(),
               ],
             ),
@@ -89,6 +101,7 @@ class _InvoicePageState extends State<InvoicePage> {
     super.dispose();
     _disposed = true;
     periodicRequest.cancel();
+    havingTroubleTimer.cancel();
   }
 
   void _copyUri() {
@@ -97,6 +110,10 @@ class _InvoicePageState extends State<InvoicePage> {
     Timer(Duration(seconds: 2), () {
       setState(() => _successMessage = "" );
     });
+  }
+
+  void _openHelpUrl() async {
+    await launch("https://api.anypayinc.com/support/${Authentication.token}");
   }
 
   void _openUri() async {
@@ -185,6 +202,9 @@ class _InvoicePageState extends State<InvoicePage> {
     qrColor = AppController.randomColor;
     usePayProtocol = Authentication.currentAccount.coins.length > 1;
     periodicRequest = Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
+    havingTroubleTimer = Timer(Duration(seconds: 50), () {
+      setState(() => _showLinkToWalletHelp = true );
+    });
     event = Events.on('invoice.paid', (payload) {
       invoice = Invoice.fromMap(payload);
       _rebuild();
@@ -489,8 +509,18 @@ class _InvoicePageState extends State<InvoicePage> {
     else return Container();
   }
 
-  Widget _InvoiceComponent() {
-    if (invoice == null)
+  bool _showInvoice() {
+    return invoice != null &&
+      !invoice.isUnderpaid() &&
+      !invoice.isExpired() &&
+      !invoice.isPaid() &&
+      !choosingCurrency;
+  }
+
+  Widget _PageContent() {
+    if (_showInvoice())
+      return _InvoiceComponent();
+    else if (invoice == null)
       if (_errorMessage != null)
         return Text(_errorMessage, style: TextStyle(color: AppController.red));
       else return Container(
@@ -505,7 +535,10 @@ class _InvoicePageState extends State<InvoicePage> {
       return _ChooseCurrencyMenu();
     else if (invoice.isExpired())
       return _ExpiredInvoice();
-    else return AnimatedOpacity(
+  }
+
+  Widget _InvoiceComponent() {
+    return AnimatedOpacity(
       opacity: _invoiceReady ? 1.0 : 0.0,
       duration: Duration(milliseconds: 300),
       child: Column(
@@ -513,6 +546,15 @@ class _InvoicePageState extends State<InvoicePage> {
         children: <Widget>[
           Text(_successMessage,
             style: TextStyle(color: AppController.green),
+          ),
+          Visibility(
+            visible: _showLinkToWalletHelp,
+            child: GestureDetector(
+              onTap: _openHelpUrl,
+              child: Text('Having trouble paying?',
+                style: TextStyle(color: AppController.blue)
+              )
+            ),
           ),
           GestureDetector(
             behavior: HitTestBehavior.translucent,
@@ -526,12 +568,13 @@ class _InvoicePageState extends State<InvoicePage> {
                     visible: Authentication.currentAccount.coins.length > 1,
                     child: Container(
                       width: 40,
-                      height: 60,
-                      margin: EdgeInsets.all(15.0),
-                      child: Icon(
-                        Icons.cached,
-                        size: 40,
-                      ),
+                      height: 30,
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 10),
+                      child: Image(
+                        image: AppController.enableDarkMode ?
+                          AssetImage('assets/images/drop-down-white.png') :
+                          AssetImage('assets/images/drop-down.png'),
+                      )
                     )
                   )
                 ]

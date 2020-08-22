@@ -19,6 +19,11 @@ class AppController extends StatefulWidget {
     return 'assets/images/anypay-full-logo$modifier.png';
   }
 
+  static String havingIssuesImagePath() {
+    var modifier = enableDarkMode ? '-white' : '';
+    return 'assets/images/having-issues$modifier.png';
+  }
+
   static String backspaceImagePath() {
     var modifier = enableDarkMode ? '-white' : '';
     return 'assets/images/backspace$modifier.png';
