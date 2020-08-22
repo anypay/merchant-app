@@ -1,0 +1,5 @@
+version: "Apple Swift version 5.3 (swiftlang-1200.0.25.2 clang-1200.0.27.1)"
+options: "c6ebe05dfb3d80428e7357a6f2d734a1"
+build_time: [1597817749, 640026000]
+inputs:
+  "/Users/neil/Projects/anypay/flutter/ios/Runner/AppDelegate.swift": [1597010401, 990086647]
