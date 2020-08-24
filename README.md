@@ -57,8 +57,10 @@ flutter clean; flutter pub get; rm -rf ~/Library/Developer/Xcode/DerivedData/; c
 # Building for iOS:
 # (usually these steps will work, but sometimes you need to go back and run the steps above 
 
-$ flutter build ios
-$ open ios/Runner.xcworkspace
+```
+flutter build ios
+open ios/Runner.xcworkspace
+```
 
 
 - Select Product > Destination > Generic iOS Device
@@ -75,5 +77,11 @@ $ open ios/Runner.xcworkspace
 # Do some set up:
     #TODO write setup for android building
 
-# and run:
-$ flutter build apk --split-per-abi
+# To build for the android store, run:
+flutter build appbundle --target-platform android-arm,android-arm64,android-x64
+
+# To build for android devices
+flutter build apk
+
+
+
