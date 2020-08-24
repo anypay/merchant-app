@@ -216,7 +216,7 @@ class _InvoicePageState extends State<InvoicePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          width: 235,
+          width: 300,
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
             child: _PaymentTitle('anypay'),
@@ -229,7 +229,7 @@ class _InvoicePageState extends State<InvoicePage> {
         ),
         ...(invoice.paymentOptions.map((option) {
           return Container(
-            width: 235,
+            width: 300,
             margin: EdgeInsets.only(top: 10),
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -500,7 +500,7 @@ class _InvoicePageState extends State<InvoicePage> {
               margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 15, bottom: 15),
               child: Image.network(Coins.supported[currency]['icon']),
             ),
-            Text(currency,
+            Text(Coins.supported[currency]['name'],
               style: TextStyle(fontSize: 40),
             ),
           ]
