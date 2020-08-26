@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,7 +19,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" preservesSuperviewLayoutMargins="YES" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="ebt-AS-GEh">
-                                <rect key="frame" x="40" y="100" width="262.5" height="696"/>
+                                <rect key="frame" x="76" y="100" width="262" height="696"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ebt-AS-GEh" secondAttribute="height" multiplier="167:443" id="9Z5-y6-a71"/>
                                 </constraints>
@@ -30,8 +30,6 @@
                             <constraint firstItem="ebt-AS-GEh" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="AQR-eF-blb"/>
                             <constraint firstItem="ebt-AS-GEh" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Izj-Bc-LOc"/>
                             <constraint firstAttribute="bottom" secondItem="ebt-AS-GEh" secondAttribute="bottom" constant="100" id="U7H-3O-DDe"/>
-                            <constraint firstItem="ebt-AS-GEh" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="20" id="Wwm-zS-rUe"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="ebt-AS-GEh" secondAttribute="trailing" constant="20" id="luU-rm-2aw"/>
                             <constraint firstItem="ebt-AS-GEh" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="100" id="mnu-uo-OxI"/>
                         </constraints>
                     </view>
