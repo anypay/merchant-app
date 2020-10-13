@@ -175,6 +175,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
             _address = Address.fromMap({ 'value': address });
             _messageType = 'success';
             _message = address;
+            Timer(Duration(milliseconds: 800), _returnToNewInvoice);
           } else {
             _messageType = 'error';
             _message = response['message'];
@@ -183,6 +184,10 @@ class _NewAddressPageState extends State<NewAddressPage> {
           }
         });
     });
+  }
+
+  void _returnToNewInvoice() {
+    AppController.closeUntilPath('/new-invoice');
   }
 
   Color _messageColor() {
