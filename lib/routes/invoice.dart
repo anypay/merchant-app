@@ -568,13 +568,9 @@ class _InvoicePageState extends State<InvoicePage> {
                     visible: Authentication.currentAccount.coins.length > 1,
                     child: Container(
                       width: 40,
-                      height: 30,
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 10),
-                      child: Image(
-                        image: AppController.enableDarkMode ?
-                          AssetImage('assets/images/drop-down-white.png') :
-                          AssetImage('assets/images/drop-down.png'),
-                      )
+                      height: 42,
+                      margin: EdgeInsets.only(right: 10.0),
+                      child: Icon(Icons.expand_more, size: 50)
                     )
                   )
                 ]
