@@ -95,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
               style: TextStyle(color: AppController.red),
             ),
             TextFormField(
+              autofillHints: [AutofillHints.username],
               controller: email,
               decoration: InputDecoration(
                 labelText: 'Email'

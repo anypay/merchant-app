@@ -43,6 +43,7 @@ class _InvoicePageState extends State<InvoicePage> {
   _InvoicePageState(this.id);
 
   TextEditingController notes = TextEditingController();
+  Map<String, dynamic> currencyDetails;
   bool _showLinkToWalletHelp = false;
   bool choosingCurrency = false;
   String _successMessage = '';
@@ -149,7 +150,7 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _chooseCurrency() {
-    if (Authentication.currentAccount.coins.length > 1)
+    if (invoice.paymentOptions.length > 1)
       choosingCurrency = true;
     _rebuild();
   }
@@ -200,7 +201,6 @@ class _InvoicePageState extends State<InvoicePage> {
     super.initState();
     _fetchInvoice();
     qrColor = AppController.randomColor;
-    usePayProtocol = Authentication.currentAccount.coins.length > 1;
     periodicRequest = Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
     havingTroubleTimer = Timer(Duration(seconds: 50), () {
       setState(() => _showLinkToWalletHelp = true );
@@ -228,14 +228,19 @@ class _InvoicePageState extends State<InvoicePage> {
           )
         ),
         ...(invoice.paymentOptions.map((option) {
+          var details = {
+            'name': option['currency_name'],
+            'icon': option['currency_logo_url'],
+          };
           return Container(
             width: 300,
             margin: EdgeInsets.only(top: 10),
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              child: _PaymentTitle(option['currency']),
+              child: _PaymentTitle(option['currency'], details: details),
               onTap: () {
                 currency = option['currency'];
+                currencyDetails = details;
                 choosingCurrency = false;
                 usePayProtocol = false;
                 useUrlStyle = true;
@@ -326,7 +331,9 @@ class _InvoicePageState extends State<InvoicePage> {
                 Container(
                   padding: EdgeInsets.only(left: 15),
                   child: Image(
-                    image: AssetImage('assets/images/copy_icon.png'),
+                    image: AppController.enableDarkMode ?
+                      AssetImage('assets/images/wallet_icon-white.png') :
+                      AssetImage('assets/images/wallet_icon.png'),
                     width: 20,
                   )
                 )
@@ -479,8 +486,12 @@ class _InvoicePageState extends State<InvoicePage> {
     );
   }
 
-  Widget _PaymentTitle(currency) {
-    if (currency == 'anypay' || Coins.supported[currency] != null)
+  Widget _PaymentTitle(currency, {details}) {
+    var coinDetailsSpecified = details != null;
+    var coinIsSupported = Coins.supported[currency] != null;
+
+    details = details ?? {};
+    if (currency == 'anypay' || coinIsSupported || coinDetailsSpecified)
       return Container(
         child: Row(
           children: currency == 'anypay' ? [
@@ -498,9 +509,9 @@ class _InvoicePageState extends State<InvoicePage> {
               width: 40,
               height: 40,
               margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 15, bottom: 15),
-              child: Image.network(Coins.supported[currency]['icon']),
+              child: Image.network(details['icon'] ?? Coins.supported[currency]['icon']),
             ),
-            Text(Coins.supported[currency]['name'],
+            Text(details['name'] ?? Coins.supported[currency]['name'],
               style: TextStyle(fontSize: 40),
             ),
           ]
@@ -563,9 +574,9 @@ class _InvoicePageState extends State<InvoicePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _PaymentTitle(usePayProtocol ? 'anypay' : currency),
+                  _PaymentTitle(usePayProtocol ? 'anypay' : currency, details: currencyDetails),
                   Visibility(
-                    visible: Authentication.currentAccount.coins.length > 1,
+                    visible: invoice.paymentOptions.length > 1,
                     child: Container(
                       width: 40,
                       height: 42,

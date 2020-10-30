@@ -1,4 +1,5 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
@@ -233,6 +234,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   Widget _Scan() {
+    if (kIsWeb) return Container();
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: _scanAddress,
