@@ -40,7 +40,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            width: 300,
+            width: AppController.scale(300, maxValue: 720, minValue: 300),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -215,7 +215,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       child: Container(
         margin: EdgeInsets.only(top: AppController.scale(35)),
         height: AppController.scale(60),
-        width: 100,
+        width: AppController.scale(100, maxValue: 240, minValue: 100).floor().toDouble(),
         child: icon == null ? Text(text,
           textAlign: TextAlign.center,
           style: TextStyle(
