@@ -105,6 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                 else if (!EmailValidator.validate(value.trim()))
                   return "That doesn't look like an email address";
               },
+              onFieldSubmitted: (value) {
+                _submitForm();
+              },
             ),
             TextFormField(
               obscureText: true,
@@ -114,6 +117,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
               validator: (value) {
                 if (value.isEmpty) return 'Please enter some text';
+              },
+              onFieldSubmitted: (value) {
+                _submitForm();
               },
             ),
           ],

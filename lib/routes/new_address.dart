@@ -355,7 +355,12 @@ class _NewAddressPageState extends State<NewAddressPage> {
           Container(
             width: 250,
             margin: EdgeInsets.only(bottom: 10),
-            child: TextField(
+              child: TextField(
+              onSubmitted: (value) {
+                _saving = true;
+                _closeKeyboard();
+                _setAddress(_paymailAddress);
+              },
               decoration: InputDecoration(
                 labelText: 'paymail address'
               ),

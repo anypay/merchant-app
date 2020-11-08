@@ -95,6 +95,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             else if (!EmailValidator.validate(value.trim()))
                               return "That doesn't look like an email address";
                           },
+                          onFieldSubmitted: (value) {
+                            _submitForm();
+                          },
                         ),
                         Container(
                           margin: (_submitting ? 

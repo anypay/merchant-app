@@ -134,6 +134,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 else if (!EmailValidator.validate(value.trim()))
                   return "That doesn't look like an email address";
               },
+              onFieldSubmitted: (value) {
+                _submitForm();
+              },
             ),
             TextFormField(
               obscureText: true,
@@ -146,6 +149,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 else if (confirmPassword.text != value)
                   return 'Passwords do not match.';
               },
+              onFieldSubmitted: (value) {
+                _submitForm();
+              },
             ),
             TextFormField(
               obscureText: true,
@@ -155,6 +161,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               ),
               validator: (value) {
                 if (value.isEmpty) return 'Please enter some text';
+              },
+              onFieldSubmitted: (value) {
+                _submitForm();
               },
             ),
           ],
