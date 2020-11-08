@@ -21,6 +21,11 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  moneybutton_flutter_web: # '^0.1.2'
+    git: 
+      # Patched the monebutton package to add the ability to change the height of the widget 
+      url: https://github.com/BananaNeil/moneybutton_flutter_web.git
+      ref: e4f37467181a52593af5720ab9830e1ab58c411b
   flutter_secure_storage: '^3.3.5'
   build_web_compilers: '^2.11.0'
   firebase_messaging: '^6.0.16'

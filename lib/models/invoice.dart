@@ -116,6 +116,10 @@ class Invoice {
     return expiry.isBefore(DateTime.now());
   }
 
+  Map<String, dynamic> get bsvPaymentOption {
+    return paymentOptions.firstWhere((option) => option['currency'] == 'BSV', orElse: () => null);
+  }
+
   String urlStyleUri([useCurrency]) {
     useCurrency = useCurrency ?? currency;
     String host = Client.host;

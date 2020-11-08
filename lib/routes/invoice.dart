@@ -1,3 +1,4 @@
+import 'package:moneybutton_flutter_web/moneybutton_flutter_web.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:rect_getter/rect_getter.dart';
@@ -45,6 +46,7 @@ class _InvoicePageState extends State<InvoicePage> {
   TextEditingController notes = TextEditingController();
   Map<String, dynamic> chosenPaymentOption;
   bool _showLinkToWalletHelp = false;
+  bool _moneyButtonLoaded = false;
   bool choosingCurrency = false;
   String _successMessage = '';
   bool usePayProtocol = true;
@@ -64,6 +66,8 @@ class _InvoicePageState extends State<InvoicePage> {
 
   Invoice invoice;
   RectGetter sharePlacement;
+
+  Map<String, dynamic> get bsvPaymentOption => invoice.bsvPaymentOption;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +90,7 @@ class _InvoicePageState extends State<InvoicePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 _PageContent(),
-                _BackButton(),
+                _moneyButtonLoaded ? Container() : _BackButton(),
               ],
             ),
           ),
@@ -550,7 +554,7 @@ class _InvoicePageState extends State<InvoicePage> {
       opacity: _invoiceReady ? 1.0 : 0.0,
       duration: Duration(milliseconds: 300),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Text(_successMessage,
             style: TextStyle(color: AppController.green),
@@ -638,13 +642,46 @@ class _InvoicePageState extends State<InvoicePage> {
                 )
               )
             )
-          ))
+          )),
+          _moneyButtonLoaded ? _BackButton() : Container(),
+          Container(
+            width: 300,
+            height: 200,
+            child: OverflowBox(
+              alignment: Alignment.topCenter,
+              maxHeight: 300,
+              child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                child: Container(
+                  child: kIsWeb && bsvPaymentOption == null ? null : 
+                    MoneyButton({
+                      'clientIdentifier': '3de67950b83c16c9dd343f691bc71887',
+                      'outputs': [{
+                        "to": bsvPaymentOption['address'],
+                        "amount": bsvPaymentOption['amount'],
+                        "currency": bsvPaymentOption['currency'],
+                      }, {
+                        'to': 'steven@simply.cash',
+                        'amount': 0.00009, // $0.02
+                        'currency': 'BSV'
+                      }],
+                      'buttonId': bsvPaymentOption['invoice_uid'],
+                    }, width: 200,
+                    height: 300,
+                    onLoaded: () {
+                      _moneyButtonLoaded = true;
+                    },
+                  ),
+                )
+              )
+            )
+          )
         ]
       )
     );
   }
 
-  Widget _BackButton() {
+  Widget _BackButton({margin}) {
     var onTap;
     if (choosingCurrency)
       onTap = () {
@@ -654,7 +691,7 @@ class _InvoicePageState extends State<InvoicePage> {
     return Visibility(
       visible: invoice == null || (!invoice.isExpired() && invoice.isUnpaid()) || invoice.isUnderpaid(),
       child: CircleBackButton(
-        margin: EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
+        margin: margin ?? EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
         backPath: '/new-invoice',
         opaque: false,
         onTap: onTap,
