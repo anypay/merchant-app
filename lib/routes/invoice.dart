@@ -43,7 +43,7 @@ class _InvoicePageState extends State<InvoicePage> {
   _InvoicePageState(this.id);
 
   TextEditingController notes = TextEditingController();
-  Map<String, dynamic> currencyDetails;
+  Map<String, dynamic> chosenPaymentOption;
   bool _showLinkToWalletHelp = false;
   bool choosingCurrency = false;
   String _successMessage = '';
@@ -228,19 +228,15 @@ class _InvoicePageState extends State<InvoicePage> {
           )
         ),
         ...(invoice.paymentOptions.map((option) {
-          var details = {
-            'name': option['currency_name'],
-            'icon': option['currency_logo_url'],
-          };
           return Container(
             width: 300,
             margin: EdgeInsets.only(top: 10),
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              child: _PaymentTitle(option['currency'], details: details),
+              child: _PaymentTitle(option['currency'], paymentOption: option),
               onTap: () {
                 currency = option['currency'];
-                currencyDetails = details;
+                chosenPaymentOption = option;
                 choosingCurrency = false;
                 usePayProtocol = false;
                 useUrlStyle = true;
@@ -486,11 +482,12 @@ class _InvoicePageState extends State<InvoicePage> {
     );
   }
 
-  Widget _PaymentTitle(currency, {details}) {
-    var coinDetailsSpecified = details != null;
+  Widget _PaymentTitle(currency, {paymentOption}) {
+    paymentOption = paymentOption ?? chosenPaymentOption;
+    var coinDetailsSpecified = paymentOption != null;
     var coinIsSupported = Coins.supported[currency] != null;
 
-    details = details ?? {};
+    paymentOption = paymentOption ?? {};
     if (currency == 'anypay' || coinIsSupported || coinDetailsSpecified)
       return Container(
         child: Row(
@@ -509,9 +506,9 @@ class _InvoicePageState extends State<InvoicePage> {
               width: 40,
               height: 40,
               margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 15, bottom: 15),
-              child: Image.network(details['icon'] ?? Coins.supported[currency]['icon']),
+              child: Image.network(paymentOption['currency_logo_url'] ?? Coins.supported[currency]['icon']),
             ),
-            Text(details['name'] ?? Coins.supported[currency]['name'],
+            Text(paymentOption['currency_name'] ?? Coins.supported[currency]['name'],
               style: TextStyle(fontSize: 40),
             ),
           ]
@@ -574,7 +571,7 @@ class _InvoicePageState extends State<InvoicePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _PaymentTitle(usePayProtocol ? 'anypay' : currency, details: currencyDetails),
+                  _PaymentTitle(usePayProtocol ? 'anypay' : currency),
                   Visibility(
                     visible: invoice.paymentOptions.length > 1,
                     child: Container(
@@ -594,7 +591,7 @@ class _InvoicePageState extends State<InvoicePage> {
                 width: 12.0,
                 color: qrColor,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+              borderRadius: BorderRadius.all(Radius.circular(18.0)),
             ),
             child: Container(
               color: AppController.white,
