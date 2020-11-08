@@ -76,6 +76,10 @@ flutter build ios; open ios/Runner.xcworkspace
 # Do some set up:
     #TODO write setup for android building
 
+
+# BEFORE YOU BUILD:
+update the version code (Y) in the pubspec.yml (2.X.X+Y)
+
 # To build for the android store, run:
 flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64
 
