@@ -448,9 +448,11 @@ packages:
   moneybutton_flutter_web:
     dependency: "direct main"
     description:
-      path: "/Users/neil/Projects/anypay/moneybutton_flutter_web"
-      relative: false
-    source: path
+      path: "."
+      ref: e4f37467181a52593af5720ab9830e1ab58c411b
+      resolved-ref: e4f37467181a52593af5720ab9830e1ab58c411b
+      url: "https://github.com/BananaNeil/moneybutton_flutter_web.git"
+    source: git
     version: "0.1.2"
   node_interop:
     dependency: transitive
