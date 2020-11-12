@@ -125,6 +125,11 @@ class _InvoicePageState extends State<InvoicePage> {
     await launch(uri);
   }
 
+  void _attemptRedirect() {
+    if (kIsWeb && invoice.redirectUrl != null)
+      launch(invoice.redirectUrl, newTab: false);
+  }
+
   void _done() {
     if (_submitting) return;
     _closeKeyboard();
@@ -179,6 +184,8 @@ class _InvoicePageState extends State<InvoicePage> {
       currency = currency ?? invoice?.currency;
       uri = invoice?.uriFor(currency, format: getFormat());
     });
+    if (invoice.isPaid())
+      Timer(Duration(seconds: 5), _attemptRedirect);
     if (invoice != null && _invoiceReady == false) {
       Timer(Duration(milliseconds: 10), () {
         _invoiceReady = true;

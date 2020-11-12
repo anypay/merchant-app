@@ -13,6 +13,7 @@ class Invoice {
   DateTime completedAt;
   String blockchainUrl;
   List paymentOptions;
+  String redirectUrl;
   String itemName;
   String currency;
   DateTime expiry;
@@ -32,6 +33,7 @@ class Invoice {
     this.paymentOptions,
     this.blockchainUrl,
     this.completedAt,
+    this.redirectUrl,
     this.complete,
     this.itemName,
     this.currency,
@@ -167,6 +169,7 @@ class Invoice {
       paymentOptions: json['payment_options'],
       blockchainUrl: json['blockchain_url'],
       complete: json['complete'] ?? false,
+      redirectUrl: json['redirect_url'],
       itemName: json['item_name'],
       currency: json['currency'],
       address: json['address'],

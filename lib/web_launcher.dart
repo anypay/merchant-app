@@ -1,6 +1,9 @@
 import 'dart:html' show window;
 
-void launch(url) async {
-  await window.open(url, "");
+void launch(url, {newTab}) async {
+  newTab = newTab ?? true;
+  if (newTab)
+    await window.open(url, "");
+  else  window.location.href = url;
 }
 
