@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 
-import 'package:app/native_storage.dart'
-  if (dart.library.html) 'package:app/web_storage.dart';
-
 class AppController extends StatefulWidget {
   final Function(BuildContext) builder;
 
@@ -38,21 +35,6 @@ class AppController extends StatefulWidget {
 
   static void toggleDarkMode([value = null]) {
     enableDarkMode = value ?? !enableDarkMode;
-    saveDarkModeToDisk();
-  }
-
-  static Future<void> checkForDarkMode(context) {
-    return Storage.read('enableDarkMode').then((darkMode) {
-      if (darkMode == null)
-        enableDarkMode = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
-      else if (darkMode != 'false') enableDarkMode = true;
-    });
-  }
-
-  static Future<void> saveDarkModeToDisk() async {
-    if (enableDarkMode)
-      return await Storage.write('enableDarkMode', 'true');
-    else return await Storage.write('enableDarkMode', 'false');
   }
 
   static ThemeData get lightTheme => ThemeData(
