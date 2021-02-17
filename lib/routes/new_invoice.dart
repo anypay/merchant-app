@@ -1,5 +1,6 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:app/models/merchant.dart';
 import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
 import 'package:app/app_controller.dart';
@@ -11,51 +12,77 @@ import 'dart:math';
 
 
 class NewInvoice extends StatelessWidget {
+  NewInvoice({this.merchantId});
+
+  final String merchantId;
+
   @override
   Widget build(BuildContext context) {
-    return NewInvoicePage(title: 'Anypay Cash Register');
+    return NewInvoicePage(merchantId: merchantId);
   }
 }
 
 
 class NewInvoicePage extends StatefulWidget {
-  NewInvoicePage({Key key, this.title}) : super(key: key);
+  NewInvoicePage({Key key, this.merchantId}) : super(key: key);
 
-  final String title;
+  final String merchantId;
 
   @override
-  _NewInvoicePageState createState() => _NewInvoicePageState();
+  _NewInvoicePageState createState() => _NewInvoicePageState(merchantId: merchantId);
 }
 
 class _NewInvoicePageState extends State<NewInvoicePage> {
+  _NewInvoicePageState({this.merchantId});
+
   String _visiblePrice = '';
   String _errorMessage = '';
   bool _submitting = false;
+  Merchant merchant;
+  String merchantId;
   Invoice _invoice;
   num _price = 0;
+
+  @override
+  void initState() {
+    _rebuild();
+    super.initState();
+    _fetchMerchant();
+    _checkForDarkMode();
+    if (merchantId == null)
+      Authentication.getAccount().then((account) {
+        _rebuild();
+      });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          child: Container(
-            width: AppController.scale(300, maxValue: 720, minValue: 300),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 200,
-                  child: Text(_errorMessage,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: AppController.red),
-                  ),
+          child: Column(
+            children: [
+              _MerchantName(),
+              Container(
+                width: AppController.scale(300, maxValue: 720, minValue: 300),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 200,
+                      child: Text(_errorMessage,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: AppController.red),
+                      ),
+                    ),
+                    _VisiblePrice(),
+                    _Buttons(),
+                  ],
                 ),
-                _VisiblePrice(),
-                _Buttons(),
-              ],
-            ),
-          ),
+              ),
+            ]
+          )
         ),
       ),
       floatingActionButton: _navButton(),
@@ -69,6 +96,10 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     });
   }
 
+  String get preferredCoinCode {
+    return merchant?.denomination ?? Authentication.currentAccount.preferredCoinCode;
+  }
+
   void _submit() {
     _submitting = true;
     AppController.randomizeColor();
@@ -77,8 +108,8 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
     if (account.coins.length == 0 && account.fetchingCoins)
       Timer(Duration(milliseconds: 500), _submit);
-    else if (account.coins.length > 0)
-      Client.createInvoice(_price, account.preferredCoinCode()).then((response) {
+    else if (preferredCoinCode != null)
+      Client.createInvoice(_price, preferredCoinCode, accountId: merchant?.accountId).then((response) {
         if (response['success']) {
           var invoiceId = response['invoiceId'];
           Navigator.pushNamed(context, '/invoices/$invoiceId').then((_) {
@@ -95,20 +126,50 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     });
   }
 
+  void _fetchMerchant() {
+    if (merchantId != null)
+      Client.fetchMerchant(merchantId).then((response) {
+        if (response['success'])
+          merchant = response['merchant'];
+        else _errorMessage = response['message'];
+        _rebuild();
+      });
+  }
+
   void _checkForDarkMode() {
     AppController.checkForDarkMode(context).then((_) {
       AppController.of(context).rebuild();
     });
   }
 
-  @override
-  void initState() {
-    _rebuild();
-    super.initState();
-    _checkForDarkMode();
-    Authentication.getAccount().then((account) {
-      _rebuild();
-    });
+  Widget _MerchantName() {
+    if (merchantId == null) return Container();
+    if (merchant == null && _errorMessage == '')
+      return Container(
+        margin: EdgeInsets.only(top: 15),
+        child: SpinKitCircle(
+          size: AppController.scale(30, minValue: 20),
+          color: AppController.randomColor,
+        )
+      );
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(top: 10, bottom: 10),
+      child: Text(merchant.name,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          shadows: <Shadow>[
+            Shadow(
+              offset: Offset(2.0, 2.0),
+              blurRadius: 3.0,
+              color: Color.fromARGB(180, 0, 0, 0),
+            ),
+          ],
+          fontWeight: FontWeight.bold,
+          fontSize: (65 - 1.5*max(merchant.name.length-8, 0)).toDouble(),
+        )
+      )
+    );
   }
 
   Widget _VisiblePrice() {
@@ -159,13 +220,14 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   }
 
   Widget _navButton() {
-    return Container(
-      child: Align(
-        alignment: Alignment(-0.85, -0.85),
+    return Align(
+      alignment: Alignment(-0.85, -0.95),
+      child: Container(
+        height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            GestureDetector(
+            !Authentication.isAuthenticated()? Container() : GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/navigation').then((value) => _rebuild()),
               child: Container(
                 margin: EdgeInsets.only(top: 10.0, left: AppController.leftPadding() + 30),
@@ -184,7 +246,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   void _setInvoice() {
     _invoice = Invoice(
-      denominationCurrency: Authentication.currentAccount.denomination,
+      denominationCurrency: merchant?.denomination ?? Authentication.currentAccount?.denomination,
       denominationAmount: _price,
     );
   }

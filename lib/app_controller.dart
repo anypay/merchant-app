@@ -76,7 +76,6 @@ class AppController extends StatefulWidget {
     yellow,
     green,
     blue,
-    red,
   ].toList();
 
   static BuildContext getCurrentContext() {

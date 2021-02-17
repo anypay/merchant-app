@@ -29,7 +29,8 @@ class Account {
     return addresses[code];
   }
 
-  String preferredCoinCode() {
+  String get preferredCoinCode {
+    if (coins.length == 0) return null;
     var codes = coins.map((a) => a['code']);
     if (codes.contains('BSV'))
       return 'BSV';

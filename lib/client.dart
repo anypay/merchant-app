@@ -1,4 +1,5 @@
 import 'package:basic_utils/basic_utils.dart';
+import 'package:app/models/merchant.dart';
 import 'package:app/authentication.dart';
 import 'package:app/models/account.dart';
 import 'package:app/models/invoice.dart';
@@ -19,6 +20,17 @@ class Client {
   static String buildAuthHeader() {
     String token = Authentication.token;
     return 'Basic ' + base64.encode(utf8.encode('$token:'));
+  }
+
+  static Future<Map<dynamic, dynamic>> fetchMerchant(id) async {
+    var response = await makeRequest('get',
+      path: "/merchants/${id}",
+    );
+
+    if (response['success'])
+      response['merchant'] = Merchant.fromMap(response['body']);
+
+    return response;
   }
 
   static Future<Map<dynamic, dynamic>> fetchCoins() async {
@@ -153,11 +165,12 @@ class Client {
     return response;
   }
 
-  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency) async {
+  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency, {accountId}) async {
+    var path = accountId == null ? '/invoices' : '/accounts/${accountId}/invoices';
     var response = await makeRequest('post',
+      requireAuth: accountId == null,
       genericErrorCodes: [400, 500],
-      requireAuth: true,
-      path: '/invoices',
+      path: path,
       body: {
         'amount': amount,
         'currency': currency,

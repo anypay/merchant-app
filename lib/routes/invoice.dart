@@ -150,8 +150,15 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _backToNewInvoice() {
-    AppController.closeUntilPath('/new-invoice');
+    AppController.closeUntilPath(backPath);
   }
+
+  String get backPath {
+    if (invoice != null && !Authentication.isAuthenticated())
+      return '/pay/${invoice.accountId}';
+    else return '/new-invoice';
+  }
+
 
   void _toggleUrlStyle() {
     useUrlStyle = !useUrlStyle;
@@ -198,9 +205,13 @@ class _InvoicePageState extends State<InvoicePage> {
     if (invoice == null || (invoice.isUnpaid() && !invoice.isExpired()))
       Client.getInvoice(id).then((response) {
         _errorMessage = null;
-        if (response['success'])
+        if (response['success']) {
           invoice = response['invoice'];
-        else _errorMessage = response['message'];
+          if (invoice.paymentOptions.length == 1) {
+            chosenPaymentOption = invoice.paymentOptions.first;
+            usePayProtocol = false;
+          }
+        } else _errorMessage = response['message'];
 
         // Checking if disposed to prevent memory leaks
         if (!_disposed) _rebuild();
@@ -699,7 +710,7 @@ class _InvoicePageState extends State<InvoicePage> {
       visible: invoice == null || (!invoice.isExpired() && invoice.isUnpaid()) || invoice.isUnderpaid(),
       child: CircleBackButton(
         margin: margin ?? EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
-        backPath: '/new-invoice',
+        backPath: backPath,
         opaque: false,
         onTap: onTap,
       )

@@ -14,6 +14,7 @@ class Invoice {
   String blockchainUrl;
   List paymentOptions;
   String redirectUrl;
+  String accountId;
   String itemName;
   String currency;
   DateTime expiry;
@@ -34,6 +35,7 @@ class Invoice {
     this.blockchainUrl,
     this.completedAt,
     this.redirectUrl,
+    this.accountId,
     this.complete,
     this.itemName,
     this.currency,
@@ -166,6 +168,7 @@ class Invoice {
       denominationAmountPaid: json['denomination_amount_paid'],
       denominationCurrency: json['denomination_currency'],
       denominationAmount: json['denomination_amount'],
+      accountId: json['account_id']?.toString(),
       paymentOptions: json['payment_options'],
       blockchainUrl: json['blockchain_url'],
       complete: json['complete'] ?? false,

@@ -94,6 +94,11 @@ class FluroRouter {
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
+      '/pay/:id',
+      handler: newHandler((id) => NewInvoice(merchantId: id), 'id'),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
       '/new-address/:code',
       handler: newHandler((code) => NewAddress(code), 'code'),
       transitionType: TransitionType.inFromBottom,
