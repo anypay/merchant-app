@@ -148,7 +148,7 @@ class AppController extends StatefulWidget {
   AppControllerState createState() => new AppControllerState();
 
   static AppControllerState of(BuildContext context) {
-    return context.ancestorStateOfType(const TypeMatcher<AppControllerState>());
+    return context.findAncestorStateOfType();
   }
 }
 
