@@ -7,6 +7,8 @@ import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
+import 'dart:html' show HtmlDocument;
+import 'dart:html' show window;
 import 'dart:async';
 import 'dart:math';
 
@@ -112,7 +114,10 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       Client.createInvoice(_price, preferredCoinCode, accountId: merchant?.accountId).then((response) {
         if (response['success']) {
           var invoiceId = response['invoiceId'];
-          Navigator.pushNamed(context, '/invoices/$invoiceId').then((_) {
+          Navigator.pushNamed(context, '/invoices/$invoiceId', arguments: {
+            'redirectUrl': merchant != null ? (window.document as HtmlDocument).referrer : null,
+            'merchant': merchant,
+          }).then((_) {
             setState(() { _submitting = false; });
           });
         } else setState(() {

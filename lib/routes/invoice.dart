@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:rect_getter/rect_getter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:app/models/merchant.dart';
 import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
 import 'package:app/app_controller.dart';
@@ -69,8 +70,15 @@ class _InvoicePageState extends State<InvoicePage> {
 
   Map<String, dynamic> get bsvPaymentOption => invoice.bsvPaymentOption;
 
+  Map arguments;
+  Merchant merchant;
+
   @override
   Widget build(BuildContext context) {
+    arguments ??= (ModalRoute.of(context).settings.arguments as Map);
+    if (arguments != null) _redirectUrl ??= arguments['redirectUrl'];
+    if (arguments != null) merchant ??= arguments['merchant'];
+
     return GestureDetector(
       onTap: _closeKeyboard,
       child: Scaffold(
@@ -111,7 +119,7 @@ class _InvoicePageState extends State<InvoicePage> {
 
   void _copyUri() {
     Clipboard.setData(ClipboardData(text: uri));
-    setState(() => _successMessage = "Coppied!" );
+    setState(() => _successMessage = "Copied!" );
     Timer(Duration(seconds: 2), () {
       setState(() => _successMessage = "" );
     });
@@ -125,9 +133,12 @@ class _InvoicePageState extends State<InvoicePage> {
     await launch(uri);
   }
 
-  void _attemptRedirect() {
-    if (kIsWeb && invoice.redirectUrl != null)
-      launch(invoice.redirectUrl, newTab: false);
+  String _redirectUrl;
+  bool hasNotes = false;
+  bool get hasRedirectUrl => invoice?.redirectUrl != null || (_redirectUrl != null && _redirectUrl.length > 0);
+  void _attemptRedirect({force}) {
+    if (kIsWeb && hasRedirectUrl && (force == true || !hasNotes))
+      launch(invoice.redirectUrl ?? _redirectUrl, newTab: false);
   }
 
   void _done() {
@@ -139,18 +150,25 @@ class _InvoicePageState extends State<InvoicePage> {
     });
     periodicRequest.cancel();
 
-    if (notes.text.length > 0)
+    if (hasNotes)
       Client.setInvoiceNotes(invoice.uid, notes.text).then((response) {
         _submitting = false;
-        if (response['success'])
-          _backToNewInvoice();
-        else setState(() => notesError = 'something went wrong!');
+        if (response['success']) {
+          if (merchant == null && Authentication.isAuthenticated())
+            _backToNewInvoice();
+          else if (hasRedirectUrl)
+            _attemptRedirect(force: true);
+          else setState(() {});
+        } else setState(() => notesError = 'something went wrong!');
       });
+    else if (hasRedirectUrl)
+      _attemptRedirect();
     else _backToNewInvoice();
   }
 
   void _backToNewInvoice() {
-    AppController.closeUntilPath(backPath);
+    if (Authentication.isAuthenticated())
+      AppController.closeUntilPath(backPath);
   }
 
   String get backPath {
@@ -450,8 +468,12 @@ class _InvoicePageState extends State<InvoicePage> {
           ),
           Container(
             width: 300,
-            child: TextFormField(
+            child: !Authentication.isAuthenticated() ? null : TextFormField(
               controller: notes,
+              onChanged: (value) {
+                if (value.length > 0 != hasNotes)
+                  setState(() => hasNotes = value.length > 0);
+              },
               validator: (value) {
                 if (notesError.length > 0)
                   return notesError;
@@ -461,19 +483,25 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: AppController.scale(30), bottom: 20),
-            child: _submitting ?
-              SpinKitCircle(
-                  size: AppController.scale(50, minValue: 40),
-                  color: AppController.randomColor,
-              ) : GestureDetector(
-                onTap: _done,
-                child: Image(
-                  image: AssetImage('assets/images/next_arrow.png'),
-                  width: 50,
-                )
-              ),
+          Visibility(
+            visible: ((merchant == null && Authentication.isAuthenticated()) || hasRedirectUrl || hasNotes),
+            maintainAnimation: true,
+            maintainState: true,
+            maintainSize: true, 
+            child: Container(
+              margin: EdgeInsets.only(top: AppController.scale(30), bottom: 20),
+              child: _submitting ?
+                SpinKitCircle(
+                    size: AppController.scale(50, minValue: 40),
+                    color: AppController.randomColor,
+                ) : GestureDetector(
+                  onTap: _done,
+                  child: Image(
+                    image: AssetImage('assets/images/next_arrow.png'),
+                    width: 50,
+                  )
+                ),
+            )
           )
         ]
       )
