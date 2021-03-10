@@ -25,7 +25,7 @@ jobs:
       - run: flutter channel beta
       - run: flutter upgrade
       - run: flutter doctor
-      - run: flutter test
+        #- run: flutter test
       - run: flutter -v build web
       - run: zip -r build/web.zip build/web
         #- deploy
