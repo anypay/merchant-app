@@ -46,7 +46,7 @@ jobs:
           command: mkdir -p build && cp -r /tmp/workspace/web build/web
       - run:
           name: Build Docker Image
-          command: docker build -t anypay/cash-register-flutter:$CIRCLE_BRANCH
+          command: docker build -t anypay/cash-register-flutter:$CIRCLE_BRANCH .
       - run:
           name: Build Docker Image
           command: docker push anypay/cash-register-flutter:$CIRCLE_BRANCH
