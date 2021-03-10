@@ -69,6 +69,16 @@ class _InvoicePageState extends State<InvoicePage> {
   RectGetter sharePlacement;
 
   Map<String, dynamic> get bsvPaymentOption => invoice.bsvPaymentOption;
+  List<dynamic> get embedOutputs {
+    if (bsvPaymentOption == null) return [];
+    return (bsvPaymentOption['outputs'] ?? []).map((output) {
+      var _output = {};
+      _output['amount'] = output['amount']/100000000;
+      _output['to'] = output['address'];
+      _output['currency'] = 'BSV';
+      return _output;
+    }).toList();
+  }
 
   Map arguments;
   Merchant merchant;
@@ -702,16 +712,8 @@ class _InvoicePageState extends State<InvoicePage> {
                   child: kIsWeb && bsvPaymentOption == null ? null : 
                     MoneyButton({
                       'clientIdentifier': '3de67950b83c16c9dd343f691bc71887',
-                      'outputs': [{
-                        "to": bsvPaymentOption['address'],
-                        "amount": bsvPaymentOption['amount'],
-                        "currency": bsvPaymentOption['currency'],
-                      }, {
-                        'to': 'steven@simply.cash',
-                        'amount': 0.00009, // $0.02
-                        'currency': 'BSV'
-                      }],
                       'buttonId': bsvPaymentOption['invoice_uid'],
+                      'outputs': embedOutputs,
                     }, width: 200,
                     height: 300,
                     onLoaded: () {
