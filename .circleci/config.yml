@@ -53,5 +53,5 @@ jobs:
           command: ./push_to_docker.sh
       - run:
           name: Pull Latest Docker Image To Server
-          command: ssh ubuntu@anypayx.com "sudo docker pull anypay/cash-register-flutter:master"
+          command: ssh ubuntu@anypayx.com "/opt/app.anypayinc.com/deploy.sh"
 
