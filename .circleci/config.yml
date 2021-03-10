@@ -28,16 +28,20 @@ jobs:
         #- run: flutter test
       - run: flutter -v build web
       - run: zip -r build/web.zip build/web
-      - run: cp -r build/web /tmp/artifacts
+      - run: cp -r build/web /tmp/workspace
+      - persist_to_workspace:
+          root: /tmp/workspace
       - store_artifacts:
-          path: /tmp/artifacts
+          path: /tmp/workspace
   deploy:
     machine:
       image: ubuntu-1604:202007-01
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: Copy Artfifacts Into Normal File System
-          command: mkdir -p build && cp -r /tmp/artifacts build/web
+          command: mkdir -p build && cp -r /tmp/workspace build/web
       - run:
           name: Build Docker Image
           command: docker build -t anypay/cash-register-flutter:$CIRCLE_BRANCH
