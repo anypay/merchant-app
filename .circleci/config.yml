@@ -41,6 +41,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
+      - checkout
       - run:
           name: Copy Artfifacts Into Normal File System
           command: mkdir -p build && cp -r /tmp/workspace/web build/web
