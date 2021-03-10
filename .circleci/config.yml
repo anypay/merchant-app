@@ -28,13 +28,12 @@ jobs:
       - run: flutter test
       - run: flutter -v build web
       - run: zip -r build/web.zip build/web
-      - deploy
+        #- deploy
   deploy:
-    - run: echo 'Deploy command not yet set up'
-    # machine:
-    #   image: ubuntu-1604:202007-01
-    # steps:
-    #   - run:
-    #       name: Chef Client Update Live Staging Container
-    #       command: ssh ubuntu@staging.anypayapp.com "sudo chef-client -o recipe[anypay::pos_staging]"
+    machine:
+      image: ubuntu-1604:202007-01
+    steps:
+      - run:
+          name: Chef Client Update Live Container
+          command: ssh ubuntu@anypayx.com "sudo chef-client -o recipe[anypay::flutter]"
 
