@@ -1,0 +1,40 @@
+version: 2.1
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
+jobs:
+  build:
+    # working_directory: ~/flutter
+    docker:
+      - image: cirrusci/flutter
+    steps:
+      ##
+      # SETUP
+      ##
+      - checkout
+      - run: flutter channel beta
+      - run: flutter upgrade
+      - run: flutter doctor
+      - run: flutter test
+      - run: flutter -v build web
+      - run: zip -r build/web.zip build/web
+      - deploy
+  deploy:
+    - run: echo "Deploy command not yet set up"
+    # machine:
+    #   image: ubuntu-1604:202007-01
+    # steps:
+    #   - run:
+    #       name: Chef Client Update Live Staging Container
+    #       command: ssh ubuntu@staging.anypayapp.com "sudo chef-client -o recipe[anypay::pos_staging]"
+
