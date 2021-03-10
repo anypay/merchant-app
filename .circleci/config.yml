@@ -28,11 +28,22 @@ jobs:
         #- run: flutter test
       - run: flutter -v build web
       - run: zip -r build/web.zip build/web
-        #- deploy
+      - run: cp -r build/web /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
   deploy:
     machine:
       image: ubuntu-1604:202007-01
     steps:
+      - run:
+          name: Copy Artfifacts Into Normal File System
+          command: mkdir -p build && cp -r /tmp/artifacts build/web
+      - run:
+          name: Build Docker Image
+          command: docker build -t anypay/cash-register-flutter:$CIRCLE_BRANCH
+      - run:
+          name: Build Docker Image
+          command: docker push anypay/cash-register-flutter:$CIRCLE_BRANCH
       - run:
           name: Chef Client Update Live Container
           command: ssh ubuntu@anypayx.com "sudo chef-client -o recipe[anypay::flutter]"
