@@ -30,7 +30,7 @@ jobs:
       - run: zip -r build/web.zip build/web
       - deploy
   deploy:
-    - run: echo "Deploy command not yet set up"
+    - run: echo 'Deploy command not yet set up'
     # machine:
     #   image: ubuntu-1604:202007-01
     # steps:
