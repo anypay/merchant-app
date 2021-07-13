@@ -22,8 +22,8 @@ jobs:
       # SETUP
       ##
       - checkout
-      - run: flutter channel master
       - run: flutter upgrade
+      - run: flutter channel master
       - run: flutter doctor
         #- run: flutter test
       - run: flutter -v build web
