@@ -441,15 +441,6 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: AppController.scale(35)),
-            child: Text(invoice.inCurrency(),
-              style: TextStyle(
-                color: Theme.of(context).primaryColorDark,
-                fontSize: 20,
-              ),
-            ),
-          ),
           Visibility(
             visible: (invoice.notes ?? []).length > 0,
             child: Column(
