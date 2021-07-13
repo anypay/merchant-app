@@ -22,7 +22,7 @@ jobs:
       # SETUP
       ##
       - checkout
-      - run: flutter channel beta
+      - run: flutter channel master
       - run: flutter upgrade
       - run: flutter doctor
         #- run: flutter test
