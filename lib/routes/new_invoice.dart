@@ -1,14 +1,12 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:app/models/merchant.dart';
 import 'package:app/authentication.dart';
 import 'package:app/models/invoice.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:app/back_button.dart';
 import 'package:app/client.dart';
-import 'dart:html' show HtmlDocument;
-import 'dart:html' show window;
+import 'package:universal_html/html.dart' show HtmlDocument;
+import 'package:universal_html/html.dart' show window;
 import 'dart:async';
 import 'dart:math';
 

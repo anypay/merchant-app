@@ -1,4 +1,4 @@
-import 'dart:html' show window;
+import 'package:universal_html/html.dart' show window;
 
 class Storage {
   static Future<String> read(String key) async {

@@ -1,6 +1,6 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/services.dart';
@@ -137,11 +137,13 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   void _scanAddress() async {
-    var result = await BarcodeScanner.scan();
+    String result = await FlutterBarcodeScanner.scanBarcode("0000000", "Cancel",
+        false,
+        ScanMode.DEFAULT);
 
-    if (result.rawContent != null) {
+    if (result != null) {
       _submittingScan = true;
-      _setAddress(result.rawContent);
+      _setAddress(result);
     }
   }
 
@@ -275,7 +277,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 20.0),
-            child: _pasting ? 
+            child: _pasting ?
             SpinKitCircle(
               color: AppController.green,
             ) : Icon(
@@ -322,7 +324,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
             visible: _note.length > 0 && _note != _address?.note,
             child: Container(
               margin: EdgeInsets.only(bottom: _savingNote ? 0 : 20),
-              child: _savingNote ? 
+              child: _savingNote ?
                 SpinKitCircle(
                   color: AppController.blue,
                 ) : GestureDetector(
@@ -375,7 +377,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
             visible: _paymailAddress.length > 0 && _paymailAddress != _address?.toString(),
             child: Container(
               margin: EdgeInsets.only(bottom: _address == null ? 20 : 0),
-              child: _saving ? 
+              child: _saving ?
                 SpinKitCircle(
                   color: AppController.blue,
                 ) : GestureDetector(

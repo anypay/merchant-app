@@ -105,7 +105,7 @@ class AppController extends StatefulWidget {
         ),
         actions: <Widget>[
           ...buttons.map((button) {
-            return FlatButton(
+            return TextButton(
               child: Text(button['text']),
               onPressed: () {
                 dialogIsOpen = false;
@@ -114,7 +114,7 @@ class AppController extends StatefulWidget {
               },
             );
           }),
-          FlatButton(
+          TextButton(
             child: Text(buttonText ?? 'Ok'),
             onPressed: () {
               dialogIsOpen = false;
