@@ -21,34 +21,25 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  moneybutton_flutter_web: # '^0.1.2'
-    git: 
-      # Patched the monebutton package to add the ability to change the height of the widget 
-      url: https://github.com/BananaNeil/moneybutton_flutter_web.git
-      ref: e4f37467181a52593af5720ab9830e1ab58c411b
-  flutter_secure_storage: '^3.3.5'
+  flutter_secure_storage: ^7.0.1
   build_web_compilers: '^2.11.0'
-  firebase_messaging: '^6.0.16'
-  socket_io_client: '^0.9.10'
-  email_validator: '^1.0.0'
-  flutter_spinkit: '^4.1.2'
+  firebase_messaging: ^14.2.1
+  socket_io_client: ^2.0.1
+  email_validator: ^2.1.17
+  flutter_spinkit: ^5.1.0
   build_runner: '^1.10.0'
-  url_launcher: '5.5.2'
-  barcode_scan: #'^3.0.1'
-    git: 
-      # Patched to allow for camera flipping (and back compatibility on devices)
-      url: https://github.com/BananaNeil/flutter_barcode_reader.git
-      ref: 5fcb042969e997bd1ea93c963f4ecec92c823ab0
-  basic_utils: '^2.5.3'
-  rect_getter: '^0.1.0'
-  qr_flutter: '^3.2.0'
-  event_bus: '^1.1.1'
-  confetti: '^0.5.2'
-  timeago: '^2.0.26'
-  share: '^0.6.5+2'
-  fluro: '^1.6.3'
-  http: '^0.12.1'
-  intl: '^0.16.1'
+  url_launcher: ^6.1.9
+  flutter_barcode_scanner: '^2.0.0'
+  basic_utils: ^5.4.2
+  rect_getter: ^1.1.0
+  qr_flutter: ^4.0.0
+  event_bus: ^2.0.0
+  confetti: ^0.7.0
+  timeago: ^3.2.2
+  share: ^2.0.4
+  fluro: ^2.0.4
+  http: ^0.13.5
+  intl: ^0.18.0
 
   flutter:
     sdk: flutter
@@ -56,12 +47,13 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
+  cupertino_icons: ^1.0.5
+  universal_html: ^2.0.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.7.3"
+  flutter_launcher_icons: ^0.11.0
 
 flutter_icons:
   android: "launcher_icon"
