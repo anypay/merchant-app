@@ -10,7 +10,7 @@ import 'package:app/native_storage.dart'
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Authentication.checkForAuth().then((isAuthenticated) {
-    FluroRouter.setupRouter();
+    AnyFluroRouter.setupRouter();
     runApp(Anypay(isAuthenticated));
   });
 }
@@ -49,7 +49,7 @@ class Anypay extends StatelessWidget {
 
       return MaterialApp(
         initialRoute: isAuthenticated ? '/new-invoice' : '/login',
-        onGenerateRoute: FluroRouter.router.generator,
+        onGenerateRoute: AnyFluroRouter.router.generator,
         navigatorKey: AppController.globalKey,
         title: 'Anypay Cash Register',
         theme: theme,
