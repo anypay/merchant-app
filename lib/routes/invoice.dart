@@ -1,4 +1,3 @@
-import 'package:moneybutton_flutter_web/moneybutton_flutter_web.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:rect_getter/rect_getter.dart';
@@ -47,7 +46,6 @@ class _InvoicePageState extends State<InvoicePage> {
   TextEditingController notes = TextEditingController();
   Map<String, dynamic> chosenPaymentOption;
   bool _showLinkToWalletHelp = false;
-  bool _moneyButtonLoaded = false;
   bool choosingCurrency = false;
   String _successMessage = '';
   bool usePayProtocol = true;
@@ -108,7 +106,7 @@ class _InvoicePageState extends State<InvoicePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 _PageContent(),
-                _moneyButtonLoaded ? Container() : _BackButton(),
+                _BackButton(),
               ],
             ),
           ),
@@ -148,7 +146,7 @@ class _InvoicePageState extends State<InvoicePage> {
   bool get hasRedirectUrl => invoice?.redirectUrl != null || (_redirectUrl != null && _redirectUrl.length > 0);
   void _attemptRedirect({force}) {
     if (kIsWeb && hasRedirectUrl && (force == true || !hasNotes))
-      launch(invoice.redirectUrl ?? _redirectUrl, newTab: false);
+      launch(invoice.redirectUrl ?? _redirectUrl);
   }
 
   void _done() {
@@ -488,7 +486,7 @@ class _InvoicePageState extends State<InvoicePage> {
             visible: ((merchant == null && Authentication.isAuthenticated()) || hasRedirectUrl || hasNotes),
             maintainAnimation: true,
             maintainState: true,
-            maintainSize: true, 
+            maintainSize: true,
             child: Container(
               margin: EdgeInsets.only(top: AppController.scale(30), bottom: 20),
               child: _submitting ?
@@ -690,7 +688,6 @@ class _InvoicePageState extends State<InvoicePage> {
               )
             )
           )),
-          _moneyButtonLoaded ? _BackButton() : Container(),
           Container(
             width: 300,
             height: 200,
@@ -700,17 +697,6 @@ class _InvoicePageState extends State<InvoicePage> {
               child: SingleChildScrollView(
                 physics: NeverScrollableScrollPhysics(),
                 child: Container(
-                  child: kIsWeb && bsvPaymentOption == null ? null : 
-                    MoneyButton({
-                      'clientIdentifier': '3de67950b83c16c9dd343f691bc71887',
-                      'buttonId': bsvPaymentOption['invoice_uid'],
-                      'outputs': embedOutputs,
-                    }, width: 200,
-                    height: 300,
-                    onLoaded: () {
-                      _moneyButtonLoaded = true;
-                    },
-                  ),
                 )
               )
             )
