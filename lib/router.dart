@@ -17,8 +17,8 @@ import 'package:app/routes/login.dart';
 
 import 'package:app/authentication.dart';
 
-class FluroRouter {
-  static Router router = Router();
+class AnyFluroRouter {
+  static FluroRouter router = FluroRouter();
 
   static newHandler(klass, [key]) {
     return Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
