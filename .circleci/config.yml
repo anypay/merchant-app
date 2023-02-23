@@ -5,53 +5,12 @@ workflows:
   build-deploy:
     jobs:
       - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
 
 jobs:
   build:
-    # working_directory: ~/flutter
     docker:
       - image: cirrusci/flutter
     steps:
-      ##
-      # SETUP
-      ##
       - checkout
-      - run: flutter upgrade
-      - run: flutter channel stable
       - run: flutter doctor
-        #- run: flutter test
-      - run: flutter -v build web
-      - run: zip -r build/web.zip build/web
-      - run: mkdir -p /tmp/workspace
-      - run: cp -r build/web /tmp/workspace/web
-      - persist_to_workspace:
-          root: /tmp/workspace
-          paths: web
-      - store_artifacts:
-          path: /tmp/workspace
-  deploy:
-    machine:
-      image: ubuntu-1604:202007-01
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - checkout
-      - run:
-          name: Copy Artfifacts Into Normal File System
-          command: mkdir -p build && cp -r /tmp/workspace/web build/web
-      - run:
-          name: Build Docker Image
-          command: docker build -t anypay/cash-register-flutter:$CIRCLE_BRANCH .
-      - run:
-          name: Push Docker Image To Docker Hub
-          command: ./push_to_docker.sh
-      - run:
-          name: Pull Latest Docker Image To Server
-          command: ssh ubuntu@anypayx.com "/opt/app.anypayinc.com/deploy.sh"
-
+      - run: flutter -v build apk
