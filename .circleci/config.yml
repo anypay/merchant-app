@@ -5,7 +5,6 @@ workflows:
   build-deploy:
     jobs:
       - build
-      - deploy_android_beta
       - deploy_ios_beta
 orbs:
   ruby: circleci/ruby@1.2.0

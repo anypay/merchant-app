@@ -1,3 +1,2 @@
 app_identifier(ENV["APPLE_IDENTIFIER"]) # The bundle identifier of your app
 apple_id(ENV["APPLE_ID"]) # Your Apple Developer Portal username
-is_key_content_base(true)

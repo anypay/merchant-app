@@ -10,12 +10,14 @@ platform :ios do
     increment_build_number(
       build_number: latest_testflight_build_number(
         initial_build_number: 1,
-        version: get_version_number(xcodeproj: "Runner.xcodeproj")
+        version: get_version_number(xcodeproj: "Runner.xcodeproj"),
+        username: ENV["APPLE_ID"],
+        app_identifier: ENV["APPLE_IDENTIFIER"]
       ) + 1,
     )
     match(type: "appstore")
     build_app(scheme: "Runner")
-    upload_to_testflight
+    upload_to_testflight(is_key_content_base64: true)
   end
 end
 
