@@ -6,6 +6,7 @@ workflows:
     jobs:
       - build
       - deploy_android_beta
+      - deploy_ios_beta
 orbs:
   ruby: circleci/ruby@1.2.0
 
@@ -48,10 +49,29 @@ jobs:
           command: gem install fastlane --no-document
           working_directory: ~/project/android
       - run:
-          name: Print current dir
-          command: ls
-          working_directory: ~/project/android
-      - run:
           name: Upload android bundle in Google Play track beta
           command: fastlane beta
           working_directory: ~/project/android
+  deploy_ios_beta:
+    mac:
+      - image: cirrusci/flutter
+    steps:
+      - checkout
+      - run:
+          name: Configure key.properties
+          command: |
+            printf "
+            keyAlias=%s
+            keyPassword=%s
+            storeFile=%s
+            storePassword=%s
+            " $RELEASE_KEY_ALIAS $RELEASE_KEY_PASSWORD "$(pwd)/android/keystore" $RELEASE_STORE_PASSWORD > android/key.properties
+      - run: echo -n $BASE64_KEYSTORE | base64 -d > android/keystore
+      - run:
+          name: Install fastlane in system
+          command: gem install fastlane --no-document
+          working_directory: ~/project/ios
+        - run:
+          name: Upload application to TestFlight
+          command: fastlane beta
+          working_directory: ~/project/ios
