@@ -53,8 +53,8 @@ jobs:
           command: fastlane beta
           working_directory: ~/project/android
   deploy_ios_beta:
-    mac:
-      - image: cirrusci/flutter
+    macos:
+      xcode: 14.0.0
     steps:
       - checkout
       - run:
