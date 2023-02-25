@@ -8,7 +8,6 @@ workflows:
       - deploy_android_beta
 orbs:
   ruby: circleci/ruby@1.2.0
-  mac-permissions: circleci/macos
 
 jobs:
   build:
