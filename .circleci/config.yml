@@ -31,7 +31,6 @@ jobs:
   deploy_android_beta:
     docker:
       - image: cirrusci/flutter
-    working_directory: ~/merchant-app/android
     steps:
       - checkout
       - run:
@@ -47,10 +46,6 @@ jobs:
       - run:
           name: Install fastlane in system
           command: gem install fastlane
-          working_directory: ~/merchant-app/android
-      - run:
-          name: Print current directory files
-          command: ls
           working_directory: ~/merchant-app/android
       - run:
           name: Upload android bundle in Google Play track beta
