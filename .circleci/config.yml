@@ -61,7 +61,7 @@ jobs:
           name: Install fastlane in system
           command: gem install fastlane --no-document
           working_directory: ~/project/ios
-        - run:
-          name: Upload application to TestFlight
-          command: fastlane beta
-          working_directory: ~/project/ios
+      - run:
+        name: Upload application to TestFlight
+        command: fastlane beta
+        working_directory: ~/project/ios
