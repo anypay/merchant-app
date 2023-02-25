@@ -58,16 +58,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Configure key.properties
-          command: |
-            printf "
-            keyAlias=%s
-            keyPassword=%s
-            storeFile=%s
-            storePassword=%s
-            " $RELEASE_KEY_ALIAS $RELEASE_KEY_PASSWORD "$(pwd)/android/keystore" $RELEASE_STORE_PASSWORD > android/key.properties
-      - run: echo -n $BASE64_KEYSTORE | base64 -d > android/keystore
-      - run:
           name: Install fastlane in system
           command: gem install fastlane --no-document
           working_directory: ~/project/ios
