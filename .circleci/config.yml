@@ -46,12 +46,12 @@ jobs:
       - run:
           name: Install fastlane in system
           command: gem install fastlane
-          working_directory: ~/android
+          working_directory: ~/merchant-app/android
       - run:
           name: Print current dir
           command: ls
-          working_directory: ~/android
+          working_directory: ~/merchant-app/android
       - run:
           name: Upload android bundle in Google Play track beta
           command: fastlane beta
-          working_directory: ~/android
+          working_directory: ~/merchant-app/android
