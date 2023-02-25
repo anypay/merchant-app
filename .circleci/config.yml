@@ -45,7 +45,7 @@ jobs:
       - run: echo -n $BASE64_KEYSTORE | base64 -d > android/keystore
       - run:
           name: Install fastlane in system
-          command: gem install fastlane
+          command: gem install fastlane --no-document
           working_directory: ~/project/android
       - run:
           name: Print current dir
