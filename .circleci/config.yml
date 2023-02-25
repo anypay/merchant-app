@@ -29,6 +29,8 @@ jobs:
       - run: flutter doctor
       - run: flutter build apk
   deploy_android_beta:
+    docker:
+      - image: cirrusci/flutter
     working_directory: ~/merchant-app/android
     steps:
       - checkout
