@@ -28,7 +28,8 @@ jobs:
       - run: flutter doctor
       - run: gem install fastlane
       - run: echo $GOOGLE_PLAY_KEY > google-play.json
-      - run: fastlane run app_store_connect_api_key key_id:"$APP_STORE_CONNECT_API_KEY_KEY_ID"  issuer_id:"$APP_STORE_CONNECT_API_KEY_ISSUER_ID"  key_content:"$APP_STORE_CONNECT_API_KEY_KEY"
+      - run: echo $APP_STORE_CONNECT_API_KEY_KEY > appstore-connect-api-key.p8
+      - run: fastlane run app_store_connect_api_key key_id:"$APP_STORE_CONNECT_API_KEY_KEY_ID"  issuer_id:"$APP_STORE_CONNECT_API_KEY_ISSUER_ID"  key_file_path:"$(pwd)/appstore-connect-api-key.p8"
 #      - run:
 #          name: fastlane
 #          command: fastlane run validate_play_store_json_key json_key_data:"$GOOGLE_PLAY_KEY" --verbose
