@@ -23,13 +23,13 @@ jobs:
             storeFile=%s
             storePassword=%s
             " $RELEASE_KEY_ALIAS $RELEASE_KEY_PASSWORD "$(pwd)/android/keystore" $RELEASE_STORE_PASSWORD > android/key.properties
+      - run: echo $GOOGLE_PLAY_KEY > google-play.json
+      - run: echo $APP_STORE_CONNECT_API_KEY_KEY > appstore-connect-api-key.p8
       - run: echo $BASE64_KEYSTORE | base64 -d | tee keystore android/keystore
       - run: flutter channel
       - run: flutter doctor
       - run: gem install fastlane
-      - run: echo $GOOGLE_PLAY_KEY > google-play.json
-      - run: echo $APP_STORE_CONNECT_API_KEY_KEY > appstore-connect-api-key.p8
-      - run: fastlane run app_store_connect_api_key key_id:"$APP_STORE_CONNECT_API_KEY_KEY_ID"  issuer_id:"$APP_STORE_CONNECT_API_KEY_ISSUER_ID"  key_file_path:"$(pwd)/appstore-connect-api-key.p8"
+      - run: fastlane run app_store_connect_api_key key_id:"$APP_STORE_CONNECT_API_KEY_KEY_ID"  issuer_id:"$APP_STORE_CONNECT_API_KEY_ISSUER_ID"  key_filepath:"$(pwd)/appstore-connect-api-key.p8"
 #      - run:
 #          name: fastlane
 #          command: fastlane run validate_play_store_json_key json_key_data:"$GOOGLE_PLAY_KEY" --verbose
