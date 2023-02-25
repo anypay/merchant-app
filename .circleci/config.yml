@@ -32,7 +32,8 @@ jobs:
     working_directory: ~/merchant-app/android
     steps:
       - checkout
-        name: Configure key.properties
+      - run:
+          name: Configure key.properties
         command: |
           printf "
           keyAlias=%s
