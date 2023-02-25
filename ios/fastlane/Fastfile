@@ -5,12 +5,17 @@ platform :ios do
     setup_circle_ci
   end
 
-  desc "Build and run tests"
+  desc "Upload application to TestFlight"
   lane :beta do
+    increment_build_number(
+      build_number: latest_testflight_build_number(
+        initial_build_number: 1,
+        version: get_version_number(xcodeproj: "Runner.xcodeproj")
+      ) + 1,
+    )
+    match(type: "appstore")
     build_app(scheme: "Runner")
     upload_to_testflight
   end
-
-
 end
 
