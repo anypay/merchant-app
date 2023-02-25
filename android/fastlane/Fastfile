@@ -16,6 +16,10 @@
 default_platform(:android)
 
 platform :android do
+  before_all do
+    setup_circle_ci
+  end
+
   desc "Deploy a new beta build to Google Play"
   lane :beta do
     build_number = number_of_commits()
