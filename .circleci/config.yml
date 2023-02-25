@@ -24,5 +24,5 @@ jobs:
       - run: echo $BASE64_KEYSTORE | base64 -d | tee keystore android/keystore
       - run: flutter channel
       - run: flutter doctor
-      - run: fastlane run validate_play_store_json_key json_key_data:$GOOGLE_PLAY_KEY
+      - run: SUPPLY_JSON_KEY_DATA=$GOOGLE_PLAY_KEY fastlane run validate_play_store_json_key json_key_data:$GOOGLE_PLAY_KEY
       - run: flutter build apk
