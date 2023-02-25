@@ -48,6 +48,10 @@ jobs:
           command: gem install fastlane
           working_directory: ~/android
       - run:
+          name: Print current dir
+          command: ls
+          working_directory: ~/android
+      - run:
           name: Upload android bundle in Google Play track beta
           command: fastlane beta
           working_directory: ~/android
