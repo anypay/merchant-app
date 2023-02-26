@@ -61,8 +61,8 @@ jobs:
       - flutter/install_sdk_and_pub:
           flutter_version: 3.7.2
       - run: flutter build ios --config-only --no-codesign
-      - run: echo 'export $(cat ios/Runner/Flutter/Generated.xcconfig | grep FLUTTER_BUILD_NAME)' >> $BASH_ENV
-      - run: echo 'export $(cat ios/Runner/Flutter/Generated.xcconfig | grep FLUTTER_BUILD_NUMBER)' >> $BASH_ENV
+      - run: printf "export %s" "$(cat ios/Runner/Flutter/Generated.xcconfig | grep FLUTTER_BUILD_NAME)" >> $BASH_ENV
+      - run: printf "export %s" "$(cat ios/Runner/Flutter/Generated.xcconfig | grep FLUTTER_BUILD_NUMBER)" >> $BASH_ENV
       - run:
           name: Install fastlane in system
           command: gem install fastlane --no-document
