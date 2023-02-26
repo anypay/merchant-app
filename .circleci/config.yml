@@ -57,8 +57,6 @@ jobs:
     steps:
       - checkout
       - run: echo -n $GOOGLE_PLAY_KEY > ios/gc_keys.json
-      - macos/switch-ruby:
-          version: "2.6.1"
       - run:
           name: Install fastlane in system
           command: gem install fastlane --no-document
