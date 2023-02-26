@@ -11,7 +11,7 @@ platform :ios do
     match(type: "appstore")
     build_app(scheme: "Runner")
     app_store_connect_api_key(is_key_content_base64: true)
-    upload_to_testflight(is_key_content_base64: true)
+    upload_to_testflight
   end
 end
 
