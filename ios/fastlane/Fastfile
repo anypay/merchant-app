@@ -7,7 +7,7 @@ platform :ios do
   end
 
   lane :beta do
-    sh('cd ../ && flutter build ios --config-only --no-codesign; tail -f /dev/null')
+    sh('cd ../ && flutter build ios --config-only --no-codesign')
     match(type: "appstore")
     build_app(scheme: "Runner")
     upload_to_testflight(is_key_content_base64: true)
