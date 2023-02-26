@@ -9,7 +9,7 @@ workflows:
 orbs:
   ruby: circleci/ruby@2.0.0
   flutter: circleci/flutter@1.1.0
-
+  macos: circleci/macos@2
 jobs:
   build:
     docker:
@@ -57,6 +57,8 @@ jobs:
     steps:
       - checkout
       - run: echo -n $GOOGLE_PLAY_KEY > ios/gc_keys.json
+      - macos/switch-ruby:
+          version: "2.6.7"
       - run:
           name: Install fastlane in system
           command: gem install fastlane --no-document
