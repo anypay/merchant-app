@@ -8,6 +8,7 @@ workflows:
       - deploy_ios_beta
 orbs:
   ruby: circleci/ruby@1.2.0
+  flutter: circleci/flutter@1.0
 
 jobs:
   build:
@@ -57,13 +58,10 @@ jobs:
     steps:
       - checkout
       - run: echo -n $GOOGLE_PLAY_KEY > ios/gc_keys.json
+      - flutter/install_sdk_and_pub:
       - run:
           name: Install fastlane in system
           command: gem install fastlane --no-document
-          working_directory: ~/project/ios
-      - run:
-          name: Upload application to TestFlight
-          command: fastlane match appstore
           working_directory: ~/project/ios
       - run:
           name: Upload application to TestFlight
