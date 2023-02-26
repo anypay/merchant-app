@@ -63,6 +63,7 @@ jobs:
       - run: flutter build ios --config-only --no-codesign
       - run: printf "export %s" "$(cat ios/Flutter/Generated.xcconfig | grep FLUTTER_BUILD_NAME)" >> $BASH_ENV
       - run: printf "export %s" "$(cat ios/Flutter/Generated.xcconfig | grep FLUTTER_BUILD_NUMBER)" >> $BASH_ENV
+      - run: cat $BASH_ENV
       - run:
           name: Install fastlane in system
           command: gem install fastlane --no-document
