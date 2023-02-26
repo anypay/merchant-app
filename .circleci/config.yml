@@ -53,7 +53,7 @@ jobs:
           working_directory: ~/project/android
   deploy_ios_beta:
     macos:
-      xcode: 14.0.1
+      xcode: 14.2.0
     steps:
       - checkout
       - run: echo -n $GOOGLE_PLAY_KEY > ios/gc_keys.json
