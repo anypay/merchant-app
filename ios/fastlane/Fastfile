@@ -8,6 +8,7 @@ platform :ios do
 
   lane :beta do
     match(type: "appstore")
+    sh('cd ../ && flutter build ios')
     build_app(scheme: "Runner")
     upload_to_testflight(is_key_content_base64: true)
   end
