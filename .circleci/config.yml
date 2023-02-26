@@ -63,5 +63,5 @@ jobs:
           working_directory: ~/project/ios
       - run:
           name: Upload application to TestFlight
-          command: tail -f /dev/null
+          command: fastlane beta
           working_directory: ~/project/ios
