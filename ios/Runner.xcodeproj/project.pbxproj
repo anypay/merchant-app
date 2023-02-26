@@ -391,8 +391,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = "$FLUTTER_BUILD_NAME";
-				PRODUCT_BUNDLE_IDENTIFIER = global.pshenmic.pos.mobile;
+				MARKETING_VERSION = $FLUTTER_BUILD_NAME;
+				PRODUCT_BUNDLE_IDENTIFIER = global.anypay.pos.mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(APP_STORE_PROVISIONING_ID)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -537,8 +537,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = "$FLUTTER_BUILD_NAME";
-				PRODUCT_BUNDLE_IDENTIFIER = global.pshenmic.pos.mobile;
+				MARKETING_VERSION = $FLUTTER_BUILD_NAME;
+				PRODUCT_BUNDLE_IDENTIFIER = global.anypay.pos.mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(APP_STORE_PROVISIONING_ID)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -575,8 +575,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = "$FLUTTER_BUILD_NAME";
-				PRODUCT_BUNDLE_IDENTIFIER = global.pshenmic.pos.mobile;
+				MARKETING_VERSION = $FLUTTER_BUILD_NAME;
+				PRODUCT_BUNDLE_IDENTIFIER = global.anypay.pos.mobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(APP_STORE_PROVISIONING_ID)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
