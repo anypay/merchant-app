@@ -58,7 +58,7 @@ jobs:
       - checkout
       - run: echo -n $GOOGLE_PLAY_KEY > ios/gc_keys.json
       - flutter/install_sdk_and_pub:
-          version: 3.7.2
+            version: 3.7.2
       - run:
           name: Install fastlane in system
           command: gem install fastlane --no-document
