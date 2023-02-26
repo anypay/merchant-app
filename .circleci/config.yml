@@ -8,7 +8,7 @@ workflows:
       - deploy_ios_beta
 orbs:
   ruby: circleci/ruby@1.2.0
-  flutter: circleci/flutter@1.1.0
+  flutter: cirrusci/flutter
 
 jobs:
   build:
