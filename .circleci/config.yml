@@ -57,6 +57,7 @@ jobs:
     steps:
       - checkout
       - run: echo -n $GOOGLE_PLAY_KEY > ios/gc_keys.json
+      - run: brew install gnupg coreutils
       - ruby/install:
           version: '2.6.1'
       - flutter/install_sdk_and_pub:
