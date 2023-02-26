@@ -1,13 +1,9 @@
 default_platform :ios
 
 platform :ios do
-  before_all do
-    setup_circle_ci
-  end
-
   desc "Upload application to TestFlight"
   lane :beta do
-    match(type: "appstore", readonly: false)
+    match(type: "appstore")
     build_app(scheme: "Runner")
     upload_to_testflight(is_key_content_base64: true)
   end
