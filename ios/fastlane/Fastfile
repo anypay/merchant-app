@@ -16,7 +16,6 @@ platform :ios do
 
   desc "Deploy a new version to the App Store"
   lane :release do
-    sh('cd ../ && flutter build ios --config-only --no-codesign')
     match(type: "appstore")
     build_app(scheme: "Runner")
     app_store_connect_api_key(is_key_content_base64: true)

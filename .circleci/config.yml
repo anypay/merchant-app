@@ -2,10 +2,41 @@ version: 2.1
 
 workflows:
   version: 2
-  build-deploy:
+  build-and-deploy:
     jobs:
-#      - build
-      - deploy_ios_beta
+      - build
+      - deploy_android:
+          lane: 'beta'
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - staging
+      - deploy_ios:
+          lane: 'beta'
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - staging
+      - deploy_android:
+          lane: 'release'
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+      - deploy_ios:
+          lane: 'release'
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
 orbs:
   ruby: circleci/ruby@2.0.0
   flutter: circleci/flutter@1.1.0
@@ -28,9 +59,13 @@ jobs:
       - run: echo -n $BASE64_KEYSTORE | base64 -d > android/keystore
       - run: flutter doctor
       - run: flutter build apk
-  deploy_android_beta:
+  deploy_android:
     docker:
       - image: cirrusci/flutter
+    parameters:
+      lane:
+        type: string
+        default: ""
     steps:
       - checkout
       - run:
@@ -49,11 +84,15 @@ jobs:
           working_directory: ~/project/android
       - run:
           name: Upload android bundle in Google Play track beta
-          command: fastlane beta
+          command: fastlane << parameters.lane >>
           working_directory: ~/project/android
-  deploy_ios_beta:
+  deploy_ios:
     macos:
       xcode: 14.2.0
+    parameters:
+      lane:
+        type: string
+        default: ""
     steps:
       - checkout
       - run: echo 'export FLUTTER_ROOT=~/development/flutter' >> $BASH_ENV
@@ -70,5 +109,5 @@ jobs:
           working_directory: ~/project/ios
       - run:
           name: Upload application to TestFlight
-          command: fastlane beta
+          command: fastlane << parameters.lane >>
           working_directory: ~/project/ios
