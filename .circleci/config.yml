@@ -55,3 +55,4 @@ jobs:
           name: Pull Latest Docker Image To Server
           command: ssh ubuntu@anypayx.com "/opt/app.anypayinc.com/deploy.sh"
 
+
