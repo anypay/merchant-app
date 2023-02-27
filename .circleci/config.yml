@@ -55,7 +55,7 @@ jobs:
             keyPassword=%s
             storeFile=%s
             storePassword=%s
-            " $RELEASE_KEY_ALIAS $RELEASE_KEY_PASSWORD "$(pwd)/android/keystore" $RELEASE_KEY_PASSWORD > android/key.properties
+            " $RELEASE_KEY_ALIAS $RELEASE_KEY_PASSWORD "$(pwd)/android/keystore" $RELEASE_STORE_PASSWORD > android/key.properties
       - run: echo -n $BASE64_KEYSTORE | base64 -d > android/keystore
       - run: flutter doctor
       - run: flutter build apk
