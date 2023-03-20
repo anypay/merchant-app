@@ -15,8 +15,6 @@ import 'package:app/routes/payment.dart';
 import 'package:app/routes/invoice.dart';
 import 'package:app/routes/login.dart';
 
-import 'package:app/authentication.dart';
-
 class AnyFluroRouter {
   static FluroRouter router = FluroRouter();
 
