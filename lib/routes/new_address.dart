@@ -1,6 +1,5 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/services.dart';
@@ -137,13 +136,11 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   void _scanAddress() async {
-    String result = await FlutterBarcodeScanner.scanBarcode("0000000", "Cancel",
-        false,
-        ScanMode.DEFAULT);
+    var result = await BarcodeScanner.scan();
 
-    if (result != null) {
+    if (result != null && result.type == ResultType.Barcode) {
       _submittingScan = true;
-      _setAddress(result);
+      _setAddress(result.rawContent);
     }
   }
 
@@ -238,7 +235,6 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   Widget _Scan() {
-    if (kIsWeb) return Container();
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: _scanAddress,
