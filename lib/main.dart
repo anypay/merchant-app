@@ -1,11 +1,9 @@
 import 'package:app/authentication.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/router.dart';
-
-import 'package:app/native_storage.dart'
-  if (dart.library.html) 'package:app/web_storage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +11,7 @@ void main() {
     AnyFluroRouter.setupRouter();
     runApp(Anypay(isAuthenticated));
   });
+  Firebase.initializeApp();
 }
 
 class Anypay extends StatelessWidget {
