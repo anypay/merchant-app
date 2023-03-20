@@ -181,8 +181,10 @@ class _NewAddressPageState extends State<NewAddressPage> {
             Timer(Duration(milliseconds: 800), _returnToNewInvoice);
           } else {
             _messageType = 'error';
-            _message = response['message'];
-            if (_message.toLowerCase().contains('invalid bch address') && address.length <= 36)
+            _message = response['body']['payload']['message'];
+            if (_message != null &&
+                _message.toLowerCase().contains('invalid bch address') &&
+                address.length <= 36)
               _message += "\n(Legacy BCH addresses are not supported)";
           }
         });
