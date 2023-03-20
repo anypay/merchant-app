@@ -47,6 +47,11 @@ class Anypay extends StatelessWidget {
       }
 
       return MaterialApp(
+        builder: (BuildContext context, Widget child) {
+          return SafeArea(
+            child: child,
+          );
+        },
         initialRoute: isAuthenticated ? '/new-invoice' : '/login',
         onGenerateRoute: AnyFluroRouter.router.generator,
         navigatorKey: AppController.globalKey,
