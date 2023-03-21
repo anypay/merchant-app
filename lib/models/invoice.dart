@@ -98,8 +98,6 @@ class Invoice {
   }
 
   String inCurrency() {
-    var defaultCurrency = Authentication.currentAccount.denomination;
-    var symbol = Currencies.all[denominationCurrency ?? defaultCurrency]['symbol'];
     return "$amount $currency";
   }
 

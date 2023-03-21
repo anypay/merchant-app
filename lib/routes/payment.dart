@@ -99,16 +99,17 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(bottom: 40),
-          child: Text(_payment.inCurrency() ?? "",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColorDark,
-              fontSize: 28,
-            ),
-          ),
-        ),
+        // TODO https://github.com/anypay/merchant-app/issues/21
+        // Container(
+        //   margin: EdgeInsets.only(bottom: 40),
+        //   child: Text(_payment.inCurrency() ?? "",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.bold,
+        //       color: Theme.of(context).primaryColorDark,
+        //       fontSize: 28,
+        //     ),
+        //   ),
+        // ),
         Container(
           child: Text(_payment.completedAtTimeAgo(),
             style: TextStyle(
