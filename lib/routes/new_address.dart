@@ -55,17 +55,23 @@ class _NewAddressPageState extends State<NewAddressPage> {
       onTap: _closeKeyboard,
       child: Scaffold(
         body: Center(
-          child: _scanning ? MobileScanner(
-            // fit: BoxFit.contain,
-            onDetect: (capture) {
-              final List<Barcode> barcodes = capture.barcodes;
-              for (final barcode in barcodes) {
-                _scanning = false;
-                _submittingScan = true;
-                _setAddress(barcode.rawValue);
-              }
-            },
-          ) :SingleChildScrollView(
+          child: _scanning ? Stack(children: [
+            MobileScanner(
+              onDetect: (capture) {
+                final List<Barcode> barcodes = capture.barcodes;
+                for (final barcode in barcodes) {
+                  _scanning = false;
+                  _submittingScan = true;
+                  _setAddress(barcode.rawValue);
+                }
+              },
+            ),
+            CircleBackButton(
+              margin: EdgeInsets.only(top: 20.0),
+              backPath: '/settings',
+            )
+          ]) :
+          SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
