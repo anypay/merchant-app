@@ -140,7 +140,11 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   void _pasteAddress() async {
     ClipboardData clipboard = await Clipboard.getData('text/plain');
-    if (clipboard.text == null || clipboard.text == '') return;
+    if (clipboard.text == null || clipboard.text == '') {
+      _message = 'Nothing to paste';
+      _messageType = 'error';
+      return;
+    }
     setState(() { _pasting = true; });
     var address = clipboard.text;
     _setAddress(address);
