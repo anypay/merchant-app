@@ -1,5 +1,5 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:mobile_scanner/mobile_scanner.dart' hide Address;
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +35,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   final String code;
 
+  bool _scanning = false;
   bool _submittingScan = false;
   bool _savingNote = false;
   bool _disposed = false;
@@ -54,7 +55,17 @@ class _NewAddressPageState extends State<NewAddressPage> {
       onTap: _closeKeyboard,
       child: Scaffold(
         body: Center(
-          child: SingleChildScrollView(
+          child: _scanning ? MobileScanner(
+            // fit: BoxFit.contain,
+            onDetect: (capture) {
+              final List<Barcode> barcodes = capture.barcodes;
+              for (final barcode in barcodes) {
+                _scanning = false;
+                _submittingScan = true;
+                _setAddress(barcode.rawValue);
+              }
+            },
+          ) :SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -136,12 +147,13 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   void _scanAddress() async {
-    var result = await BarcodeScanner.scan();
-
-    if (result != null && result.type == ResultType.Barcode) {
-      _submittingScan = true;
-      _setAddress(result.rawContent);
-    }
+    _scanning = true;
+    // var result = await BarcodeScanner.scan();
+    //
+    // if (result != null && result.type == ResultType.Barcode) {
+    //   _submittingScan = true;
+    //   _setAddress(result.rawContent);
+    // }
   }
 
   void _setNote() async {

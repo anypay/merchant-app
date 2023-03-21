@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Router;
+import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
 import 'package:app/routes/edit_business_info.dart';
