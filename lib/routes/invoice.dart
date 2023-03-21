@@ -234,7 +234,7 @@ class _InvoicePageState extends State<InvoicePage> {
     _fetchInvoice();
     qrColor = AppController.randomColor;
     periodicRequest = Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
-    havingTroubleTimer = Timer(Duration(seconds: 10), () {
+    havingTroubleTimer = Timer(Duration(seconds: 50), () {
       setState(() => _showLinkToWalletHelp = true );
     });
     event = Events.on('invoice.paid', (payload) {
