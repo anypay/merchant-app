@@ -61,10 +61,10 @@ packages:
     dependency: transitive
     description:
       name: bazel_worker
-      sha256: "45aea72e83bd3ed8923d51a5614c87cc04fa8ffb8392ddfb506db8126383cc62"
+      sha256: "500584fdb80bcb70a2990a5838338a757cc24bbf27d88bf791cbe9461c57cd5a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.25"
+    version: "1.0.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -141,18 +141,18 @@ packages:
     dependency: transitive
     description:
       name: built_collection
-      sha256: "4b741b723310592422031210f77c9707ad1e5ea2a061eb21a8b5d8308a8b92be"
+      sha256: "376e3dd27b51ea877c28d525560790aee2e6fbb5f20e2f85d5081027d94e2100"
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.2"
+    version: "5.1.1"
   built_value:
     dependency: transitive
     description:
       name: built_value
-      sha256: "8c7cbec28b45345725c379fd06dc05ea1e318291906c018bdd321644fdbb5df9"
+      sha256: "31b7c748fd4b9adf8d25d72a4c4a59ef119f12876cf414f94f8af5131d5fa2b0"
       url: "https://pub.dev"
     source: hosted
-    version: "7.1.0"
+    version: "8.4.4"
   characters:
     dependency: transitive
     description:
@@ -197,10 +197,10 @@ packages:
     dependency: transitive
     description:
       name: code_builder
-      sha256: "2c93d78a14af7dc767e590341b82be48be85119734a4a536dd6b49e6d94f0f0e"
+      sha256: "48ae73ba8dbf1923de91e0fd65736148f63f6c6fb0925bdda05c1df0298c55e1"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.0"
+    version: "3.7.0"
   collection:
     dependency: transitive
     description:
@@ -341,10 +341,10 @@ packages:
     dependency: transitive
     description:
       name: fixnum
-      sha256: "3b298dacb1898a8f5fddec19388b899b0f13195066b89fa66391e5e92f6c2052"
+      sha256: "25517a4deb0c03aa0f32fd12db525856438902d9c16536311e76cdc57b31d7d1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.11"
+    version: "1.1.0"
   fluro:
     dependency: "direct main"
     description:
@@ -358,14 +358,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_barcode_scanner:
-    dependency: "direct main"
-    description:
-      name: flutter_barcode_scanner
-      sha256: a4ba37daf9933f451a5e812c753ddd045d6354e4a3280342d895b07fecaab3fa
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -374,14 +366,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.0"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      sha256: "60fc7b78455b94e6de2333d2f95196d32cf5c22f4b0b0520a628804cb463503b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.7"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -576,6 +560,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  mobile_scanner:
+    dependency: "direct main"
+    description:
+      name: mobile_scanner
+      sha256: "441ac8d39742c221b19519ed6469909687619405c593004b6332c97d908f838a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   package_config:
     dependency: transitive
     description:
@@ -636,10 +628,10 @@ packages:
     dependency: transitive
     description:
       name: protobuf
-      sha256: "1e1b532aa5467cfcff00cfa6ff597eea78131515cb00991298fb8292ba1f6f12"
+      sha256: "01dd9bd0fa02548bf2ceee13545d4a0ec6046459d847b6b061d8a27237108a08"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "2.1.0"
   pub_semver:
     dependency: transitive
     description:
@@ -672,14 +664,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      sha256: "16169b1cc79f01d9c47fe05b5670b87cbf7f5cfc77757369f245c36a6ae2b290"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.3"
   rect_getter:
     dependency: "direct main"
     description:
@@ -950,5 +934,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.18.0 <3.0.0"
+  dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.3.0"

@@ -1,6 +1,5 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart' hide Address;
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/services.dart';
@@ -36,6 +35,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   final String code;
 
+  bool _scanning = false;
   bool _submittingScan = false;
   bool _savingNote = false;
   bool _disposed = false;
@@ -55,7 +55,23 @@ class _NewAddressPageState extends State<NewAddressPage> {
       onTap: _closeKeyboard,
       child: Scaffold(
         body: Center(
-          child: SingleChildScrollView(
+          child: _scanning ? Stack(children: [
+            MobileScanner(
+              onDetect: (capture) {
+                final List<Barcode> barcodes = capture.barcodes;
+                for (final barcode in barcodes) {
+                  _scanning = false;
+                  _submittingScan = true;
+                  _setAddress(barcode.rawValue);
+                }
+              },
+            ),
+            CircleBackButton(
+              margin: EdgeInsets.only(top: 20.0),
+              backPath: '/settings',
+            )
+          ]) :
+          SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -130,21 +146,18 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   void _pasteAddress() async {
     ClipboardData clipboard = await Clipboard.getData('text/plain');
-    if (clipboard.text == null || clipboard.text == '') return;
+    if (clipboard.text == null || clipboard.text == '') {
+      _message = 'Nothing to paste';
+      _messageType = 'error';
+      return;
+    }
     setState(() { _pasting = true; });
     var address = clipboard.text;
     _setAddress(address);
   }
 
   void _scanAddress() async {
-    String result = await FlutterBarcodeScanner.scanBarcode("0000000", "Cancel",
-        false,
-        ScanMode.DEFAULT);
-
-    if (result != null) {
-      _submittingScan = true;
-      _setAddress(result);
-    }
+    _scanning = true;
   }
 
   void _setNote() async {
@@ -181,8 +194,10 @@ class _NewAddressPageState extends State<NewAddressPage> {
             Timer(Duration(milliseconds: 800), _returnToNewInvoice);
           } else {
             _messageType = 'error';
-            _message = response['message'];
-            if (_message.toLowerCase().contains('invalid bch address') && address.length <= 36)
+            _message = response['body']['payload']['message'];
+            if (_message != null &&
+                _message.toLowerCase().contains('invalid bch address') &&
+                address.length <= 36)
               _message += "\n(Legacy BCH addresses are not supported)";
           }
         });
@@ -236,7 +251,6 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   Widget _Scan() {
-    if (kIsWeb) return Container();
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: _scanAddress,

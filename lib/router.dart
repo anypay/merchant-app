@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Router;
+import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
 import 'package:app/routes/edit_business_info.dart';
@@ -14,8 +14,6 @@ import 'package:app/routes/payments.dart';
 import 'package:app/routes/payment.dart';
 import 'package:app/routes/invoice.dart';
 import 'package:app/routes/login.dart';
-
-import 'package:app/authentication.dart';
 
 class AnyFluroRouter {
   static FluroRouter router = FluroRouter();

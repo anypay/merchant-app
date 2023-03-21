@@ -1,5 +1,4 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:rect_getter/rect_getter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:app/models/merchant.dart';
@@ -15,9 +14,7 @@ import 'package:app/events.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
 import 'dart:async';
-
-import 'package:url_launcher/url_launcher.dart'
-  if (dart.library.html) 'package:app/web_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 
 class ShowInvoice extends StatelessWidget {
@@ -84,7 +81,6 @@ class _InvoicePageState extends State<InvoicePage> {
   @override
   Widget build(BuildContext context) {
     arguments ??= (ModalRoute.of(context).settings.arguments as Map);
-    if (arguments != null) _redirectUrl ??= arguments['redirectUrl'];
     if (arguments != null) merchant ??= arguments['merchant'];
 
     return GestureDetector(
@@ -134,20 +130,14 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _openHelpUrl() async {
-    await launch("https://api.anypayinc.com/support/${Authentication.token}");
+    await launchUrlString("https://anypayx.com/faq");
   }
 
   void _openUri() async {
-    await launch(uri);
+    await launchUrlString(uri);
   }
 
-  String _redirectUrl;
   bool hasNotes = false;
-  bool get hasRedirectUrl => invoice?.redirectUrl != null || (_redirectUrl != null && _redirectUrl.length > 0);
-  void _attemptRedirect({force}) {
-    if (kIsWeb && hasRedirectUrl && (force == true || !hasNotes))
-      launch(invoice.redirectUrl ?? _redirectUrl);
-  }
 
   void _done() {
     if (_submitting) return;
@@ -164,13 +154,9 @@ class _InvoicePageState extends State<InvoicePage> {
         if (response['success']) {
           if (merchant == null && Authentication.isAuthenticated())
             _backToNewInvoice();
-          else if (hasRedirectUrl)
-            _attemptRedirect(force: true);
           else setState(() {});
         } else setState(() => notesError = 'something went wrong!');
       });
-    else if (hasRedirectUrl)
-      _attemptRedirect();
     else _backToNewInvoice();
   }
 
@@ -198,7 +184,7 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _shareUri() async {
-    var shareUri = "https://anypayapp.com/invoices/${invoice?.uid}";
+    var shareUri = "https://anypayx.com/i/${invoice?.uid}";
 
     await Share.share(shareUri,
       sharePositionOrigin: sharePlacement.getRect()
@@ -217,8 +203,6 @@ class _InvoicePageState extends State<InvoicePage> {
       currency = currency ?? invoice?.currency;
       uri = invoice?.uriFor(currency, format: getFormat());
     });
-    if (invoice.isPaid())
-      Timer(Duration(seconds: 5), _attemptRedirect);
     if (invoice != null && _invoiceReady == false) {
       Timer(Duration(milliseconds: 10), () {
         _invoiceReady = true;
@@ -483,7 +467,7 @@ class _InvoicePageState extends State<InvoicePage> {
             ),
           ),
           Visibility(
-            visible: ((merchant == null && Authentication.isAuthenticated()) || hasRedirectUrl || hasNotes),
+            visible: ((merchant == null && Authentication.isAuthenticated()) || hasNotes),
             maintainAnimation: true,
             maintainState: true,
             maintainSize: true,
@@ -657,7 +641,6 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
             ),
           ),
-          kIsWeb ? _WebShareOptions() :
           (sharePlacement = RectGetter.defaultKey(
             child: Container(
               width: 235,
