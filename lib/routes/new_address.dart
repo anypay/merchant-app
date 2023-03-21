@@ -148,12 +148,6 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   void _scanAddress() async {
     _scanning = true;
-    // var result = await BarcodeScanner.scan();
-    //
-    // if (result != null && result.type == ResultType.Barcode) {
-    //   _submittingScan = true;
-    //   _setAddress(result.rawContent);
-    // }
   }
 
   void _setNote() async {
