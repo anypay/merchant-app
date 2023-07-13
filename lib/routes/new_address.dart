@@ -180,7 +180,20 @@ class _NewAddressPageState extends State<NewAddressPage> {
       _messageType = 'pending';
       _message = address;
     });
-    Client.setAddress(code, address).then((response) {
+
+    var coinCode, coinChain;
+
+    var coinCodename = code.split('_');
+
+    coinCode = coinCodename[0];
+
+    if (coinCodename.length == 1) {
+      coinChain = coinCode;
+    } else {
+      coinChain = coinCodename[1];
+    }
+
+    Client.setAddress(coinCode, coinChain, address).then((response) {
       if (!_disposed)
         setState(() {
           _submittingScan = false;
