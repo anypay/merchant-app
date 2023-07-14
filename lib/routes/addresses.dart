@@ -54,40 +54,48 @@ class _AddressesPageState extends State<AddressesPage> {
   List<Widget> _newAddressLinks() {
     if (Coins.all.length == 0)
       return [SpinKitCircle(color: AppController.blue)];
-    else return Coins.supported.keys.map((code) =>
-      Container(
-        height: 100,
-        width: 400,
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () => {
-            Navigator.pushNamed(context, '/new-address/$code')
-          },
-          child: Row(
-            children: [
-              Container(
-                width: 75,
-                margin: EdgeInsets.only(
-                  top: 10.0,
-                  left: 50.0,
-                  right: 40.0,
-                  bottom: 10.0,
-                ),
-                child: Image.network(
-                  Coins.supported[code]['icon']
-                ),
-              ),
-              Text(
-                Coins.supported[code]['name'],
-                style: TextStyle(
-                  fontSize: 22,
-                ),
+    else {
+      var coinList = Coins.supported.keys.toList();
+
+      coinList.sort();
+
+      return coinList.map((code) =>
+          Container(
+              height: 100,
+              width: 400,
+              child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () => {
+                    Navigator.pushNamed(context, '/new-address/$code')
+                  },
+                  child: Row(
+                      children: [
+                        Container(
+                          width: 75,
+                          margin: EdgeInsets.only(
+                            top: 10.0,
+                            left: 50.0,
+                            right: 40.0,
+                            bottom: 10.0,
+                          ),
+                          child: Image.network(
+                              Coins.supported[code]['icon']
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                              Coins.supported[code]['name'],
+                              style: TextStyle(fontSize: 22),
+                              maxLines: 2,
+                              overflow: TextOverflow.fade
+                          ),
+                        ),
+                      ]
+                  )
               )
-            ]
           )
-        )
-      )
-    ).toList();
+      ).toList();
+    }
   }
 }
 
