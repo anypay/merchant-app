@@ -2,7 +2,6 @@ import 'package:app/push_notifications.dart';
 import 'package:app/models/address.dart';
 import 'package:app/models/account.dart';
 import 'package:app/app_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:app/preloader.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
