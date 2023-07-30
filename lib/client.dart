@@ -120,10 +120,10 @@ class Client {
     return response;
   }
 
-  static Future<Map<dynamic, dynamic>> setAddress(code, address) async {
-    return makeRequest('put',
-      body: { 'address': address },
-      path: '/addresses/$code',
+  static Future<Map<dynamic, dynamic>> setAddress(String code, String chain, String address) async {
+    return makeRequest('post',
+      body: { 'currency': code, 'chain': chain, 'address': address },
+      path: '/api/v1/addresses',
       requireAuth: true,
     );
   }
@@ -212,7 +212,7 @@ class Client {
       var message = responseBody['message'];
 
       var code = response.statusCode;
-      // For debugging: 
+      // For debugging:
       // print("PATH: $path, BODY: ${jsonEncode(body ?? {})}, CODE: $code");
       if (response.statusCode == 401 && unauthorized != null) {
         unauthorized();
