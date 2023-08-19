@@ -70,12 +70,14 @@ class Authentication {
           coins.forEach((coin) {
             Coins.all[coin['code']] = {
               'name': coin['name'],
+              'decimals': coin['decimals'],
               'icon': coin['icon']
             };
             if (coin['supported'] == true)
               Coins.supported[coin['code']] = {
                 'name': coin['name'],
-                'icon': coin['icon']
+                'icon': coin['icon'],
+                'decimals': coin['decimals'],
               };
           });
           coins.removeWhere((coin) => !coin['enabled']);
