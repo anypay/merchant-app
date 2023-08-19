@@ -1,7 +1,6 @@
 import 'package:basic_utils/basic_utils.dart';
 import 'package:app/models/merchant.dart';
 import 'package:app/authentication.dart';
-import 'package:app/models/account.dart';
 import 'package:app/models/invoice.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

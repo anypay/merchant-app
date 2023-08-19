@@ -24,6 +24,8 @@ class Invoice {
   String hash;
   List notes;
   num amount;
+  num invoiceAmount;
+  num invoiceAmountPaid;
   String uri;
   String uid;
 
@@ -42,6 +44,8 @@ class Invoice {
     this.address,
     this.notes,
     this.amount,
+    this.invoiceAmount,
+    this.invoiceAmountPaid,
     this.status,
     this.expiry,
     this.hash,
@@ -175,6 +179,8 @@ class Invoice {
       currency: json['currency'],
       address: json['address'],
       amount: json['amount'],
+      invoiceAmount: json['invoice_amount'],
+      invoiceAmountPaid: json['invoice_amount_paid'],
       status: json['status'],
       notes: json['notes'],
       hash: json['hash'],

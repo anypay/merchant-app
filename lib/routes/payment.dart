@@ -1,13 +1,12 @@
 import 'package:url_launcher/url_launcher.dart'
   if (dart.library.html) 'package:app/web_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/models/invoice.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
-import "package:intl/intl.dart";
+import 'dart:math';
 import "package:app/coins.dart";
 
 class Payment extends StatelessWidget {
@@ -75,6 +74,14 @@ class _PaymentPageState extends State<PaymentPage> {
     if (_payment == null)
       return SpinKitCircle(color: AppController.blue);
 
+    var denominationCurrencyName =
+        (Coins.all[_payment.currency] ?? {})['name'] ?? '...';
+    var denominationCurrencyAmount = (_payment.invoiceAmountPaid != null
+        ? (_payment.invoiceAmountPaid / pow(10, Coins.all[_payment.currency]['decimals'])).toString()
+        : '...');
+    var denominationCurrencyText =
+        denominationCurrencyName  + ' ' + denominationCurrencyAmount;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -91,7 +98,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         Container(
           margin: EdgeInsets.only(bottom: 10),
-          child: Text((Coins.all[_payment.currency] ?? {})['name'] ?? '',
+          child: Text((denominationCurrencyText),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColorDark,
@@ -99,17 +106,6 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
           ),
         ),
-        // TODO https://github.com/anypay/merchant-app/issues/21
-        // Container(
-        //   margin: EdgeInsets.only(bottom: 40),
-        //   child: Text(_payment.inCurrency() ?? "",
-        //     style: TextStyle(
-        //       fontWeight: FontWeight.bold,
-        //       color: Theme.of(context).primaryColorDark,
-        //       fontSize: 28,
-        //     ),
-        //   ),
-        // ),
         Container(
           child: Text(_payment.completedAtTimeAgo(),
             style: TextStyle(

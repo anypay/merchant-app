@@ -2,7 +2,6 @@ import 'package:app/push_notifications.dart';
 import 'package:app/models/address.dart';
 import 'package:app/models/account.dart';
 import 'package:app/app_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:app/preloader.dart';
 import 'package:app/client.dart';
 import 'package:app/coins.dart';
@@ -71,12 +70,14 @@ class Authentication {
           coins.forEach((coin) {
             Coins.all[coin['code']] = {
               'name': coin['name'],
+              'decimals': coin['decimals'],
               'icon': coin['icon']
             };
             if (coin['supported'] == true)
               Coins.supported[coin['code']] = {
                 'name': coin['name'],
-                'icon': coin['icon']
+                'icon': coin['icon'],
+                'decimals': coin['decimals'],
               };
           });
           coins.removeWhere((coin) => !coin['enabled']);
