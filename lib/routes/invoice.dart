@@ -260,14 +260,15 @@ class _InvoicePageState extends State<InvoicePage> {
           )
         ),
         ...(invoice.paymentOptions.map((option) {
+          var code = option['chain'] != option['currency'] ? option['currency'] + '_' + option['chain'] : option['currency'];
           return Container(
             width: 300,
             margin: EdgeInsets.only(top: 10),
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              child: _PaymentTitle(option['currency'], paymentOption: option),
+              child: _PaymentTitle(code, paymentOption: option),
               onTap: () {
-                currency = option['currency'];
+                currency = code;
                 chosenPaymentOption = option;
                 choosingCurrency = false;
                 usePayProtocol = false;
