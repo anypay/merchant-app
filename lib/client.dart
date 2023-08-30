@@ -9,7 +9,7 @@ import 'dart:io';
 
 class Client {
   static final protocol = 'https';
-  static final domain = 'api.anypayinc.com';
+  static final domain = 'api.anypayx.com';
   static final host = "$protocol://$domain";
 
   static String humanize(str) {
@@ -134,7 +134,7 @@ class Client {
 
     var response = await makeRequest('get',
       unauthorized: (() => Authentication.logout()),
-      uri: Uri.https(domain, '/invoices', {
+      uri: Uri.http(domain, '/invoices', {
         'limit': perPage.toString(),
         'offset': offset.toString(),
         'complete': 'true',
