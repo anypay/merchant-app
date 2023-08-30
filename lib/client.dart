@@ -134,7 +134,7 @@ class Client {
 
     var response = await makeRequest('get',
       unauthorized: (() => Authentication.logout()),
-      uri: Uri.http(domain, '/invoices', {
+      uri: Uri.https(domain, '/invoices', {
         'limit': perPage.toString(),
         'offset': offset.toString(),
         'complete': 'true',
