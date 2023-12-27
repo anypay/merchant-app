@@ -35,6 +35,11 @@ if (keystorePropertiesFile.exists()) {
 android {
     compileSdkVersion 31
 
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -68,7 +73,7 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
 }

@@ -8,13 +8,12 @@ import 'dart:convert';
 import 'dart:io';
 
 class Client {
-  static final protocol = 'https';
-  static final domain = 'api.anypayx.com';
-  static final host = "$protocol://$domain";
+  static String protocol = 'https';
+  static String domain = 'anypay.pshenmic.dev';
+  static String host = "$protocol://$domain";
 
   static String humanize(str) {
-    if (str != null && str.length > 0)
-      return StringUtils.capitalize(str);
+    if (str != null && str.length > 0) return StringUtils.capitalize(str);
   }
 
   static String buildAuthHeader() {
@@ -23,7 +22,8 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchMerchant(id) async {
-    var response = await makeRequest('get',
+    var response = await makeRequest(
+      'get',
       path: "/merchants/${id}",
     );
 
@@ -34,7 +34,8 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchCoins() async {
-    return makeRequest('get',
+    return makeRequest(
+      'get',
       unauthorized: (() => Authentication.logout()),
       requireAuth: true,
       path: '/coins',
@@ -42,7 +43,8 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchAccountAddresses() async {
-    return makeRequest('get',
+    return makeRequest(
+      'get',
       unauthorized: (() => Authentication.logout()),
       path: '/account_addresses',
       requireAuth: true,
@@ -50,16 +52,18 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> setAddressNote(addressId, note) async {
-    return makeRequest('put',
+    return makeRequest(
+      'put',
       path: '/addresses/$addressId/notes',
       unauthorized: (() => Authentication.logout()),
-      body: { 'note': note },
+      body: {'note': note},
       requireAuth: true,
     );
   }
 
   static Future<Map<dynamic, dynamic>> getAccount() async {
-    return makeRequest('get',
+    return makeRequest(
+      'get',
       unauthorized: (() => Authentication.logout()),
       requireAuth: true,
       path: '/account',
@@ -67,7 +71,8 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> createAccount(email, password) async {
-    return makeRequest('post',
+    return makeRequest(
+      'post',
       path: '/accounts',
       body: {
         'email': email.trim().toLowerCase(),
@@ -77,7 +82,8 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> updateAccount(data) async {
-    return makeRequest('put',
+    return makeRequest(
+      'put',
       requireAuth: true,
       path: '/account',
       body: data,
@@ -85,17 +91,17 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> setFireBaseToken(data) async {
-    return makeRequest('put',
+    return makeRequest(
+      'put',
       path: '/firebase_token',
       requireAuth: true,
-      body: {
-        'firebase_token': data
-      },
+      body: {'firebase_token': data},
     );
   }
 
   static Future<Map<dynamic, dynamic>> resetPassword(email) async {
-    return makeRequest('post',
+    return makeRequest(
+      'post',
       path: '/password-resets',
       body: {
         'email': email.trim(),
@@ -105,9 +111,11 @@ class Client {
 
   static Future<Map<dynamic, dynamic>> authenticate(email, password) async {
     email = email.trim().toLowerCase();
-    String basicAuth = 'Basic ' + base64.encode(utf8.encode('$email:$password'));
+    String basicAuth =
+        'Basic ' + base64.encode(utf8.encode('$email:$password'));
 
-    var response = await makeRequest('post',
+    var response = await makeRequest(
+      'post',
       path: '/access_tokens',
       basicAuth: basicAuth,
     );
@@ -120,9 +128,11 @@ class Client {
     return response;
   }
 
-  static Future<Map<dynamic, dynamic>> setAddress(String code, String chain, String address) async {
-    return makeRequest('post',
-      body: { 'currency': code, 'chain': chain, 'address': address },
+  static Future<Map<dynamic, dynamic>> setAddress(
+      String code, String chain, String address) async {
+    return makeRequest(
+      'post',
+      body: {'currency': code, 'chain': chain, 'address': address},
       path: '/api/v1/addresses',
       requireAuth: true,
     );
@@ -132,7 +142,8 @@ class Client {
     var perPage = 100;
     var offset = perPage * (page - 1 ?? 0);
 
-    var response = await makeRequest('get',
+    var response = await makeRequest(
+      'get',
       unauthorized: (() => Authentication.logout()),
       uri: Uri.https(domain, '/invoices', {
         'limit': perPage.toString(),
@@ -151,9 +162,9 @@ class Client {
     return response;
   }
 
-
   static Future<Map<dynamic, dynamic>> getInvoice(id) async {
-    var response = await makeRequest('get',
+    var response = await makeRequest(
+      'get',
       unauthorized: (() => Authentication.logout()),
       path: '/invoices/$id',
       requireAuth: true,
@@ -165,9 +176,12 @@ class Client {
     return response;
   }
 
-  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency, {accountId}) async {
-    var path = accountId == null ? '/invoices' : '/accounts/${accountId}/invoices';
-    var response = await makeRequest('post',
+  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency,
+      {accountId}) async {
+    var path =
+        accountId == null ? '/invoices' : '/accounts/${accountId}/invoices';
+    var response = await makeRequest(
+      'post',
       requireAuth: accountId == null,
       genericErrorCodes: [400, 500],
       path: path,
@@ -177,25 +191,35 @@ class Client {
       },
     );
 
-    if (response['success'])
-      response['invoiceId'] = response['body']['uid'];
+    if (response['success']) response['invoiceId'] = response['body']['uid'];
 
     return response;
   }
 
   static Future<Map<dynamic, dynamic>> setInvoiceNotes(invoiceId, notes) async {
-    return makeRequest('post',
+    return makeRequest(
+      'post',
       path: '/invoices/$invoiceId/notes',
       unauthorized: (() => Authentication.logout()),
-      body: { 'note': notes },
+      body: {'note': notes},
       requireAuth: true,
     );
   }
 
-  static Future<Map<dynamic, dynamic>> makeRequest(method, {path, uri, headers, body, requireAuth, basicAuth, unauthorized, genericErrorCodes}) async {
+  static Future<Map<dynamic, dynamic>> makeRequest(method,
+      {path,
+      uri,
+      headers,
+      body,
+      requireAuth,
+      basicAuth,
+      unauthorized,
+      genericErrorCodes}) async {
     try {
-      http.Request request = http.Request(method, uri ?? Uri.parse('$host$path'));
-      if (requireAuth ?? false) request.headers['authorization'] = buildAuthHeader();
+      http.Request request =
+          http.Request(method, uri ?? Uri.parse('$host$path'));
+      if (requireAuth ?? false)
+        request.headers['authorization'] = buildAuthHeader();
       if (basicAuth != null) request.headers['authorization'] = basicAuth;
       if (genericErrorCodes == null) genericErrorCodes = [500];
 
@@ -205,7 +229,8 @@ class Client {
         request.headers[key] = value;
       });
 
-      http.StreamedResponse streamedResponse = await http.Client().send(request);
+      http.StreamedResponse streamedResponse =
+          await http.Client().send(request);
       http.Response response = await http.Response.fromStream(streamedResponse);
 
       var responseBody = (json.decode(response.body) as Map);
@@ -219,24 +244,25 @@ class Client {
         return {
           'message': 'Unauthorized',
           'success': false,
-          'body': { },
+          'body': {},
         };
       } else if (genericErrorCodes.contains(response.statusCode)) {
         return {
           'success': false,
           'message': "Something went wrong, please try again later",
-          'body': { },
+          'body': {},
         };
-      } else return {
-        'success': response.statusCode == 200,
-        'message': humanize(message ?? ""),
-        'body': responseBody,
-      };
+      } else
+        return {
+          'success': response.statusCode == 200,
+          'message': humanize(message ?? ""),
+          'body': responseBody,
+        };
     } on SocketException catch (_) {
       return {
         'message': 'Not connected to the internet',
         'success': false,
-        'body': { },
+        'body': {},
       };
     }
   }
