@@ -1,3 +1,4 @@
+import 'package:app/routes/about_us.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
@@ -19,9 +20,12 @@ class AnyFluroRouter {
   static FluroRouter router = FluroRouter();
 
   static newHandler(klass, [key]) {
-    return Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      if (key == null) return klass();
-      else return klass(params[key][0]);
+    return Handler(
+        handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      if (key == null)
+        return klass();
+      else
+        return klass(params[key][0]);
     });
   }
 
@@ -79,6 +83,11 @@ class AnyFluroRouter {
     router.define(
       '/settings/addresses',
       handler: newHandler(() => Addresses()),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      '/settings/about_us',
+      handler: newHandler(() => AboutUs()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
