@@ -31,29 +31,29 @@ class AboutUs extends StatelessWidget {
                 "Build ${PackageInfoPlusHelper.build}",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
+                  SizedBox(
+                    height: 10,
+                  ),
+              Text("2024",  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
               SizedBox(
-                height: 40,
-              ),
-              Text("2024"),
-              SizedBox(
-                height: 13,
+                height: 10,
               ),
               _clickable(
                   url: "https://docs.anypayx.com/terms",
                   title: "Terms of Service"),
               SizedBox(
-                height: 13,
+                height: 10,
               ),
               _clickable(
                   url: "https://docs.anypayx.com/privacy",
                   title: "Privacy Policy"),
               SizedBox(
-                height: 13,
+                height: 10,
               ),
               _clickable(
                   url: "https://docs.anypayx.com/", title: "Documentation"),
               SizedBox(
-                height: 13,
+                height: 10,
               ),
               CircleBackButton(
                 margin: EdgeInsets.only(top: 20.0),
@@ -71,6 +71,6 @@ class AboutUs extends StatelessWidget {
         onTap: () async {
           await launchUrl(Uri.parse(url));
         },
-        child: Text(title));
+        child: Text(title,  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),));
   }
 }
