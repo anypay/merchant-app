@@ -27,17 +27,6 @@ class AboutUs extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              Text(
-                "Build ${PackageInfoPlusHelper.build}",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-                  SizedBox(
-                    height: 10,
-                  ),
-              Text("2024",  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
-              SizedBox(
-                height: 10,
-              ),
               _clickable(
                   url: "https://docs.anypayx.com/terms",
                   title: "Terms of Service"),
@@ -52,6 +41,20 @@ class AboutUs extends StatelessWidget {
               ),
               _clickable(
                   url: "https://docs.anypayx.com/", title: "Documentation"),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Build ${PackageInfoPlusHelper.build}",
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "2024",
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -71,6 +74,8 @@ class AboutUs extends StatelessWidget {
         onTap: () async {
           await launchUrl(Uri.parse(url));
         },
-        child: Text(title,  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),));
+        child: Text(
+          title,
+        ));
   }
 }
