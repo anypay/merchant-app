@@ -45,7 +45,7 @@ class AboutUs extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                "Build ${PackageInfoPlusHelper.build}",
+                "${PackageInfoPlusHelper.version} [Build ${PackageInfoPlusHelper.build}]",
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
               SizedBox(
