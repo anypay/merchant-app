@@ -63,6 +63,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      //disabled for about_us branch
+                      if(false)
                       _EditUrlLink(),
                       _SelectCurrencyLink(context),
                       _BusinessInfoLink(context),
