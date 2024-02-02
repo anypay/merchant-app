@@ -18,9 +18,9 @@ class EditBusinessInfo extends StatelessWidget {
 }
 
 class EditBusinessInfoPage extends StatefulWidget {
-  EditBusinessInfoPage({Key key, this.allowBack}) : super(key: key);
+  EditBusinessInfoPage({Key? key, this.allowBack}) : super(key: key);
 
-  final bool allowBack;
+  final bool? allowBack;
 
   @override
   _EditBusinessInfoPageState createState() => _EditBusinessInfoPageState(allowBack);
@@ -72,9 +72,9 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
 
   void _rebuild() {
     setState(() {
-      address.text = Authentication.currentAccount.physicalAddress;
-      email.text = Authentication.currentAccount.ambassadorEmail;
-      name.text = Authentication.currentAccount.businessName;
+      address.text = Authentication.currentAccount.physicalAddress ?? 'N\\A';
+      email.text = Authentication.currentAccount.ambassadorEmail?? 'N\\A';
+      name.text = Authentication.currentAccount.businessName?? 'N\\A';
     });
   }
 
@@ -94,7 +94,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
       _successMessage = "";
     });
     _closeKeyboard();
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       Authentication.updateAccount({
         'ambassador_email': email.text.toLowerCase(),
         'physical_address': address.text,
@@ -147,8 +147,9 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
               labelText: 'Ambassador Email (Optional)'
             ),
             validator: (value) {
-              if (!value.isEmpty && !EmailValidator.validate(value.trim()))
+              if (value != null && !value.isEmpty && !EmailValidator.validate(value.trim()))
                 return "That doesn't look like an email address";
+              return null;
             },
           ),
           Container(

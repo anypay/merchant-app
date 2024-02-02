@@ -29,44 +29,44 @@ class ShowInvoice extends StatelessWidget {
 }
 
 class InvoicePage extends StatefulWidget {
-  InvoicePage({Key key, this.id}) : super(key: key);
+  InvoicePage({Key? key, this.id}) : super(key: key);
 
-  final String id;
+  final String? id;
 
   @override
-  _InvoicePageState createState() => _InvoicePageState(id);
+  _InvoicePageState createState() => _InvoicePageState(id ?? '');
 }
 
 class _InvoicePageState extends State<InvoicePage> {
   _InvoicePageState(this.id);
 
   TextEditingController notes = TextEditingController();
-  Map<String, dynamic> chosenPaymentOption;
+  Map<String, dynamic>? chosenPaymentOption;
   bool _showLinkToWalletHelp = false;
   bool choosingCurrency = false;
   String _successMessage = '';
   bool usePayProtocol = true;
   bool _invoiceReady = false;
   bool _submitting = false;
-  StreamSubscription event;
-  Timer havingTroubleTimer;
+  StreamSubscription? event;
+  Timer? havingTroubleTimer;
   bool useUrlStyle = true;
   bool _disposed = false;
-  Timer periodicRequest;
-  String _errorMessage;
-  String notesError;
-  String currency;
-  Color qrColor;
-  String uri;
-  String id;
+  Timer? periodicRequest;
+  String? _errorMessage;
+  String? notesError;
+  String? currency;
+  Color? qrColor;
+  String? uri;
+  String? id;
 
-  Invoice invoice;
-  RectGetter sharePlacement;
+  Invoice? invoice;
+  RectGetter? sharePlacement;
 
-  Map<String, dynamic> get bsvPaymentOption => invoice.bsvPaymentOption;
+  Map<String, dynamic>? get bsvPaymentOption => invoice != null ? invoice!.bsvPaymentOption : null;
   List<dynamic> get embedOutputs {
     if (bsvPaymentOption == null) return [];
-    return (bsvPaymentOption['outputs'] ?? []).map((output) {
+    return (bsvPaymentOption!['outputs'] ?? []).map((output) {
       var _output = {};
       _output['amount'] = output['amount']/100000000;
       _output['to'] = output['address'];
@@ -75,13 +75,13 @@ class _InvoicePageState extends State<InvoicePage> {
     }).toList();
   }
 
-  Map arguments;
-  Merchant merchant;
+  Map? arguments;
+  Merchant? merchant;
 
   @override
   Widget build(BuildContext context) {
-    arguments ??= (ModalRoute.of(context).settings.arguments as Map);
-    if (arguments != null) merchant ??= arguments['merchant'];
+    arguments ??= (ModalRoute.of(context)!.settings.arguments as Map);
+    if (arguments != null) merchant ??= arguments!['merchant'];
 
     return GestureDetector(
       onTap: _closeKeyboard,
@@ -113,17 +113,20 @@ class _InvoicePageState extends State<InvoicePage> {
 
   @override
   void dispose() {
-    event.cancel();
+    event!.cancel();
     notes.dispose();
     super.dispose();
     _disposed = true;
-    periodicRequest.cancel();
-    havingTroubleTimer.cancel();
+    periodicRequest!.cancel();
+    havingTroubleTimer!.cancel();
   }
 
   void _copyUri() {
-    Clipboard.setData(ClipboardData(text: uri));
-    setState(() => _successMessage = "Copied!" );
+    if (uri != null) {
+      Clipboard.setData(ClipboardData(text: uri!));
+      setState(() => _successMessage = "Copied!" );
+    }
+
     Timer(Duration(seconds: 2), () {
       setState(() => _successMessage = "" );
     });
@@ -134,7 +137,9 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _openUri() async {
-    await launchUrlString(uri);
+    if (uri != null) {
+      await launchUrlString(uri!);
+    }
   }
 
   bool hasNotes = false;
@@ -146,10 +151,10 @@ class _InvoicePageState extends State<InvoicePage> {
       _submitting = true;
       notesError = "";
     });
-    periodicRequest.cancel();
+    periodicRequest!.cancel();
 
     if (hasNotes)
-      Client.setInvoiceNotes(invoice.uid, notes.text).then((response) {
+      Client.setInvoiceNotes(invoice!.uid, notes.text).then((response) {
         _submitting = false;
         if (response['success']) {
           if (merchant == null && Authentication.isAuthenticated())
@@ -167,7 +172,7 @@ class _InvoicePageState extends State<InvoicePage> {
 
   String get backPath {
     if (invoice != null && !Authentication.isAuthenticated())
-      return '/pay/${invoice.accountId}';
+      return '/pay/${invoice!.accountId}';
     else return '/new-invoice';
   }
 
@@ -178,7 +183,7 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _chooseCurrency() {
-    if (invoice.paymentOptions.length > 1)
+    if (invoice!.paymentOptions!.length > 1)
       choosingCurrency = true;
     _rebuild();
   }
@@ -187,15 +192,16 @@ class _InvoicePageState extends State<InvoicePage> {
     var shareUri = "https://anypayx.com/i/${invoice?.uid}";
 
     await Share.share(shareUri,
-      sharePositionOrigin: sharePlacement.getRect()
+      sharePositionOrigin: sharePlacement!.getRect()
     );
   }
 
-  String getFormat() {
+  String? getFormat() {
     if (usePayProtocol)
       return 'pay';
     else if (useUrlStyle)
       return 'url';
+    return null;
   }
 
   void _rebuild() {
@@ -212,13 +218,13 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _fetchInvoice() {
-    if (invoice == null || (invoice.isUnpaid() && !invoice.isExpired()))
+    if (invoice == null || (invoice!.isUnpaid() && !invoice!.isExpired()))
       Client.getInvoice(id).then((response) {
         _errorMessage = null;
         if (response['success']) {
           invoice = response['invoice'];
-          if (invoice.paymentOptions.length == 1) {
-            chosenPaymentOption = invoice.paymentOptions.first;
+          if (invoice!.paymentOptions!.length == 1) {
+            chosenPaymentOption = invoice!.paymentOptions!.first;
             usePayProtocol = false;
           }
         } else _errorMessage = response['message'];
@@ -259,7 +265,7 @@ class _InvoicePageState extends State<InvoicePage> {
             },
           )
         ),
-        ...(invoice.paymentOptions.map((option) {
+        ...(invoice!.paymentOptions!.map((option) {
           var code = option['chain'] != option['currency'] ? option['currency'] + '_' + option['chain'] : option['currency'];
           return Container(
             width: 300,
@@ -298,7 +304,7 @@ class _InvoicePageState extends State<InvoicePage> {
           ),
           Container(
             margin: EdgeInsets.only(top: 20, bottom: 20),
-            child: Text(invoice.amountWithDenomination(),
+            child: Text(invoice!.amountWithDenomination(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.lineThrough,
@@ -307,7 +313,7 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
             ),
           ),
-          Text(invoice.paidAmountWithDenomination(),
+          Text(invoice!.paidAmountWithDenomination(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColorLight,
@@ -416,7 +422,7 @@ class _InvoicePageState extends State<InvoicePage> {
           ),
           Container(
             margin: EdgeInsets.only(top: AppController.scale(35), bottom: 5),
-            child: Text(invoice.amountWithDenomination(),
+            child: Text(invoice!.amountWithDenomination(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColorDark,
@@ -425,7 +431,7 @@ class _InvoicePageState extends State<InvoicePage> {
             ),
           ),
           Visibility(
-            visible: (invoice.notes ?? []).length > 0,
+            visible: (invoice!.notes ?? []).length > 0,
             child: Column(
               children: [
                 Text("Order Notes:",
@@ -438,7 +444,7 @@ class _InvoicePageState extends State<InvoicePage> {
                 Container(
                   width: 300,
                   margin: EdgeInsets.only(top: 5),
-                  child: Text(invoice.noteText(),
+                  child: Text(invoice!.noteText(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Theme.of(context).primaryColorDark,
@@ -459,7 +465,7 @@ class _InvoicePageState extends State<InvoicePage> {
                   setState(() => hasNotes = value.length > 0);
               },
               validator: (value) {
-                if (notesError.length > 0)
+                if (notesError!.length > 0)
                   return notesError;
               },
               decoration: InputDecoration(
@@ -553,9 +559,9 @@ class _InvoicePageState extends State<InvoicePage> {
 
   bool _showInvoice() {
     return invoice != null &&
-      !invoice.isUnderpaid() &&
-      !invoice.isExpired() &&
-      !invoice.isPaid() &&
+      !invoice!.isUnderpaid() &&
+      !invoice!.isExpired() &&
+      !invoice!.isPaid() &&
       !choosingCurrency;
   }
 
@@ -564,19 +570,20 @@ class _InvoicePageState extends State<InvoicePage> {
       return _InvoiceComponent();
     else if (invoice == null)
       if (_errorMessage != null)
-        return Text(_errorMessage, style: TextStyle(color: AppController.red));
+        return Text(_errorMessage!, style: TextStyle(color: AppController.red));
       else return Container(
           child: SpinKitCircle(color: qrColor),
           height: AppController.scale(360),
         );
-    else if (invoice.isUnderpaid())
+    else if (invoice!.isUnderpaid())
       return _UnderpaidScreen();
-    else if (invoice.isPaid())
+    else if (invoice!.isPaid())
       return _PaidScreen();
     else if (choosingCurrency)
       return _ChooseCurrencyMenu();
-    else if (invoice.isExpired())
+    else if (invoice!.isExpired())
       return _ExpiredInvoice();
+    return Container();
   }
 
   Widget _InvoiceComponent() {
@@ -607,7 +614,8 @@ class _InvoicePageState extends State<InvoicePage> {
                 children: [
                   _PaymentTitle(usePayProtocol ? 'anypay' : currency),
                   Visibility(
-                    visible: invoice.paymentOptions.length > 1,
+                    visible: invoice != null && invoice!.paymentOptions != null &&
+                        invoice!.paymentOptions!.length > 1,
                     child: Container(
                       width: 40,
                       height: 42,
@@ -623,7 +631,7 @@ class _InvoicePageState extends State<InvoicePage> {
             shape: RoundedRectangleBorder(
               side: BorderSide(
                 width: 12.0,
-                color: qrColor,
+                color: qrColor!,
               ),
               borderRadius: BorderRadius.all(Radius.circular(18.0)),
             ),
@@ -633,11 +641,11 @@ class _InvoicePageState extends State<InvoicePage> {
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: _toggleUrlStyle,
-                child: QrImage(
+                child: QrImageView(
                   foregroundColor: Color(0xFF404040),
                   version: QrVersions.auto,
                   size: AppController.scale(200, maxValue: 280, minValue: 100),
-                  data: uri,
+                  data: uri!,
                 ),
               ),
             ),
@@ -698,7 +706,7 @@ class _InvoicePageState extends State<InvoicePage> {
         _rebuild();
       };
     return Visibility(
-      visible: invoice == null || (!invoice.isExpired() && invoice.isUnpaid()) || invoice.isUnderpaid(),
+      visible: invoice == null || (!invoice!.isExpired() && invoice!.isUnpaid()) || invoice!.isUnderpaid(),
       child: CircleBackButton(
         margin: margin ?? EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
         backPath: backPath,

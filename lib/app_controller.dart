@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 
-import 'package:app/native_storage.dart'
-  if (dart.library.html) 'package:app/web_storage.dart';
+import 'package:app/native_storage.dart';
 
 class AppController extends StatefulWidget {
-  final Function(BuildContext) builder;
+  final Function(BuildContext)? builder;
 
   static final globalKey = new GlobalKey<NavigatorState>();
   static bool enableDarkMode = false;
   static bool dialogIsOpen = false;
-  static String openedPath;
+  static String? openedPath;
 
   static String logoImagePath() {
     var modifier = enableDarkMode ? '-white' : '';
@@ -79,10 +78,10 @@ class AppController extends StatefulWidget {
   ].toList();
 
   static BuildContext getCurrentContext() {
-    return globalKey.currentState.overlay.context;
+    return globalKey.currentState!.overlay!.context;
   }
 
-  static double scale(num value, {num maxValue, num minValue}) {
+  static double scale(num value, {num? maxValue, num? minValue}) {
     var screenData = MediaQuery.of(getCurrentContext());
     value = value * screenData.size.height/650;
     value = min(value, maxValue ?? double.maxFinite);
@@ -90,7 +89,7 @@ class AppController extends StatefulWidget {
     return value.toDouble();
   }
 
-  static void openDialog(title, body, {path: null, buttonText: null, buttons: null}) async {
+  static void openDialog(title, body, {path, buttonText, buttons}) async {
     if (dialogIsOpen) return;
     dialogIsOpen = true;
 
@@ -132,7 +131,7 @@ class AppController extends StatefulWidget {
     Navigator.pushNamedAndRemoveUntil(getCurrentContext(), path, (Route<dynamic> route) => false);
   }
 
-  static void openPath(String path) async {
+  static void openPath(String? path) async {
     if (path != null && openedPath != path)
       Navigator.pushNamed(getCurrentContext(), path);
     Timer(Duration(milliseconds: 5000), () => openedPath = null);
@@ -140,13 +139,13 @@ class AppController extends StatefulWidget {
   }
 
   const AppController(
-      {Key key, this.builder})
+      {Key? key, this.builder})
   : super(key: key);
 
   @override
   AppControllerState createState() => new AppControllerState();
 
-  static AppControllerState of(BuildContext context) {
+  static AppControllerState? of(BuildContext context) {
     return context.findAncestorStateOfType();
   }
 }
@@ -155,7 +154,7 @@ class AppControllerState extends State<AppController> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context);
+    return widget.builder!(context);
   }
 
   void rebuild() {

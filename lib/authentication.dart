@@ -7,12 +7,11 @@ import 'package:app/client.dart';
 import 'package:app/coins.dart';
 import 'dart:async';
 
-import 'package:app/native_storage.dart'
-  if (dart.library.html) 'package:app/web_storage.dart';
+import 'package:app/native_storage.dart';
 
 class Authentication {
   static Account currentAccount = Account();
-  static String token;
+  static String? token;
 
   static void setEmail(email) {
     if (currentAccount.email != email)
@@ -115,7 +114,7 @@ class Authentication {
     });
   }
 
-  static Future<String> readFromDisk(key) async {
+  static Future<String?> readFromDisk(key) async {
     return Storage.read(key);
   }
 
@@ -123,7 +122,7 @@ class Authentication {
     if (token == null)
       return await Storage.delete('token');
     else
-      return await Storage.write('token', token);
+      return await Storage.write('token', token!);
   }
 
   static void saveAccountToDisk() async {

@@ -14,7 +14,7 @@ class Payments extends StatelessWidget {
 }
 
 class PaymentsPage extends StatefulWidget {
-  PaymentsPage({Key key}) : super(key: key);
+  PaymentsPage({Key? key}) : super(key: key);
 
   @override
   _PaymentsPageState createState() => _PaymentsPageState();
@@ -24,7 +24,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   bool _awaitingResponse = true;
   bool _showMore = false;
   var allInvoices = [];
-  String _errorMessage;
+  String? _errorMessage;
   num page = 0;
 
   @override
@@ -86,7 +86,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
   List<Widget> _InvoiceList() {
     if (_errorMessage != null)
-      return [Text(_errorMessage, textAlign: TextAlign.center, style: TextStyle(color: AppController.red))];
+      return [Text(_errorMessage!, textAlign: TextAlign.center, style: TextStyle(color: AppController.red))];
     else if (allInvoices.length == 0)
       return [
         Container(

@@ -27,13 +27,15 @@ class Anypay extends StatelessWidget {
         primaryColorDark: Color(0xFF707070),
         primaryColorLight: Color(0xFF404040),
         brightness: Brightness.light,
-        accentColor: AppController.blue,
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: AppController.blue),
         fontFamily: 'Ubuntu',
       );
       var darkTheme = ThemeData(
         primaryColorDark: Color(0xffCCCCCC),
         primaryColorLight: Color(0xFFFFFFFF),
-        accentColor: Color(0xff2196f3),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: Color(0xff2196f3)),
         brightness: Brightness.dark,
         fontFamily: 'Ubuntu',
       );
@@ -47,9 +49,9 @@ class Anypay extends StatelessWidget {
       }
 
       return MaterialApp(
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
           return SafeArea(
-            child: child,
+            child: child!,
           );
         },
         initialRoute: isAuthenticated ? '/new-invoice' : '/login',

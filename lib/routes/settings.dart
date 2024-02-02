@@ -12,9 +12,9 @@ class Settings extends StatelessWidget {
 }
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({Key key, this.title}) : super(key: key);
+  SettingsPage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -71,7 +71,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void _rebuild() {
     setState(() {
       denomination = Authentication.currentAccount.denomination ?? 'USD';
-      symbol = Currencies.all[denomination]['symbol'];
+      symbol = Currencies.all[denomination]!['symbol'];
     });
   }
 

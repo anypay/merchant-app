@@ -21,12 +21,12 @@ class Payment extends StatelessWidget {
 }
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage({Key key, this.id}) : super(key: key);
+  PaymentPage({Key? key, this.id}) : super(key: key);
 
-  final String id;
+  final String? id;
 
   @override
-  _PaymentPageState createState() => _PaymentPageState(id);
+  _PaymentPageState createState() => _PaymentPageState(id ?? '');
 }
 
 class _PaymentPageState extends State<PaymentPage> {
@@ -34,8 +34,8 @@ class _PaymentPageState extends State<PaymentPage> {
 
   final String id;
   String _errorMessage = '';
-  Invoice _payment;
-  String _notes;
+  Invoice? _payment;
+  String? _notes;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,9 @@ class _PaymentPageState extends State<PaymentPage> {
       setState(() {
         if (response['success']) {
           _payment = response['invoice'];
-          _notes = _payment.orderNotes();
+          if (_payment != null) {
+            _notes = _payment!.orderNotes();
+          }
         } else _errorMessage = response['message'];
       });
     });
@@ -75,9 +77,9 @@ class _PaymentPageState extends State<PaymentPage> {
       return SpinKitCircle(color: AppController.blue);
 
     var denominationCurrencyName =
-        (Coins.all[_payment.currency] ?? {})['name'] ?? '...';
-    var denominationCurrencyAmount = (_payment.invoiceAmountPaid != null
-        ? (_payment.invoiceAmountPaid / pow(10, Coins.all[_payment.currency]['decimals'])).toString()
+        (Coins.all[_payment!.currency] ?? {})['name'] ?? '...';
+    var denominationCurrencyAmount = (_payment!.invoiceAmountPaid != null
+        ? (_payment!.invoiceAmountPaid! / pow(10, Coins.all[_payment!.currency]['decimals'])).toString()
         : '...');
     var denominationCurrencyText =
         denominationCurrencyName  + ' ' + denominationCurrencyAmount;
@@ -88,7 +90,7 @@ class _PaymentPageState extends State<PaymentPage> {
         Text(_errorMessage, style: TextStyle(color: AppController.red)),
         Container(
           margin: EdgeInsets.only(bottom: 40),
-          child: Text(_payment.amountWithDenomination() ?? "",
+          child: Text(_payment!.amountWithDenomination() ?? "",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColorLight,
@@ -107,7 +109,7 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
         ),
         Container(
-          child: Text(_payment.completedAtTimeAgo(),
+          child: Text(_payment!.completedAtTimeAgo(),
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
               fontSize: 20,
@@ -117,7 +119,7 @@ class _PaymentPageState extends State<PaymentPage> {
         Container(
           margin: EdgeInsets.only(bottom: 40),
           child: Text(
-            _payment.formatCompletedAt(),
+            _payment!.formatCompletedAt(),
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
               fontSize: 20,
@@ -125,10 +127,10 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
         ),
         Visibility(
-          visible: _notes.length > 0,
+          visible: _notes!.length > 0,
           child: Container(
             margin: EdgeInsets.only(right: 10),
-            child: Text(_notes,
+            child: Text(_notes!,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).primaryColorDark,
@@ -138,11 +140,11 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
         ),
         Visibility(
-          visible: _payment.getBlockchainUrl() != null,
+          visible: _payment!.getBlockchainUrl() != null,
           child: Container(
             child: GestureDetector(
               onTap: () async {
-                await launch(_payment.getBlockchainUrl());
+                await launch(_payment!.getBlockchainUrl()!);
               },
               child: Text('View on blockchain',
                 style: TextStyle(

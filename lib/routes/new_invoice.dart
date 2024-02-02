@@ -14,19 +14,19 @@ import 'dart:math';
 class NewInvoice extends StatelessWidget {
   NewInvoice({this.merchantId});
 
-  final String merchantId;
+  final String? merchantId;
 
   @override
   Widget build(BuildContext context) {
-    return NewInvoicePage(merchantId: merchantId);
+    return NewInvoicePage(merchantId: merchantId ?? '');
   }
 }
 
 
 class NewInvoicePage extends StatefulWidget {
-  NewInvoicePage({Key key, this.merchantId}) : super(key: key);
+  NewInvoicePage({Key? key, this.merchantId}) : super(key: key);
 
-  final String merchantId;
+  final String? merchantId;
 
   @override
   _NewInvoicePageState createState() => _NewInvoicePageState(merchantId: merchantId);
@@ -38,9 +38,9 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   String _visiblePrice = '';
   String _errorMessage = '';
   bool _submitting = false;
-  Merchant merchant;
-  String merchantId;
-  Invoice _invoice;
+  Merchant? merchant;
+  String? merchantId;
+  Invoice? _invoice;
   num _price = 0;
 
   @override
@@ -96,7 +96,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     });
   }
 
-  String get preferredCoinCode {
+  String? get preferredCoinCode {
     return merchant?.denomination ?? Authentication.currentAccount.preferredCoinCode;
   }
 
@@ -141,7 +141,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   void _checkForDarkMode() {
     AppController.checkForDarkMode(context).then((_) {
-      AppController.of(context).rebuild();
+      AppController.of(context)!.rebuild();
     });
   }
 
@@ -158,7 +158,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(top: 10, bottom: 10),
-      child: Text(merchant.name,
+      child: Text(merchant!.name ?? '',
         textAlign: TextAlign.center,
         style: TextStyle(
           shadows: <Shadow>[
@@ -169,7 +169,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
             ),
           ],
           fontWeight: FontWeight.bold,
-          fontSize: (65 - 1.5*max(merchant.name.length-8, 0)).toDouble(),
+          fontSize: (65 - 1.5*max(merchant!.name!.length-8, 0)).toDouble(),
         )
       )
     );
@@ -256,11 +256,11 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   void _setVisiblePrice() {
     _setInvoice();
-    _visiblePrice = _invoice.amountWithDenomination();
+    _visiblePrice = _invoice!.amountWithDenomination();
   }
 
   void _backspace() {
-    var denominator = pow(10, _invoice.decimalPlaces());
+    var denominator = pow(10, _invoice!.decimalPlaces());
     _price = (_price * 0.1 * denominator).truncateToDouble()/denominator;
     _errorMessage = "";
     _rebuild();
@@ -268,7 +268,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   void _updatePrice(i) {
     if (_price >= 92233720368547.76) return;
-    var denominator = pow(10, _invoice.decimalPlaces());
+    var denominator = pow(10, _invoice!.decimalPlaces());
     _price = (_price * 10 * denominator + i).round().toDouble()/denominator;
     _errorMessage = "";
     _rebuild();

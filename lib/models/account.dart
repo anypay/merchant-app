@@ -5,11 +5,11 @@ import 'dart:convert';
 class Account {
   Map<String, dynamic> addresses = {};
   bool fetchingCoins = false;
-  String ambassadorEmail;
-  String physicalAddress;
-  String businessName;
-  String denomination;
-  String email;
+  String? ambassadorEmail;
+  String? physicalAddress;
+  String? businessName;
+  String? denomination;
+  String? email;
 
   List coins = [];
 
@@ -29,7 +29,7 @@ class Account {
     return addresses[code];
   }
 
-  String get preferredCoinCode {
+  String? get preferredCoinCode {
     if (coins.length == 0) return null;
     var codes = coins.map((a) => a['code']);
     if (codes.contains('BSV'))

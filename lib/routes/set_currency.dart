@@ -1,11 +1,9 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/currencies.dart';
-import 'package:app/client.dart';
 
 class SetCurrency extends StatelessWidget {
   @override
@@ -15,9 +13,9 @@ class SetCurrency extends StatelessWidget {
 }
 
 class SetCurrencyPage extends StatefulWidget {
-  SetCurrencyPage({Key key, this.title}) : super(key: key);
+  SetCurrencyPage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _SetCurrencyPageState createState() => _SetCurrencyPageState();
@@ -26,7 +24,7 @@ class SetCurrencyPage extends StatefulWidget {
 class _SetCurrencyPageState extends State<SetCurrencyPage> {
   Map<String, dynamic> visibleCurrencies = Currencies.all;
   String _errorMessage = '';
-  String _chosenCurrency;
+  String? _chosenCurrency;
 
   @override
   Widget build(BuildContext context) {

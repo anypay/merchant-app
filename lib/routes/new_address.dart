@@ -22,12 +22,12 @@ class NewAddress extends StatelessWidget {
 }
 
 class NewAddressPage extends StatefulWidget {
-  NewAddressPage({Key key, this.code}) : super(key: key);
+  NewAddressPage({Key? key, this.code}) : super(key: key);
 
-  final String code;
+  final String? code;
 
   @override
-  _NewAddressPageState createState() => _NewAddressPageState(code);
+  _NewAddressPageState createState() => _NewAddressPageState(code ?? '');
 }
 
 class _NewAddressPageState extends State<NewAddressPage> {
@@ -47,7 +47,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
   String _noteError = '';
   String _message = '';
   String _note = '';
-  Address _address;
+  Address? _address;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +126,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
       setState(() {
         _address = Authentication.currentAccount.addressFor(this.code);
         _note = _address?.note ?? "";
-        _message = _address?.toString();
+        _message = _address?.toString() ?? "";
         _messageType = 'success';
       });
   }
@@ -145,8 +145,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   void _pasteAddress() async {
-    ClipboardData clipboard = await Clipboard.getData('text/plain');
-    if (clipboard.text == null || clipboard.text == '') {
+    ClipboardData? clipboard = await Clipboard.getData('text/plain');
+    if (clipboard != null && clipboard.text == null || clipboard!.text == '') {
       _message = 'Nothing to paste';
       _messageType = 'error';
       return;
@@ -164,15 +164,17 @@ class _NewAddressPageState extends State<NewAddressPage> {
     setState(() {
       _savingNote = true;
     });
-    Client.setAddressNote(_address.id, _note).then((response) {
-      if (!_disposed)
-        setState(() {
-          if (response['success']) {
-            _savingNote = false;
-            _address.note = _note;
-          } else _noteError = response['message'];
-        });
-    });
+    if (_address != null) {
+      Client.setAddressNote(_address!.id, _note).then((response) {
+        if (!_disposed)
+          setState(() {
+            if (response['success']) {
+              _savingNote = false;
+              _address!.note = _note;
+            } else _noteError = response['message'];
+          });
+      });
+    }
   }
 
   void _setAddress(address) async {
@@ -221,7 +223,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
     AppController.closeUntilPath('/new-invoice');
   }
 
-  Color _messageColor() {
+  Color? _messageColor() {
     return {
       'pending': Theme.of(context).primaryColorDark,
       'success': AppController.green,

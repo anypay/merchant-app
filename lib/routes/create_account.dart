@@ -13,9 +13,9 @@ class CreateAccount extends StatelessWidget {
 }
 
 class CreateAccountPage extends StatefulWidget {
-  CreateAccountPage({Key key, this.title}) : super(key: key);
+  CreateAccountPage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _CreateAccountPageState createState() => _CreateAccountPageState();
@@ -47,7 +47,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
                 _textFields(),
                 Container(
-                  margin: (_submitting ? 
+                  margin: (_submitting ?
                     EdgeInsets.only(top: 5, bottom: 10) :
                     EdgeInsets.only(top: 20, bottom: 20)),
                   child: _submitting ? SpinKitCircle(color: AppController.blue) :
@@ -82,7 +82,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   void _submitForm() {
     _closeKeyboard();
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       setState(() {
         _errorMessage = "";
         _submitting = true;
@@ -130,7 +130,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 labelText: 'Email'
               ),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
+                if (value == null || value.isEmpty) return 'Please enter some text';
                 else if (!EmailValidator.validate(value.trim()))
                   return "That doesn't look like an email address";
               },
@@ -145,7 +145,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 labelText: 'Password'
               ),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
+                if (value == null || value.isEmpty) return 'Please enter some text';
                 else if (confirmPassword.text != value)
                   return 'Passwords do not match.';
               },
@@ -160,7 +160,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 labelText: 'Re-type Password'
               ),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
+                if (value == null || value.isEmpty) return 'Please enter some text';
               },
               onFieldSubmitted: (value) {
                 _submitForm();

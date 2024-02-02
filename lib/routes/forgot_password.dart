@@ -13,9 +13,9 @@ class ForgotPassword extends StatelessWidget {
 }
 
 class ForgotPasswordPage extends StatefulWidget {
-  ForgotPasswordPage({Key key, this.title}) : super(key: key);
+  ForgotPasswordPage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
@@ -37,7 +37,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   void _submitForm() {
     _closeKeyboard();
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       setState(() {
         _submitting = true;
         _errorMessage = "";
@@ -91,16 +91,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             labelText: 'Email'
                           ),
                           validator: (value) {
-                            if (value.isEmpty) return 'Please enter some text';
-                            else if (!EmailValidator.validate(value.trim()))
+                            if (value != null && value.isEmpty)
+                              return 'Please enter some text';
+
+                            if (!EmailValidator.validate(value!.trim()))
                               return "That doesn't look like an email address";
+
+                            return null;
                           },
                           onFieldSubmitted: (value) {
                             _submitForm();
                           },
                         ),
                         Container(
-                          margin: (_submitting ? 
+                          margin: (_submitting ?
                             EdgeInsets.only(top: 10, bottom: 5) :
                             EdgeInsets.only(top: 20, bottom: 20)),
                           child: _submitting ? SpinKitCircle(color: AppController.blue) :
