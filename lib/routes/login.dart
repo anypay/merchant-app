@@ -4,7 +4,6 @@ import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/client.dart';
 
-import '../package_info_helper.dart';
 
 class Login extends StatelessWidget {
   @override

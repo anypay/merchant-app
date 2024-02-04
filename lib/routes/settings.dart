@@ -1,6 +1,5 @@
 import 'package:app/authentication.dart';
 import 'package:app/client.dart';
-import 'package:app/package_info_helper.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
@@ -159,29 +158,6 @@ class _SettingsPageState extends State<SettingsPage> {
           }),
     );
   }
-
-  // Widget _buildAboutUs(context) {
-  //   return Container(
-  //     margin: EdgeInsets.all(10.0),
-  //     child: GestureDetector(
-  //         behavior: HitTestBehavior.translucent,
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             Container(
-  //                 margin: EdgeInsets.all(AppController.scale(20.0)),
-  //                 child: Text("About Us",
-  //                     style: TextStyle(
-  //                       fontSize: 22,
-  //                     ))),
-  //           ],
-  //         ),
-  //         onTap: () {
-  //           Navigator.pushNamed(context, '/settings/addresses');
-  //         }),
-  //   );
-  // }
-
   Widget _SelectCurrencyLink(context) {
     return Container(
       margin: EdgeInsets.all(10.0),

@@ -9,11 +9,12 @@ import 'dart:io';
 
 class Client {
   static String protocol = 'https';
-  static String domain = 'anypay.pshenmic.dev';
+  static String domain = 'api.anypayx.dev';
   static String host = "$protocol://$domain";
 
   static String humanize(str) {
-    if (str != null && str.length > 0) return StringUtils.capitalize(str);
+    if (str != null && str.length > 0)
+      return StringUtils.capitalize(str);
   }
 
   static String buildAuthHeader() {
