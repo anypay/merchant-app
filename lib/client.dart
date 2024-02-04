@@ -9,7 +9,7 @@ import 'dart:io';
 
 class Client {
   static String protocol = 'https';
-  static String domain = 'api.anypayx.dev';
+  static String domain = 'api.anypayx.com';
   static String host = "$protocol://$domain";
 
   static String humanize(str) {
