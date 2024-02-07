@@ -6,7 +6,7 @@ import 'dart:math';
 import 'package:app/native_storage.dart';
 
 class AppController extends StatefulWidget {
-  final Function(BuildContext)? builder;
+  final Function(BuildContext) builder;
 
   static final globalKey = new GlobalKey<NavigatorState>();
   static bool enableDarkMode = false;
@@ -138,9 +138,7 @@ class AppController extends StatefulWidget {
     openedPath = path;
   }
 
-  const AppController(
-      {Key? key, this.builder})
-  : super(key: key);
+  const AppController({Key? key, required this.builder}) : super(key: key);
 
   @override
   AppControllerState createState() => new AppControllerState();
@@ -154,7 +152,7 @@ class AppControllerState extends State<AppController> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder!(context);
+    return widget.builder(context);
   }
 
   void rebuild() {
