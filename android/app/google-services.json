@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "311550979740",
+    "firebase_url": "https://anypay-c906a.firebaseio.com",
+    "project_id": "anypay-c906a",
+    "storage_bucket": "anypay-c906a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311550979740:android:b724047bcf3506f4038759",
+        "android_client_info": {
+          "package_name": "global.anypay.pos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311550979740-fi1songbinioa82igubiulmdmiqm0804.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDocmvnRAxKnTiSGP783eGlmn6qZT-bJ2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311550979740-fi1songbinioa82igubiulmdmiqm0804.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "311550979740-a05oiassjsqvgoje0dqkidv535htve4b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "global.anypay.pos.mobile",
+                "app_store_id": "1442219043"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

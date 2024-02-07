@@ -1,0 +1,113 @@
+version: 2.1
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy_android:
+          lane: 'beta'
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - staging
+      - deploy_ios:
+          lane: 'beta'
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - staging
+      - deploy_android:
+          lane: 'release'
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+      - deploy_ios:
+          lane: 'release'
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+orbs:
+  ruby: circleci/ruby@2.0.0
+  flutter: circleci/flutter@1.1.0
+  macos: circleci/macos@2
+jobs:
+  build:
+    docker:
+      - image: cirrusci/flutter
+    steps:
+      - checkout
+      - run:
+          name: Configure key.properties
+          command: |
+            printf "
+            keyAlias=%s
+            keyPassword=%s
+            storeFile=%s
+            storePassword=%s
+            " $RELEASE_KEY_ALIAS $RELEASE_KEY_PASSWORD "$(pwd)/android/keystore" $RELEASE_STORE_PASSWORD > android/key.properties
+      - run: echo -n $BASE64_KEYSTORE | base64 -d > android/keystore
+      - run: flutter doctor
+      - run: flutter build apk
+  deploy_android:
+    docker:
+      - image: cirrusci/flutter
+    parameters:
+      lane:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - run:
+          name: Configure key.properties
+          command: |
+            printf "
+            keyAlias=%s
+            keyPassword=%s
+            storeFile=%s
+            storePassword=%s
+            " $RELEASE_KEY_ALIAS $RELEASE_KEY_PASSWORD "$(pwd)/android/keystore" $RELEASE_STORE_PASSWORD > android/key.properties
+      - run: echo -n $BASE64_KEYSTORE | base64 -d > android/keystore
+      - run:
+          name: Install fastlane in system
+          command: gem install fastlane --no-document
+          working_directory: ~/project/android
+      - run:
+          name: Upload android bundle in Google Play track beta
+          command: fastlane << parameters.lane >>
+          working_directory: ~/project/android
+  deploy_ios:
+    macos:
+      xcode: 14.2.0
+    parameters:
+      lane:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - run: echo 'export FLUTTER_ROOT=~/development/flutter' >> $BASH_ENV
+      - run: echo -n $GOOGLE_PLAY_KEY > ios/gc_keys.json
+      - flutter/install_sdk_and_pub:
+          flutter_version: 3.7.2
+      - run: flutter build ios --config-only --no-codesign
+      - run: printf "export %s\n" "$(cat ios/Flutter/Generated.xcconfig | grep FLUTTER_BUILD_NAME)" >> $BASH_ENV
+      - run: printf "export %s\n" "$(cat ios/Flutter/Generated.xcconfig | grep FLUTTER_BUILD_NUMBER)" >> $BASH_ENV
+      - run: cat $BASH_ENV
+      - run:
+          name: Install fastlane in system
+          command: gem install fastlane --no-document
+          working_directory: ~/project/ios
+      - run:
+          name: Upload application to TestFlight
+          command: fastlane << parameters.lane >>
+          working_directory: ~/project/ios
