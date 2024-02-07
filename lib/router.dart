@@ -27,77 +27,77 @@ class AnyFluroRouter {
 
   static void setupRouter() {
     router.define(
-      '/login',
+      'login',
       handler: newHandler(() => Login()),
       transitionType: TransitionType.fadeIn,
     );
     router.define(
-      '/registration',
+      'registration',
       handler: newHandler(() => CreateAccount()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/register-business',
+      'register-business',
       handler: newHandler(() => EditBusinessInfo(allowBack: false)),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/password-reset',
+      'password-reset',
       handler: newHandler(() => ForgotPassword()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/invoices/:id',
+      'invoices/:id',
       handler: newHandler((id) => ShowInvoice(id), 'id'),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/new-invoice',
+      'new-invoice',
       handler: newHandler(() => NewInvoice()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/navigation',
+      'navigation',
       handler: newHandler(() => Navigation()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/settings',
+      'settings',
       handler: newHandler(() => Settings()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/settings/business-info',
+      'settings/business-info',
       handler: newHandler(() => EditBusinessInfo()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/settings/currency',
+      'settings/currency',
       handler: newHandler(() => SetCurrency()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/settings/addresses',
+      'settings/addresses',
       handler: newHandler(() => Addresses()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/payments',
+      'payments',
       handler: newHandler(() => Payments()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/payments/:id',
+      'payments/:id',
       handler: newHandler((id) => Payment(id), 'id'),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/pay/:id',
+      'pay/:id',
       handler: newHandler((id) => NewInvoice(merchantId: id), 'id'),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      '/new-address/:code',
+      'new-address/:code',
       handler: newHandler((code) => NewAddress(code), 'code'),
       transitionType: TransitionType.inFromBottom,
     );

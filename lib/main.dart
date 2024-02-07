@@ -54,7 +54,7 @@ class Anypay extends StatelessWidget {
             child: child!,
           );
         },
-        initialRoute: isAuthenticated ? '/new-invoice' : '/login',
+        initialRoute: isAuthenticated ? 'new-invoice' : 'login',
         onGenerateRoute: AnyFluroRouter.router.generator,
         navigatorKey: AppController.globalKey,
         title: 'Anypay Cash Register',
