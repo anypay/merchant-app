@@ -18,7 +18,7 @@ class NewInvoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NewInvoicePage(merchantId: merchantId ?? '');
+    return NewInvoicePage(merchantId: merchantId);
   }
 }
 
