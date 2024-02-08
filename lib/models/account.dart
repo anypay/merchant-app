@@ -1,4 +1,3 @@
-import 'package:app/currencies.dart';
 import 'package:app/models/address.dart';
 import 'dart:convert';
 
@@ -44,13 +43,13 @@ class Account {
       'business_name': businessName,
       'denomination': denomination,
       'email': email,
-    } as Map;
+    };
   }
 
   factory Account.fromMap(Map<String, dynamic> body) {
     var json = body['account'] ?? body;
+
     return Account(
-      ambassadorEmail: json['ambassador_email'],
       physicalAddress: json['physical_address'],
       businessName: json['business_name'],
       denomination: json['denomination'],
