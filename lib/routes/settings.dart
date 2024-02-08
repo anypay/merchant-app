@@ -93,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/settings/addresses').then((value) {
+          Navigator.pushNamed(context, 'settings/addresses').then((value) {
             _successMessage = '';
             _rebuild();
           });
@@ -128,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/settings/currency').then((value) {
+          Navigator.pushNamed(context, 'settings/currency').then((value) {
             _successMessage = 'Saved!';
             _rebuild();
           });
@@ -155,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/settings/business-info');
+          Navigator.pushNamed(context, 'settings/business-info');
         }
       ),
     );

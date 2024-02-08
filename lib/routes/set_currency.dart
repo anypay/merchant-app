@@ -54,7 +54,7 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
     if (Navigator.canPop(context))
       Navigator.pop(context, true);
     else
-      Navigator.pushNamedAndRemoveUntil(context, '/settings', (Route<dynamic> route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, 'settings', (Route<dynamic> route) => false);
   }
 
   void _filterList(text) {

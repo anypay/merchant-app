@@ -1,10 +1,8 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
-import "package:intl/intl.dart";
 
 class Payments extends StatelessWidget {
   @override
@@ -81,7 +79,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   }
 
   void openPayment(id) {
-    Navigator.pushNamed(context, '/payments/$id');
+    Navigator.pushNamed(context, 'payments/$id');
   }
 
   List<Widget> _InvoiceList() {

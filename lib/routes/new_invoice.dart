@@ -112,7 +112,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       Client.createInvoice(_price, preferredCoinCode, accountId: merchant?.accountId).then((response) {
         if (response['success']) {
           var invoiceId = response['invoiceId'];
-          Navigator.pushNamed(context, '/invoices/$invoiceId', arguments: {
+          Navigator.pushNamed(context, 'invoices/$invoiceId', arguments: {
             'redirectUrl': merchant != null ? (window.document as HtmlDocument).referrer : null,
             'merchant': merchant,
           }).then((_) {
@@ -123,7 +123,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
           _submitting = false;
         });
       });
-    else Navigator.pushNamed(context, '/settings/addresses').then((result) {
+    else Navigator.pushNamed(context, 'settings/addresses').then((result) {
      _submitting = false;
      _rebuild();
     });
@@ -231,7 +231,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             !Authentication.isAuthenticated()? Container() : GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/navigation').then((value) => _rebuild()),
+              onTap: () => Navigator.pushNamed(context, 'navigation').then((value) => _rebuild()),
               child: Container(
                 margin: EdgeInsets.only(top: 10.0, left: AppController.leftPadding() + 30),
                 child: Icon(Icons.menu, size: 20+AppController.scale(20.0)),
@@ -249,7 +249,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
 
   void _setInvoice() {
     _invoice = Invoice(
-      denominationCurrency: merchant?.denomination ?? Authentication.currentAccount?.denomination,
+      denominationCurrency: merchant?.denomination ?? Authentication.currentAccount.denomination,
       denominationAmount: _price,
     );
   }

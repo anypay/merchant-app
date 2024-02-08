@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                 fontSize: 18,
               )),
               onTap: () {
-                Navigator.pushNamed(context, '/registration');
+                Navigator.pushNamed(context, 'registration');
               }
             ),
           ),
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 18,
                   )),
                   onTap: () {
-                    Navigator.pushNamed(context, '/password-reset');
+                    Navigator.pushNamed(context, 'password-reset');
                   }
                 ),
               ]

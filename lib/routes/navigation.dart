@@ -2,7 +2,6 @@ import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
-import 'package:app/client.dart';
 
 class Navigation extends StatelessWidget {
   @override
@@ -65,7 +64,7 @@ class _NavigationPageState extends State<NavigationPage> {
             fontSize: 22,
           )),
           onTap: () {
-            Navigator.pushNamed(context, '/payments');
+            Navigator.pushNamed(context, 'payments');
           }
         ),
       ),
@@ -79,7 +78,7 @@ class _NavigationPageState extends State<NavigationPage> {
             fontSize: 22,
           )),
           onTap: () {
-            Navigator.pushNamed(context, '/settings');
+            Navigator.pushNamed(context, 'settings');
           }
         ),
       ),

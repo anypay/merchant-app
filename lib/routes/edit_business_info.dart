@@ -4,7 +4,6 @@ import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
-import 'package:app/client.dart';
 
 class EditBusinessInfo extends StatelessWidget {
   EditBusinessInfo({this.allowBack = true});
@@ -103,7 +102,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
         setState(() {
           _submitting = false;
           if (!allowBack)
-            Navigator.pushNamedAndRemoveUntil(context, '/settings/addresses', (Route<dynamic> route) => false);
+            Navigator.pushNamedAndRemoveUntil(context, 'settings/addresses', (Route<dynamic> route) => false);
           else if (response['success'])
             _successMessage = "Saved!";
           else _errorMessage = response['message'];

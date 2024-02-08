@@ -66,7 +66,7 @@ class _AddressesPageState extends State<AddressesPage> {
               child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () => {
-                    Navigator.pushNamed(context, '/new-address/$code')
+                    Navigator.pushNamed(context, 'new-address/$code')
                   },
                   child: Row(
                       children: [
