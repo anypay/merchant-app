@@ -214,7 +214,7 @@ class Client {
       http.Response response = await http.Response.fromStream(streamedResponse);
 
       var responseBody = (json.decode(response.body) as Map);
-      var message = responseBody['message'];
+      var message = responseBody['message'] ?? '';
 
       var code = response.statusCode;
       // For debugging:
