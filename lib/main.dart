@@ -27,11 +27,11 @@ class Anypay extends StatelessWidget {
       var lightTheme = ThemeData(
         primaryColorDark: Color(0xFF707070),
         primaryColorLight: Color(0xFF404040),
-        brightness: Brightness.light,
         colorScheme: ColorScheme.fromSwatch().copyWith(
             background: AppController.white,
             secondary: AppController.blue,
-            brightness: Brightness.light),
+            brightness: Brightness.light
+        ),
         fontFamily: 'Ubuntu',
       );
 
@@ -41,8 +41,8 @@ class Anypay extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch().copyWith(
             background: Color(0xff222222),
             secondary: Color(0xff2196f3),
-            brightness: Brightness.dark),
-        brightness: Brightness.dark,
+            brightness: Brightness.dark
+        ),
         fontFamily: 'Ubuntu',
       );
 
