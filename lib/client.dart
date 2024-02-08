@@ -12,10 +12,7 @@ class Client {
   static final host = "$protocol://$domain";
 
   static String humanize(String str) {
-    if (str.length > 0)
-      return StringUtils.capitalize(str);
-    else
-      return "";
+    return StringUtils.capitalize(str);
   }
 
   static String buildAuthHeader() {
