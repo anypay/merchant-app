@@ -43,7 +43,7 @@ class AppController extends StatefulWidget {
   static Future<void> checkForDarkMode(context) {
     return Storage.read('enableDarkMode').then((darkMode) {
       if (darkMode == null)
-        enableDarkMode = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
+        enableDarkMode = SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
       else if (darkMode != 'false') enableDarkMode = true;
     });
   }
@@ -78,6 +78,14 @@ class AppController extends StatefulWidget {
   ].toList();
 
   static BuildContext getCurrentContext() {
+    if (globalKey.currentState == null) {
+      throw 'GlobalKey current state is not available';
+    }
+
+    if (globalKey.currentState!.overlay == null) {
+      throw 'GlobalKey current state overlay is not available';
+    }
+
     return globalKey.currentState!.overlay!.context;
   }
 
@@ -90,11 +98,16 @@ class AppController extends StatefulWidget {
   }
 
   static void openDialog(title, body, {path, buttonText, buttons}) async {
-    if (dialogIsOpen) return;
+    if (dialogIsOpen) {
+      return;
+    }
+
     dialogIsOpen = true;
 
     var context = getCurrentContext();
+
     buttons ??= [];
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -118,8 +131,9 @@ class AppController extends StatefulWidget {
             onPressed: () {
               dialogIsOpen = false;
               Navigator.of(context).pop();
-              if (path != null)
+              if (path != null) {
                 openPath(path);
+              }
             },
           ),
         ],
@@ -132,9 +146,12 @@ class AppController extends StatefulWidget {
   }
 
   static void openPath(String? path) async {
-    if (path != null && openedPath != path)
+    if (path != null && openedPath != path) {
       Navigator.pushNamed(getCurrentContext(), path);
+    }
+
     Timer(Duration(milliseconds: 5000), () => openedPath = null);
+
     openedPath = path;
   }
 
