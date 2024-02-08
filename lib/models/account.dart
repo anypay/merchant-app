@@ -25,8 +25,8 @@ class Account {
     return jsonEncode(toMap());
   }
 
-  Address addressFor(code) {
-    return addresses[code];
+  Address? addressFor(code) {
+    return addresses[code] ?? null;
   }
 
   String? get preferredCoinCode {

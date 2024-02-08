@@ -75,7 +75,14 @@ class Invoice {
   }
 
   int decimalPlaces() {
-    return (Currencies.all[denominationCurrency] ?? {})['decimal_places'] as int ?? 2;
+    var decimalPlaces = (Currencies.all[denominationCurrency] ??
+        {})['decimal_places'];
+
+    if (decimalPlaces != null) {
+      return decimalPlaces as int;
+    }
+
+    return 2;
   }
 
   String paidAmountWithDenomination() {

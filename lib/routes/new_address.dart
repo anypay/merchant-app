@@ -22,12 +22,12 @@ class NewAddress extends StatelessWidget {
 }
 
 class NewAddressPage extends StatefulWidget {
-  NewAddressPage({Key? key, this.code}) : super(key: key);
+  NewAddressPage({Key? key, required this.code}) : super(key: key);
 
-  final String? code;
+  final String code;
 
   @override
-  _NewAddressPageState createState() => _NewAddressPageState(code ?? '');
+  _NewAddressPageState createState() => _NewAddressPageState(code);
 }
 
 class _NewAddressPageState extends State<NewAddressPage> {
