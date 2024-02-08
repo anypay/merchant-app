@@ -56,8 +56,12 @@ class Anypay extends StatelessWidget {
 
       return MaterialApp(
         builder: (BuildContext context, Widget? child) {
+          if (child == null) {
+            throw 'MaterialApp builder child is null';
+          }
+
           return SafeArea(
-            child: child!,
+            child: child,
           );
         },
         initialRoute: isAuthenticated ? 'new-invoice' : 'login',
