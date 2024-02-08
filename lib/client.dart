@@ -8,10 +8,10 @@ import 'dart:io';
 
 class Client {
   static final protocol = 'https';
-  static final domain = 'anypay.pshenmic.dev';
+  static final domain = 'api.anypayx.com';
   static final host = "$protocol://$domain";
 
-  static String humanize(str) {
+  static String humanize(String str) {
     if (str.length > 0)
       return StringUtils.capitalize(str);
     else
@@ -35,15 +35,11 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchCoins() async {
-    var req = await makeRequest('get',
+    return makeRequest('get',
       unauthorized: (() => Authentication.logout()),
       requireAuth: true,
       path: '/coins',
     );
-
-    print(jsonEncode(req));
-
-    return req;
   }
 
   static Future<Map<dynamic, dynamic>> fetchAccountAddresses() async {
@@ -214,7 +210,7 @@ class Client {
       http.Response response = await http.Response.fromStream(streamedResponse);
 
       var responseBody = (json.decode(response.body) as Map);
-      var message = responseBody['message'] ?? '';
+      var message = responseBody['message'];
 
       var code = response.statusCode;
       // For debugging:
@@ -234,7 +230,7 @@ class Client {
         };
       } else return {
         'success': code == 200,
-        'message': humanize(message),
+        'message': humanize(message ?? ''),
         'body': responseBody,
       };
     } on SocketException catch (_) {
