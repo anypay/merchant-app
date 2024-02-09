@@ -23,8 +23,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchMerchant(id) async {
-    var response = await makeRequest(
-      'get',
+    var response = await makeRequest('get',
       path: "/merchants/${id}",
     );
 
