@@ -39,7 +39,6 @@ dependencies:
   fluro: ^2.0.4
   http: ^0.13.5
   intl: ^0.18.0
-  confirm_dialog: ^1.0.1
 
   flutter:
     sdk: flutter
