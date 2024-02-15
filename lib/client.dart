@@ -53,7 +53,7 @@ class Client {
     return makeRequest('put',
       path: '/addresses/$addressId/notes',
       unauthorized: (() => Authentication.logout()),
-      body: {'note': note},
+      body: { 'note': note },
       requireAuth: true,
     );
   }
@@ -151,7 +151,7 @@ class Client {
     return response;
   }
 
-  
+
   static Future<Map<dynamic, dynamic>> getInvoice(id) async {
     var response = await makeRequest('get',
       unauthorized: (() => Authentication.logout()),
@@ -192,7 +192,7 @@ class Client {
     );
   }
 
-  static Future<Map<dynamic, dynamic>> makeRequest(method,{ path, uri, headers, body, requireAuth, basicAuth, unauthorized, genericErrorCodes}) async {
+  static Future<Map<dynamic, dynamic>> makeRequest(method, {path, uri, headers, body, requireAuth, basicAuth, unauthorized, genericErrorCodes}) async {
     try {
       http.Request request = http.Request(method, uri ?? Uri.parse('$host$path'));
       if (requireAuth ?? false) request.headers['authorization'] = buildAuthHeader();
