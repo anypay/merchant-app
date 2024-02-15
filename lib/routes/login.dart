@@ -68,8 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         _submitting = false;
         if (response['success']) {
           AppController.closeUntilPath('/new-invoice');
-        } else
-          setState(() {
+        } else setState(() {
             _errorMessage = response['message'];
           });
       });
