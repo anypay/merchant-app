@@ -70,8 +70,8 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> createAccount(email, password) async {
-    return makeRequest(
-      'post',
+    return makeRequest('post',
+                       
       path: '/accounts',
       body: {
         'email': email.trim().toLowerCase(),
