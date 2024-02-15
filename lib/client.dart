@@ -151,6 +151,7 @@ class Client {
     return response;
   }
 
+  
   static Future<Map<dynamic, dynamic>> getInvoice(id) async {
     var response = await makeRequest('get',
       unauthorized: (() => Authentication.logout()),
