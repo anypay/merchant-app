@@ -151,8 +151,7 @@ class _LoginPageState extends State<LoginPage> {
             child: _submitting
                 ? SpinKitCircle(color: AppController.blue)
                 : GestureDetector(
-                    child: Text('Login',
-                        style: TextStyle(
+                    child: Text('Login',style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AppController.blue,
                           fontSize: 18,
