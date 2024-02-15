@@ -154,7 +154,8 @@ class _SettingsPageState extends State<SettingsPage> {
               _successMessage = '';
               _rebuild();
             });
-          }),
+          }
+      ),
     );
   }
   Widget _SelectCurrencyLink(context) {
