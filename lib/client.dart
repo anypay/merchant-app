@@ -88,8 +88,8 @@ class Client {
     return makeRequest('put',
       path: '/firebase_token',
       requireAuth: true,
-      body: {'firebase_token': data},
-                       
+      body: {
+        'firebase_token': data         
      };
     );
   }
