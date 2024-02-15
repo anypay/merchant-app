@@ -165,12 +165,9 @@ class Client {
     return response;
   }
 
-  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency,
-      {accountId}) async {
-    var path =
-        accountId == null ? '/invoices' : '/accounts/${accountId}/invoices';
-    var response = await makeRequest(
-      'post',
+  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency,{accountId}) async {
+    var path =accountId == null ? '/invoices' : '/accounts/${accountId}/invoices';
+    var response = await makeRequest('post',
       requireAuth: accountId == null,
       genericErrorCodes: [400, 500],
       path: path,
