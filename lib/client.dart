@@ -90,7 +90,7 @@ class Client {
       requireAuth: true,
       body: {
         'firebase_token': data         
-     };
+     },
     );
   }
 
