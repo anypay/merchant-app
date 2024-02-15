@@ -214,6 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Navigator.pushNamed(context, '/settings/business-info');
           }
       ),
+   
     );
   }
 }
