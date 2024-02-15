@@ -205,8 +205,7 @@ class Client {
         request.headers[key] = value;
       });
 
-      http.StreamedResponse streamedResponse =
-          await http.Client().send(request);
+      http.StreamedResponse streamedResponse = await http.Client().send(request);
       http.Response response = await http.Response.fromStream(streamedResponse);
 
       var responseBody = (json.decode(response.body) as Map);
