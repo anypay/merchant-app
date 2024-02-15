@@ -19,9 +19,12 @@ class AnyFluroRouter {
   static FluroRouter router = FluroRouter();
 
   static newHandler(klass, [key]) {
-    return Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      if (key == null) return klass();
-      else return klass(params[key][0]);
+    return Handler(
+        handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      if (key == null)
+        return klass();
+      else
+        return klass(params[key][0]);
     });
   }
 

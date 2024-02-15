@@ -1,5 +1,5 @@
 import 'package:url_launcher/url_launcher.dart'
-  if (dart.library.html) 'package:app/web_launcher.dart';
+    if (dart.library.html) 'package:app/web_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
@@ -42,14 +42,13 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Container(
-        child: Align(
-          alignment: Alignment(-0.83, -1),
-          child: CircleBackButton(
-            margin: EdgeInsets.only(right: 20.0, top: 35 + AppController.topPadding()),
-            backPath: '/payments',
-          )
-        )
-      ),
+          child: Align(
+              alignment: Alignment(-0.83, -1),
+              child: CircleBackButton(
+                margin: EdgeInsets.only(
+                    right: 20.0, top: 35 + AppController.topPadding()),
+                backPath: '/payments',
+              ))),
       body: Center(
         child: SingleChildScrollView(
           child: _Payment(),
@@ -66,14 +65,14 @@ class _PaymentPageState extends State<PaymentPage> {
         if (response['success']) {
           _payment = response['invoice'];
           _notes = _payment.orderNotes();
-        } else _errorMessage = response['message'];
+        } else
+          _errorMessage = response['message'];
       });
     });
   }
 
   Widget _Payment() {
-    if (_payment == null)
-      return SpinKitCircle(color: AppController.blue);
+    if (_payment == null) return SpinKitCircle(color: AppController.blue);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +80,8 @@ class _PaymentPageState extends State<PaymentPage> {
         Text(_errorMessage, style: TextStyle(color: AppController.red)),
         Container(
           margin: EdgeInsets.only(bottom: 40),
-          child: Text(_payment.amountWithDenomination() ?? "",
+          child: Text(
+            _payment.amountWithDenomination() ?? "",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColorLight,
@@ -91,7 +91,8 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         Container(
           margin: EdgeInsets.only(bottom: 10),
-          child: Text((Coins.all[_payment.currency] ?? {})['name'] ?? '',
+          child: Text(
+            (Coins.all[_payment.currency] ?? {})['name'] ?? '',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColorDark,
@@ -111,7 +112,8 @@ class _PaymentPageState extends State<PaymentPage> {
         //   ),
         // ),
         Container(
-          child: Text(_payment.completedAtTimeAgo(),
+          child: Text(
+            _payment.completedAtTimeAgo(),
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
               fontSize: 20,
@@ -132,7 +134,8 @@ class _PaymentPageState extends State<PaymentPage> {
           visible: _notes.length > 0,
           child: Container(
             margin: EdgeInsets.only(right: 10),
-            child: Text(_notes,
+            child: Text(
+              _notes,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).primaryColorDark,
@@ -148,7 +151,8 @@ class _PaymentPageState extends State<PaymentPage> {
               onTap: () async {
                 await launch(_payment.getBlockchainUrl());
               },
-              child: Text('View on blockchain',
+              child: Text(
+                'View on blockchain',
                 style: TextStyle(
                   color: AppController.blue,
                   fontSize: 20,
@@ -161,4 +165,3 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 }
-

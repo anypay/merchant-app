@@ -31,26 +31,22 @@ class _PaymentsPageState extends State<PaymentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Container(
-        child: Align(
-          alignment: Alignment(-0.83, -1),
-          child: SafeArea(
-            child: CircleBackButton(
-              margin: EdgeInsets.only(right: 20.0, top: 35 + AppController.topPadding()),
-              backPath: '/navigation',
-            )
-          )
-        )
-      ),
+          child: Align(
+              alignment: Alignment(-0.83, -1),
+              child: SafeArea(
+                  child: CircleBackButton(
+                margin: EdgeInsets.only(
+                    right: 20.0, top: 35 + AppController.topPadding()),
+                backPath: '/navigation',
+              )))),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _TitleBar(),
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: _InvoiceList()
-              ),
+              child:
+                  ListView(padding: EdgeInsets.zero, children: _InvoiceList()),
             ),
           ],
         ),
@@ -69,7 +65,8 @@ class _PaymentsPageState extends State<PaymentsPage> {
             ...allInvoices,
             ...(response['invoices']),
           ];
-        } else _errorMessage = response['message'];
+        } else
+          _errorMessage = response['message'];
       });
     });
   }
@@ -86,22 +83,27 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
   List<Widget> _InvoiceList() {
     if (_errorMessage != null)
-      return [Text(_errorMessage, textAlign: TextAlign.center, style: TextStyle(color: AppController.red))];
+      return [
+        Text(_errorMessage,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppController.red))
+      ];
     else if (allInvoices.length == 0)
       return [
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: _awaitingResponse ?
-            SpinKitCircle(color: AppController.blue) :
-            Text("No payments yet!", textAlign: TextAlign.center),
+          child: _awaitingResponse
+              ? SpinKitCircle(color: AppController.blue)
+              : Text("No payments yet!", textAlign: TextAlign.center),
         )
       ];
-    else return [
-      ...allInvoices.map((invoice) {
-        return _Invoice(invoice);
-      }),
-      _MoreButton(),
-    ];
+    else
+      return [
+        ...allInvoices.map((invoice) {
+          return _Invoice(invoice);
+        }),
+        _MoreButton(),
+      ];
   }
 
   Widget _Invoice(invoice) {
@@ -120,7 +122,8 @@ class _PaymentsPageState extends State<PaymentsPage> {
           margin: EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
-              Text(amount,
+              Text(
+                amount,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColorDark,
@@ -129,7 +132,8 @@ class _PaymentsPageState extends State<PaymentsPage> {
               ),
               Visibility(
                 visible: invoice.orderNotes().length > 0,
-                child: Text(invoice.orderNotes(),
+                child: Text(
+                  invoice.orderNotes(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -138,13 +142,15 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   ),
                 ),
               ),
-              Text(invoice.formatCompletedAt(),
+              Text(
+                invoice.formatCompletedAt(),
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontSize: 20,
                 ),
               ),
-              Text(invoice.completedAtTimeAgo(),
+              Text(
+                invoice.completedAtTimeAgo(),
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontSize: 20,
@@ -168,7 +174,8 @@ class _PaymentsPageState extends State<PaymentsPage> {
         visible: _showMore,
         child: GestureDetector(
           onTap: _getNextPage,
-          child: Text('More',
+          child: Text(
+            'More',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -183,21 +190,18 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
   Widget _TitleBar() {
     return Container(
-      margin: EdgeInsets.only(top: 10 + AppController.topPadding(), bottom: 10.0),
-      width: 300,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text('Payments', style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 40,
-          )),
-        ],
-      )
-    );
+        margin:
+            EdgeInsets.only(top: 10 + AppController.topPadding(), bottom: 10.0),
+        width: 300,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Payments',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40,
+                )),
+          ],
+        ));
   }
 }
-
-
-
-

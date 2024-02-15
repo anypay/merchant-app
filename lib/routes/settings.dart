@@ -68,7 +68,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       CircleBackButton(
                         margin: EdgeInsets.only(top: 20.0),
                         backPath: '/navigation',
+<<<<<<< HEAD
                       ),
+=======
+                      )
+>>>>>>> 651913d98a1a9f58cd108d1f1d12a21c20657b02
                     ],
                   )
               ),
@@ -158,6 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+
   Widget _SelectCurrencyLink(context) {
     return Container(
       margin: EdgeInsets.all(10.0),

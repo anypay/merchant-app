@@ -23,7 +23,8 @@ class EditBusinessInfoPage extends StatefulWidget {
   final bool allowBack;
 
   @override
-  _EditBusinessInfoPageState createState() => _EditBusinessInfoPageState(allowBack);
+  _EditBusinessInfoPageState createState() =>
+      _EditBusinessInfoPageState(allowBack);
 }
 
 class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
@@ -103,10 +104,12 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
         setState(() {
           _submitting = false;
           if (!allowBack)
-            Navigator.pushNamedAndRemoveUntil(context, '/settings/addresses', (Route<dynamic> route) => false);
+            Navigator.pushNamedAndRemoveUntil(context, '/settings/addresses',
+                (Route<dynamic> route) => false);
           else if (response['success'])
             _successMessage = "Saved!";
-          else _errorMessage = response['message'];
+          else
+            _errorMessage = response['message'];
         });
       });
     }
@@ -114,8 +117,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
 
   void _closeKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus)
-      currentFocus.unfocus();
+    if (!currentFocus.hasPrimaryFocus) currentFocus.unfocus();
   }
 
   Widget _Form() {
@@ -123,29 +125,27 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          Text(_successMessage,
+          Text(
+            _successMessage,
             style: TextStyle(color: AppController.green),
           ),
-          Text(_errorMessage,
+          Text(
+            _errorMessage,
             style: TextStyle(color: AppController.red),
           ),
           TextFormField(
             controller: name,
-            decoration: InputDecoration(
-              labelText: 'Business Name (Optional)'
-            ),
+            decoration: InputDecoration(labelText: 'Business Name (Optional)'),
           ),
           TextFormField(
             controller: address,
             decoration: InputDecoration(
-              labelText: 'Business Street Address (Optional)'
-            ),
+                labelText: 'Business Street Address (Optional)'),
           ),
           TextFormField(
             controller: email,
-            decoration: InputDecoration(
-              labelText: 'Ambassador Email (Optional)'
-            ),
+            decoration:
+                InputDecoration(labelText: 'Ambassador Email (Optional)'),
             validator: (value) {
               if (!value.isEmpty && !EmailValidator.validate(value.trim()))
                 return "That doesn't look like an email address";
@@ -153,23 +153,26 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
           ),
           Container(
             margin: EdgeInsets.only(top: 40.0),
-            child: _submitting ? SpinKitCircle(color: AppController.randomColor) : GestureDetector(
-              child: Text(allowBack ? 'SAVE' : 'Finish', style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: AppController.blue,
-                fontSize: 18,
-              )),
-              onTap: _submitForm,
-            ),
+            child: _submitting
+                ? SpinKitCircle(color: AppController.randomColor)
+                : GestureDetector(
+                    child: Text(allowBack ? 'SAVE' : 'Finish',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppController.blue,
+                          fontSize: 18,
+                        )),
+                    onTap: _submitForm,
+                  ),
           ),
-          !allowBack ? Container() : CircleBackButton(
-            margin: EdgeInsets.only(top: 20.0),
-            backPath: '/settings',
-          )
+          !allowBack
+              ? Container()
+              : CircleBackButton(
+                  margin: EdgeInsets.only(top: 20.0),
+                  backPath: '/settings',
+                )
         ],
       ),
     );
   }
 }
-
-
