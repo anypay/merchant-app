@@ -142,8 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: <Widget>[
               Container(
                   margin: EdgeInsets.all(AppController.scale(20.0)),
-                  child: Text("Addresses",
-                      style: TextStyle(
+                  child: Text("Addresses",style: TextStyle(
                         fontSize: 22,
                       ))),
               Icon(Icons.edit),
