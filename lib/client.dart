@@ -132,8 +132,7 @@ class Client {
     var perPage = 100;
     var offset = perPage * (page - 1 ?? 0);
 
-    var response = await makeRequest(
-      'get',
+    var response = await makeRequest('get',
       unauthorized: (() => Authentication.logout()),
       uri: Uri.https(domain, '/invoices', {
         'limit': perPage.toString(),
