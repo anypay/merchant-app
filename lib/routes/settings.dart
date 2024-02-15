@@ -142,7 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.all(AppController.scale(20.0)),
-              child: Text("Addresses",style: TextStyle(
+              child: Text("Addresses", style: TextStyle(
                 fontSize: 22,
               ))
             ),
@@ -170,10 +170,10 @@ class _SettingsPageState extends State<SettingsPage> {
               margin: EdgeInsets.all(AppController.scale(20.0)),
               child: Row(
                 children: <Widget>[
-                  Text("Currency ",style: TextStyle(
+                  Text("Currency ", style: TextStyle(
                     fontSize: 22,
                   )),
-                  Text("($symbol$denomination)",style: TextStyle(
+                  Text("($symbol$denomination)", style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
                   )),
@@ -203,7 +203,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.all(AppController.scale(20.0)),
-              child: Text("Business Info",style: TextStyle(
+              child: Text("Business Info", style: TextStyle(
                 fontSize: 22,
               )),
             ),
