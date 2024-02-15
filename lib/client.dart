@@ -95,8 +95,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> resetPassword(email) async {
-    return makeRequest('post',
-                       
+    return makeRequest('post',                   
       path: '/password-resets',
       body: {
         'email': email.trim(),
