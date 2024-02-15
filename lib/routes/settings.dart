@@ -1,8 +1,11 @@
 import 'package:app/authentication.dart';
+import 'package:app/client.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/currencies.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Settings extends StatelessWidget {
   @override
@@ -24,14 +27,21 @@ class _SettingsPageState extends State<SettingsPage> {
   var _successMessage = '';
   var denomination;
   var symbol;
+  var urlController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   void initState() {
     _rebuild();
     super.initState();
+    setBackendUrl();
     Authentication.getAccount().then((account) {
       _rebuild();
     });
+  }
+
+  void setBackendUrl() {
+    urlController.text = Client.host;
   }
 
   @override
@@ -46,24 +56,75 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: TextStyle(color: AppController.green),
               ),
               Container(
-                width: 300,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _SelectCurrencyLink(context),
-                    _BusinessInfoLink(context),
-                    _AddressesLink(context),
-                    CircleBackButton(
-                      margin: EdgeInsets.only(top: 20.0),
-                      backPath: '/navigation',
-                    ),
-                  ],
-                )
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _EditUrlLink(),
+                      _SelectCurrencyLink(context),
+                      _BusinessInfoLink(context),
+                      _AddressesLink(context),
+                      CircleBackButton(
+                        margin: EdgeInsets.only(top: 20.0),
+                        backPath: '/navigation',
+<<<<<<< HEAD
+                      ),
+=======
+                      )
+>>>>>>> 651913d98a1a9f58cd108d1f1d12a21c20657b02
+                    ],
+                  )
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _EditUrlLink() {
+    return Form(
+      key: _formKey,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+                controller: urlController,
+                decoration: InputDecoration(
+                    labelText: 'Update Backend Url',
+                    hintText: "http:// or https://"),
+                validator: (value) {
+                  if (Uri.parse(value).isAbsolute) {
+                    return null;
+                  } else {
+                    return "Please provide valid url";
+                  }
+                }),
+          ),
+          TextButton(
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  if (await confirm(context,
+                      title: Text("Confirmation"),
+                      content: Text(
+                          "You will be logged out because you changed the API backend url"))) {
+                    final uri = Uri.parse(urlController.text);
+                    await FlutterSecureStorage(
+                        aOptions: AndroidOptions(
+                      encryptedSharedPreferences: true,
+                    )).write(key: "backend_url", value: urlController.text);
+                    Client.protocol = uri.scheme;
+                    Client.domain = uri.host;
+                    Authentication.logout();
+                  }
+                }
+              },
+              child: Text(
+                "Save",
+                style: TextStyle(color: Colors.white),
+              ))
+        ],
       ),
     );
   }
@@ -158,7 +219,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Navigator.pushNamed(context, '/settings/business-info');
         }
       ),
+   
     );
   }
-
 }

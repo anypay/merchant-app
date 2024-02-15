@@ -55,67 +55,69 @@ class _NewAddressPageState extends State<NewAddressPage> {
       onTap: _closeKeyboard,
       child: Scaffold(
         body: Center(
-          child: _scanning ? Stack(children: [
-            MobileScanner(
-              onDetect: (capture) {
-                final List<Barcode> barcodes = capture.barcodes;
-                for (final barcode in barcodes) {
-                  _scanning = false;
-                  _submittingScan = true;
-                  _setAddress(barcode.rawValue);
-                }
-              },
-            ),
-            CircleBackButton(
-              margin: EdgeInsets.only(top: 20.0),
-              backPath: '/settings',
-            )
-          ]) :
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _Title(),
-                Container(
-                  width: 330,
+          child: _scanning
+              ? Stack(children: [
+                  MobileScanner(
+                    onDetect: (capture) {
+                      final List<Barcode> barcodes = capture.barcodes;
+                      for (final barcode in barcodes) {
+                        _scanning = false;
+                        _submittingScan = true;
+                        _setAddress(barcode.rawValue);
+                      }
+                    },
+                  ),
+                  CircleBackButton(
+                    margin: EdgeInsets.only(top: 20.0),
+                    backPath: '/settings',
+                  )
+                ])
+              : SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      ConstrainedBox(
-                        constraints: new BoxConstraints(
-                          minHeight: 5.0,
-                          minWidth: 330,
-                          maxHeight: 80.0,
-                          maxWidth: 330,
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: SelectableText(_message ?? '',
-                            toolbarOptions: ToolbarOptions(
-                              copy: true,
+                      _Title(),
+                      Container(
+                        width: 330,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            ConstrainedBox(
+                              constraints: new BoxConstraints(
+                                minHeight: 5.0,
+                                minWidth: 330,
+                                maxHeight: 80.0,
+                                maxWidth: 330,
+                              ),
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: SelectableText(
+                                  _message ?? '',
+                                  toolbarOptions: ToolbarOptions(
+                                    copy: true,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: _messageColor(),
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
                             ),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: _messageColor(),
-                              fontSize: 16,
-                            ),
-                          ),
+                            _PaymailField(),
+                            _NoteField(),
+                            _Paste(),
+                            _Scan(),
+                          ],
                         ),
                       ),
-                      _PaymailField(),
-                      _NoteField(),
-                      _Paste(),
-                      _Scan(),
+                      CircleBackButton(
+                        margin: EdgeInsets.only(top: 20.0),
+                        backPath: '/settings',
+                      ),
                     ],
                   ),
                 ),
-                CircleBackButton(
-                  margin: EdgeInsets.only(top: 20.0),
-                  backPath: '/settings',
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -151,7 +153,9 @@ class _NewAddressPageState extends State<NewAddressPage> {
       _messageType = 'error';
       return;
     }
-    setState(() { _pasting = true; });
+    setState(() {
+      _pasting = true;
+    });
     var address = clipboard.text;
     _setAddress(address);
   }
@@ -170,7 +174,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
           if (response['success']) {
             _savingNote = false;
             _address.note = _note;
-          } else _noteError = response['message'];
+          } else
+            _noteError = response['message'];
         });
     });
   }
@@ -201,7 +206,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
           _saving = false;
           if (response['success']) {
             Authentication.fetchCoins().then((v) => _rebuild());
-            _address = Address.fromMap({ 'value': address });
+            _address = Address.fromMap({'value': address});
             _messageType = 'success';
             _message = address;
             Timer(Duration(milliseconds: 800), _returnToNewInvoice);
@@ -231,35 +236,29 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   void _closeKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus)
-      currentFocus.unfocus();
+    if (!currentFocus.hasPrimaryFocus) currentFocus.unfocus();
   }
 
   Widget _Title() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 75,
-            margin: EdgeInsets.only(
-              top: 10.0,
-              right: 20.0,
-              bottom: 10.0,
-            ),
-            child: Image.network(
-              Coins.all[code]['icon']
-            ),
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Container(
+          width: 75,
+          margin: EdgeInsets.only(
+            top: 10.0,
+            right: 20.0,
+            bottom: 10.0,
           ),
-          Text(
-            Coins.all[code]['name'],
-            style: TextStyle(
-              fontSize: 30,
-            ),
-          )
-        ]
-      ),
+          child: Image.network(Coins.all[code]['icon']),
+        ),
+        Text(
+          Coins.all[code]['name'],
+          style: TextStyle(
+            fontSize: 30,
+          ),
+        )
+      ]),
     );
   }
 
@@ -273,22 +272,23 @@ class _NewAddressPageState extends State<NewAddressPage> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 20.0, top: 15.0),
-            child: _submittingScan ?
-            SpinKitCircle(
-              color: AppController.green,
-            ) : Icon(
-              Icons.camera_alt,
-              size: 50,
-            ),
+            child: _submittingScan
+                ? SpinKitCircle(
+                    color: AppController.green,
+                  )
+                : Icon(
+                    Icons.camera_alt,
+                    size: 50,
+                  ),
           ),
           Container(
-            margin: EdgeInsets.only(right: 20.0, top: 15.0),
-            child: Text('Scan',
-              style: TextStyle(
-                fontSize: 50,
-              ),
-            )
-          ),
+              margin: EdgeInsets.only(right: 20.0, top: 15.0),
+              child: Text(
+                'Scan',
+                style: TextStyle(
+                  fontSize: 50,
+                ),
+              )),
         ],
       ),
     );
@@ -304,15 +304,17 @@ class _NewAddressPageState extends State<NewAddressPage> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 20.0),
-            child: _pasting ?
-            SpinKitCircle(
-              color: AppController.green,
-            ) : Icon(
-              Icons.content_paste,
-              size: 50,
-            ),
+            child: _pasting
+                ? SpinKitCircle(
+                    color: AppController.green,
+                  )
+                : Icon(
+                    Icons.content_paste,
+                    size: 50,
+                  ),
           ),
-          Text('Paste',
+          Text(
+            'Paste',
             style: TextStyle(
               fontSize: 50,
             ),
@@ -325,54 +327,45 @@ class _NewAddressPageState extends State<NewAddressPage> {
   Widget _NoteField() {
     return Visibility(
       visible: _address != null,
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: 250,
-            margin: EdgeInsets.only(bottom: _note.length > 0 ? 10 : 20),
-            child: TextFormField(
+      child: Column(children: <Widget>[
+        Container(
+          width: 250,
+          margin: EdgeInsets.only(bottom: _note.length > 0 ? 10 : 20),
+          child: TextFormField(
               // controller: _address?.note,
               initialValue: _note,
               validator: (value) {
-                if (_noteError.length > 0)
-                  return _noteError;
+                if (_noteError.length > 0) return _noteError;
               },
-              decoration: InputDecoration(
-                labelText: 'Add note...'
-              ),
+              decoration: InputDecoration(labelText: 'Add note...'),
               onChanged: (text) {
                 setState(() {
                   _note = text;
                 });
-              }
-            ),
-          ),
-          Visibility(
+              }),
+        ),
+        Visibility(
             visible: _note.length > 0 && _note != _address?.note,
             child: Container(
-              margin: EdgeInsets.only(bottom: _savingNote ? 0 : 20),
-              child: _savingNote ?
-                SpinKitCircle(
-                  color: AppController.blue,
-                ) : GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    _saving = true;
-                    _closeKeyboard();
-                    _setNote();
-                  },
-                  child: Text('Save Note',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppController.blue,
-                      fontSize: 18,
-                    )
-                  )
-                )
-              )
-            )
-        ]
-      ),
+                margin: EdgeInsets.only(bottom: _savingNote ? 0 : 20),
+                child: _savingNote
+                    ? SpinKitCircle(
+                        color: AppController.blue,
+                      )
+                    : GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          _saving = true;
+                          _closeKeyboard();
+                          _setNote();
+                        },
+                        child: Text('Save Note',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppController.blue,
+                              fontSize: 18,
+                            )))))
+      ]),
     );
   }
 
@@ -384,49 +377,43 @@ class _NewAddressPageState extends State<NewAddressPage> {
           Container(
             width: 250,
             margin: EdgeInsets.only(bottom: 10),
-              child: TextField(
-              onSubmitted: (value) {
-                _saving = true;
-                _closeKeyboard();
-                _setAddress(_paymailAddress);
-              },
-              decoration: InputDecoration(
-                labelText: 'paymail address'
-              ),
-              onChanged: (text) {
-                setState(() {
-                  _paymailAddress = text;
-                });
-              }
-            ),
+            child: TextField(
+                onSubmitted: (value) {
+                  _saving = true;
+                  _closeKeyboard();
+                  _setAddress(_paymailAddress);
+                },
+                decoration: InputDecoration(labelText: 'paymail address'),
+                onChanged: (text) {
+                  setState(() {
+                    _paymailAddress = text;
+                  });
+                }),
           ),
           Visibility(
-            visible: _paymailAddress.length > 0 && _paymailAddress != _address?.toString(),
-            child: Container(
-              margin: EdgeInsets.only(bottom: _address == null ? 20 : 0),
-              child: _saving ?
-                SpinKitCircle(
-                  color: AppController.blue,
-                ) : GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    _saving = true;
-                    _closeKeyboard();
-                    _setAddress(_paymailAddress);
-                  },
-                  child: Text('Save',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppController.blue,
-                      fontSize: 18,
-                    )
-                  )
-                )
-            )
-          ),
+              visible: _paymailAddress.length > 0 &&
+                  _paymailAddress != _address?.toString(),
+              child: Container(
+                  margin: EdgeInsets.only(bottom: _address == null ? 20 : 0),
+                  child: _saving
+                      ? SpinKitCircle(
+                          color: AppController.blue,
+                        )
+                      : GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            _saving = true;
+                            _closeKeyboard();
+                            _setAddress(_paymailAddress);
+                          },
+                          child: Text('Save',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppController.blue,
+                                fontSize: 18,
+                              ))))),
         ],
       ),
     );
   }
 }
-

@@ -42,23 +42,24 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image(
-                  width: 300,
-                  image: AssetImage(AppController.logoImagePath())
-                ),
+                    width: 300,
+                    image: AssetImage(AppController.logoImagePath())),
                 _textFields(),
                 Container(
-                  margin: (_submitting ? 
-                    EdgeInsets.only(top: 5, bottom: 10) :
-                    EdgeInsets.only(top: 20, bottom: 20)),
-                  child: _submitting ? SpinKitCircle(color: AppController.blue) :
-                    GestureDetector(
-                      child: Text('Register', style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppController.blue,
-                        fontSize: 18,
-                      )),
-                      onTap: _submitForm,
-                    ),
+                  margin: (_submitting
+                      ? EdgeInsets.only(top: 5, bottom: 10)
+                      : EdgeInsets.only(top: 20, bottom: 20)),
+                  child: _submitting
+                      ? SpinKitCircle(color: AppController.blue)
+                      : GestureDetector(
+                          child: Text('Register',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppController.blue,
+                                fontSize: 18,
+                              )),
+                          onTap: _submitForm,
+                        ),
                 ),
                 CircleBackButton(
                   backPath: '/login',
@@ -76,7 +77,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       if (response['success'])
         AppController.closeUntilPath('/register-business');
       else
-        setState(() { _errorMessage = response['message']; });
+        setState(() {
+          _errorMessage = response['message'];
+        });
     });
   }
 
@@ -92,7 +95,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         if (response['success'])
           _loadNextPage();
         else
-          setState(() { _errorMessage = response['message']; });
+          setState(() {
+            _errorMessage = response['message'];
+          });
       });
     }
   }
@@ -107,8 +112,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   void _closeKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus)
-      currentFocus.unfocus();
+    if (!currentFocus.hasPrimaryFocus) currentFocus.unfocus();
   }
 
   Widget _textFields() {
@@ -120,17 +124,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(_errorMessage,
+            Text(
+              _errorMessage,
               style: TextStyle(color: AppController.red),
               textAlign: TextAlign.center,
             ),
             TextFormField(
               controller: email,
-              decoration: InputDecoration(
-                labelText: 'Email'
-              ),
+              decoration: InputDecoration(labelText: 'Email'),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
+                if (value.isEmpty)
+                  return 'Please enter some text';
                 else if (!EmailValidator.validate(value.trim()))
                   return "That doesn't look like an email address";
               },
@@ -141,11 +145,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             TextFormField(
               obscureText: true,
               controller: password,
-              decoration: InputDecoration(
-                labelText: 'Password'
-              ),
+              decoration: InputDecoration(labelText: 'Password'),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
+                if (value.isEmpty)
+                  return 'Please enter some text';
                 else if (confirmPassword.text != value)
                   return 'Passwords do not match.';
               },
@@ -156,9 +159,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             TextFormField(
               obscureText: true,
               controller: confirmPassword,
-              decoration: InputDecoration(
-                labelText: 'Re-type Password'
-              ),
+              decoration: InputDecoration(labelText: 'Re-type Password'),
               validator: (value) {
                 if (value.isEmpty) return 'Please enter some text';
               },
@@ -172,4 +173,3 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 }
-

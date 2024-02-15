@@ -1,7 +1,6 @@
 import 'package:event_bus/event_bus.dart';
 import 'dart:async';
 
-
 class Events {
   static EventBus eventBus = EventBus();
 
@@ -22,4 +21,3 @@ class ServerMessageEvent {
 
   ServerMessageEvent(this.event, this.payload);
 }
-

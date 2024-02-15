@@ -40,4 +40,3 @@ class Address {
     return Address.fromMap(jsonDecode(body));
   }
 }
-
