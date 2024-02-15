@@ -203,8 +203,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: <Widget>[
               Container(
                 margin: EdgeInsets.all(AppController.scale(20.0)),
-                child: Text("Business Info",
-                    style: TextStyle(
+                child: Text("Business Info",style: TextStyle(
                       fontSize: 22,
                     )),
               ),
@@ -213,7 +212,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           onTap: () {
             Navigator.pushNamed(context, '/settings/business-info');
-          }),
+          }
+      ),
     );
   }
 }
