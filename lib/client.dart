@@ -192,13 +192,7 @@ class Client {
     );
   }
 
-  static Future<Map<dynamic, dynamic>> makeRequest(method,
-      {path,
-      uri,
-      headers,
-      body,
-      requireAuth,
-      basicAuth,
+  static Future<Map<dynamic, dynamic>> makeRequest(method,{path,uri, headers, body, requireAuth,basicAuth,
       unauthorized,
       genericErrorCodes}) async {
     try {
