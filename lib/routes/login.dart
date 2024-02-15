@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             margin: EdgeInsets.only(bottom: _submitting ? 20.0 : 40.0),
             child: _submitting ?
-                  SpinKitCircle(color: AppController.blue) :
+              SpinKitCircle(color: AppController.blue) :
               GestureDetector(
                 child: Text('Login', style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Container(
             child: GestureDetector(
-              child: Text('Sign Up',style: TextStyle(
+              child: Text('Sign Up', style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: AppController.blue,
                 fontSize: 18,
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GestureDetector(
-                  child: Text('Forgot Password?',style: TextStyle(
+                  child: Text('Forgot Password?', style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: AppController.blue,
                     fontSize: 18,
