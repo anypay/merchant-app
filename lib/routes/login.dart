@@ -168,7 +168,8 @@ class _LoginPageState extends State<LoginPage> {
                     )),
                 onTap: () {
                   Navigator.pushNamed(context, '/registration');
-                }),
+                }
+            ),
           ),
           Container(
             margin: EdgeInsets.only(top: 20.0),
