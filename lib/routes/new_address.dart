@@ -11,29 +11,33 @@ import 'package:app/coins.dart';
 import 'dart:async';
 
 class NewAddress extends StatelessWidget {
-  NewAddress(this.code);
+  NewAddress(this.code, this.chain);
 
   final String code;
+  final String chain;
 
   @override
   Widget build(BuildContext context) {
-    return NewAddressPage(code: code);
+    return NewAddressPage(code: code, chain: chain);
   }
 }
 
 class NewAddressPage extends StatefulWidget {
-  NewAddressPage({Key? key, required this.code}) : super(key: key);
+  NewAddressPage({Key? key, required this.code, required this.chain})
+      : super(key: key);
 
   final String code;
+  final String chain;
 
   @override
-  _NewAddressPageState createState() => _NewAddressPageState(code);
+  _NewAddressPageState createState() => _NewAddressPageState(code, chain);
 }
 
 class _NewAddressPageState extends State<NewAddressPage> {
-  _NewAddressPageState(this.code);
+  _NewAddressPageState(this.code, this.chain);
 
   final String code;
+  final String chain;
 
   bool _scanning = false;
   bool _submittingScan = false;
@@ -68,7 +72,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
             ),
             CircleBackButton(
               margin: EdgeInsets.only(top: 20.0),
-              backPath: '/settings',
+              backPath: 'settings',
             )
           ]) :
           SingleChildScrollView(
@@ -111,7 +115,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                 ),
                 CircleBackButton(
                   margin: EdgeInsets.only(top: 20.0),
-                  backPath: '/settings',
+                  backPath: 'settings',
                 ),
               ],
             ),
@@ -124,7 +128,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
   void _rebuild() {
     if (!_disposed)
       setState(() {
-        _address = Authentication.currentAccount.addressFor(this.code);
+        _address = Authentication.currentAccount.addressFor(CoinCode(this.code, this.chain));
         _note = _address?.note ?? "";
         _message = _address?.toString() ?? "";
         _messageType = 'success';
@@ -183,19 +187,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
       _message = address;
     });
 
-    var coinCode, coinChain;
-
-    var coinCodename = code.split('_');
-
-    coinCode = coinCodename[0];
-
-    if (coinCodename.length == 1) {
-      coinChain = coinCode;
-    } else {
-      coinChain = coinCodename[1];
-    }
-
-    Client.setAddress(coinCode, coinChain, address).then((response) {
+    Client.setAddress(code, chain, address).then((response) {
       if (!_disposed)
         setState(() {
           _submittingScan = false;

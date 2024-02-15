@@ -55,25 +55,13 @@ class _InvoicePageState extends State<InvoicePage> {
   Timer? periodicRequest;
   String? _errorMessage;
   String? notesError;
-  String? currency;
+  CoinCode? currency;
   Color? qrColor;
   String? uri;
   String? id;
 
   Invoice? invoice;
   RectGetter? sharePlacement;
-
-  Map<String, dynamic>? get bsvPaymentOption => invoice != null ? invoice!.bsvPaymentOption : null;
-  List<dynamic> get embedOutputs {
-    if (bsvPaymentOption == null) return [];
-    return (bsvPaymentOption!['outputs'] ?? []).map((output) {
-      var _output = {};
-      _output['amount'] = output['amount']/100000000;
-      _output['to'] = output['address'];
-      _output['currency'] = 'BSV';
-      return _output;
-    }).toList();
-  }
 
   Map? arguments;
   Merchant? merchant;
@@ -206,7 +194,9 @@ class _InvoicePageState extends State<InvoicePage> {
 
   void _rebuild() {
     setState(() {
-      currency = currency ?? invoice?.currency;
+      var invoiceCurrency = invoice != null ? CoinCode.fromString(
+          invoice!.currency!) : null;
+      currency = currency ?? invoiceCurrency;
       uri = invoice?.uriFor(currency, format: getFormat());
     });
     if (invoice != null && _invoiceReady == false) {
@@ -257,7 +247,7 @@ class _InvoicePageState extends State<InvoicePage> {
           width: 300,
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
-            child: _PaymentTitle('anypay'),
+            child: _PaymentTitle(CoinCode('anypay', 'anypay')),
             onTap: () {
               choosingCurrency = false;
               usePayProtocol = true;
@@ -266,15 +256,16 @@ class _InvoicePageState extends State<InvoicePage> {
           )
         ),
         ...(invoice!.paymentOptions!.map((option) {
-          var code = option['chain'] != option['currency'] ? option['currency'] + '_' + option['chain'] : option['currency'];
+          var coinCode = CoinCode.fromString(
+              "${option['currency']}_${option['chain']}");
           return Container(
             width: 300,
             margin: EdgeInsets.only(top: 10),
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              child: _PaymentTitle(code, paymentOption: option),
+              child: _PaymentTitle(coinCode, paymentOption: option),
               onTap: () {
-                currency = code;
+                currency = coinCode;
                 chosenPaymentOption = option;
                 choosingCurrency = false;
                 usePayProtocol = false;
@@ -522,16 +513,16 @@ class _InvoicePageState extends State<InvoicePage> {
     );
   }
 
-  Widget _PaymentTitle(currency, {paymentOption}) {
+  Widget _PaymentTitle(CoinCode currency, {paymentOption}) {
     paymentOption = paymentOption ?? chosenPaymentOption;
     var coinDetailsSpecified = paymentOption != null;
     var coinIsSupported = Coins.supported[currency] != null;
 
     paymentOption = paymentOption ?? {};
-    if (currency == 'anypay' || coinIsSupported || coinDetailsSpecified)
+    if (currency.code == 'anypay' || coinIsSupported || coinDetailsSpecified) {
       return Container(
         child: Row(
-          children: currency == 'anypay' ? [
+          children: currency.code == 'anypay' ? [
             Container(
               width: 60,
               child: Image(
@@ -546,15 +537,18 @@ class _InvoicePageState extends State<InvoicePage> {
               width: 40,
               height: 40,
               margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 15, bottom: 15),
-              child: Image.network(paymentOption['currency_logo_url'] ?? Coins.supported[currency]['icon']),
+              child: Image.network(paymentOption['currency_logo_url'] ??
+                  Coins.supported[currency]['icon']),
             ),
-            Text(paymentOption['currency_name'] ?? Coins.supported[currency]['name'],
+            Text(paymentOption['currency_name'] ??
+                Coins.supported[currency]['name'],
               style: TextStyle(fontSize: 40),
-            ),
-          ]
-        )
-      );
-    else return Container();
+                ),
+            ]
+          ));
+    } else {
+      return Container();
+    }
   }
 
   bool _showInvoice() {
@@ -588,9 +582,9 @@ class _InvoicePageState extends State<InvoicePage> {
 
   Widget _InvoiceComponent() {
     return AnimatedOpacity(
-      opacity: _invoiceReady ? 1.0 : 0.0,
-      duration: Duration(milliseconds: 300),
-      child: Column(
+    opacity: _invoiceReady ? 1.0 : 0.0,
+    duration: Duration(milliseconds: 300),
+    child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Text(_successMessage,
@@ -612,9 +606,12 @@ class _InvoicePageState extends State<InvoicePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _PaymentTitle(usePayProtocol ? 'anypay' : currency),
+                  _PaymentTitle(usePayProtocol
+                      ? CoinCode('anypay', 'anypay')
+                      : currency!),
                   Visibility(
-                    visible: invoice != null && invoice!.paymentOptions != null &&
+                    visible: invoice != null &&
+                        invoice!.paymentOptions != null &&
                         invoice!.paymentOptions!.length > 1,
                     child: Container(
                       width: 40,
@@ -644,7 +641,8 @@ class _InvoicePageState extends State<InvoicePage> {
                 child: QrImageView(
                   foregroundColor: Color(0xFF404040),
                   version: QrVersions.auto,
-                  size: AppController.scale(200, maxValue: 280, minValue: 100),
+                  size: AppController.scale(
+                      200, maxValue: 280, minValue: 100),
                   data: uri!,
                 ),
               ),
@@ -670,7 +668,8 @@ class _InvoicePageState extends State<InvoicePage> {
                       padding: EdgeInsets.only(left: 15),
                       child: Image(
                           image: AppController.enableDarkMode ?
-                            AssetImage('assets/images/share-white.png') :
+                            AssetImage(
+                                'assets/images/share-white.png') :
                             AssetImage('assets/images/share.png'),
                         width: 20,
                       )
@@ -694,7 +693,7 @@ class _InvoicePageState extends State<InvoicePage> {
             )
           )
         ]
-      )
+    )
     );
   }
 
@@ -706,9 +705,12 @@ class _InvoicePageState extends State<InvoicePage> {
         _rebuild();
       };
     return Visibility(
-      visible: invoice == null || (!invoice!.isExpired() && invoice!.isUnpaid()) || invoice!.isUnderpaid(),
+      visible: invoice == null ||
+          (!invoice!.isExpired() && invoice!.isUnpaid()) ||
+          invoice!.isUnderpaid(),
       child: CircleBackButton(
-        margin: margin ?? EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
+        margin: margin ??
+            EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
         backPath: backPath,
         opaque: false,
         onTap: onTap,

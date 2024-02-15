@@ -41,7 +41,7 @@ class _AddressesPageState extends State<AddressesPage> {
                 ..._newAddressLinks(),
                 CircleBackButton(
                   margin: EdgeInsets.only(top: 20.0),
-                  backPath: '/settings',
+                  backPath: 'settings',
                 ),
               ]
             ),
@@ -55,18 +55,18 @@ class _AddressesPageState extends State<AddressesPage> {
     if (Coins.all.length == 0)
       return [SpinKitCircle(color: AppController.blue)];
     else {
-      var coinList = Coins.supported.keys.toList();
+      List<CoinCode> coinList = Coins.supported.keys.toList();
 
-      coinList.sort();
+      coinList.sort((a, b) => a.code.compareTo(b.code));
 
-      return coinList.map((code) =>
+      return coinList.map((coinCode) =>
           Container(
               height: 100,
               width: 400,
               child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onTap: () => {
-                    Navigator.pushNamed(context, 'new-address/$code')
+                  onTap: () {
+                    Navigator.pushNamed(context, 'new-address/${coinCode.code}/${coinCode.chain}');
                   },
                   child: Row(
                       children: [
@@ -79,12 +79,12 @@ class _AddressesPageState extends State<AddressesPage> {
                             bottom: 10.0,
                           ),
                           child: Image.network(
-                              Coins.supported[code]['icon']
+                              Coins.supported[coinCode]['icon']
                           ),
                         ),
                         Expanded(
                           child: Text(
-                              Coins.supported[code]['name'],
+                              Coins.supported[coinCode]['name'],
                               style: TextStyle(fontSize: 22),
                               maxLines: 2,
                               overflow: TextOverflow.fade
