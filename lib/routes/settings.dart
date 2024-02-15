@@ -71,7 +71,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       )
 
                     ],
-                  )),
+                  )
+              ),
             ],
           ),
         ),
