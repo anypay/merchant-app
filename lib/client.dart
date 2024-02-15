@@ -42,7 +42,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchAccountAddresses() async {
-      return makeRequest('get',                         
+    return makeRequest('get',   
       unauthorized: (() => Authentication.logout()),
       path: '/account_addresses',
       requireAuth: true,
@@ -50,7 +50,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> setAddressNote(addressId, note) async {
-    return makeRequest('put',                
+    return makeRequest('put',
       path: '/addresses/$addressId/notes',
       unauthorized: (() => Authentication.logout()),
       body: {'note': note},
@@ -59,7 +59,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> getAccount() async {
-    return makeRequest('get',                
+    return makeRequest('get',
       unauthorized: (() => Authentication.logout()),
       requireAuth: true,
       path: '/account',
@@ -67,7 +67,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> createAccount(email, password) async {
-    return makeRequest('post',                  
+    return makeRequest('post',
       path: '/accounts',
       body: {
         'email': email.trim().toLowerCase(),
@@ -77,7 +77,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> updateAccount(data) async {
-    return makeRequest('put',               
+    return makeRequest('put',
       requireAuth: true,
       path: '/account',
       body: data,
@@ -89,13 +89,13 @@ class Client {
       path: '/firebase_token',
       requireAuth: true,
       body: {
-        'firebase_token': data         
-     },
+        'firebase_token': data
+      },
     );
   }
 
   static Future<Map<dynamic, dynamic>> resetPassword(email) async {
-    return makeRequest('post',                   
+    return makeRequest('post',
       path: '/password-resets',
       body: {
         'email': email.trim(),
@@ -105,7 +105,7 @@ class Client {
 
   static Future<Map<dynamic, dynamic>> authenticate(email, password) async {
     email = email.trim().toLowerCase();
-    String basicAuth ='Basic ' + base64.encode(utf8.encode('$email:$password'));
+    String basicAuth = 'Basic ' + base64.encode(utf8.encode('$email:$password'));
 
     var response = await makeRequest('post',
       path: '/access_tokens',
@@ -122,7 +122,8 @@ class Client {
 
   static Future<Map<dynamic, dynamic>> setAddress(String code, String chain, String address) async {
     return makeRequest('post',
-      body: {'currency': code, 'chain': chain, 'address': address},
+      body: { 'currency': code, 'chain': chain, 
+  'address': address },
       path: '/api/v1/addresses',
       requireAuth: true,
     );
