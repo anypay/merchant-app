@@ -68,7 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       CircleBackButton(
                         margin: EdgeInsets.only(top: 20.0),
                         backPath: '/navigation',
-                      )
+                      ),
                     ],
                   )
               ),
