@@ -144,7 +144,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   margin: EdgeInsets.all(AppController.scale(20.0)),
                   child: Text("Addresses",style: TextStyle(
                         fontSize: 22,
-                      ))),
+                      ))
+              ),
               Icon(Icons.edit),
             ],
           ),
