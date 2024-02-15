@@ -195,8 +195,7 @@ class Client {
   static Future<Map<dynamic, dynamic>> makeRequest(method,{path,uri, headers, body, requireAuth,basicAuth,unauthorized,genericErrorCodes}) async {
     try {
       http.Request request =http.Request(method, uri ?? Uri.parse('$host$path'));
-      if (requireAuth ?? false)
-        request.headers['authorization'] = buildAuthHeader();
+      if (requireAuth ?? false) request.headers['authorization'] = buildAuthHeader();
       if (basicAuth != null) request.headers['authorization'] = basicAuth;
       if (genericErrorCodes == null) genericErrorCodes = [500];
 
