@@ -34,7 +34,8 @@ class _LoginPageState extends State<LoginPage> {
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) currentFocus.unfocus();
+        if (!currentFocus.hasPrimaryFocus) 
+          currentFocus.unfocus();
       },
       child: Scaffold(
         body: Center(
