@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) 
+        if (!currentFocus.hasPrimaryFocus)
           currentFocus.unfocus();
       },
       child: Scaffold(
@@ -45,8 +45,8 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image(
-                    width: 300,
-                    image: AssetImage(AppController.logoImagePath())
+                  width: 300,
+                  image: AssetImage(AppController.logoImagePath())
                 ),
                 _TextFields(),
                 _Links(context),
@@ -66,11 +66,11 @@ class _LoginPageState extends State<LoginPage> {
       });
       Client.authenticate(email.text, password.text).then((response) {
         _submitting = false;
-        if (response['success']) {
+        if (response['success']){
           AppController.closeUntilPath('/new-invoice');
-        } else setState(() {
-            _errorMessage = response['message'];
-          });
+        }else setState(() {
+          _errorMessage = response['message'];
+        });
       });
     }
   }
@@ -148,45 +148,45 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: _submitting ? 20.0 : 40.0),
-            child: _submitting? 
-                  SpinKitCircle(color: AppController.blue): 
-                  GestureDetector(
-                    child: Text('Login',style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppController.blue,
-                          fontSize: 18,
-                        )),
-                    onTap: _submitForm,
-                  ),
+            child: _submitting ?
+                  SpinKitCircle(color: AppController.blue) :
+              GestureDetector(
+                child: Text('Login', style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppController.blue,
+                  fontSize: 18,
+                )),
+                onTap: _submitForm,
+              ),
           ),
           Container(
             child: GestureDetector(
-                child: Text('Sign Up',style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppController.blue,
-                      fontSize: 18,
-                    )),
-                onTap: () {
-                  Navigator.pushNamed(context, '/registration');
-                }
+              child: Text('Sign Up',style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppController.blue,
+                fontSize: 18,
+              )),
+              onTap: () {
+                Navigator.pushNamed(context, '/registration');
+              }
             ),
           ),
           Container(
             margin: EdgeInsets.only(top: 20.0),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                      child: Text('Forgot Password?',style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppController.blue,
-                            fontSize: 18,
-                          )),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/password-reset');
-                      }
-                  ),
-                ]
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  child: Text('Forgot Password?',style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppController.blue,
+                    fontSize: 18,
+                  )),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/password-reset');
+                  }
+                ),
+              ]
             ),
           )
         ],
