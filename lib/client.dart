@@ -105,11 +105,9 @@ class Client {
 
   static Future<Map<dynamic, dynamic>> authenticate(email, password) async {
     email = email.trim().toLowerCase();
-    String basicAuth =
-        'Basic ' + base64.encode(utf8.encode('$email:$password'));
+    String basicAuth ='Basic ' + base64.encode(utf8.encode('$email:$password'));
 
-    var response = await makeRequest(
-      'post',
+    var response = await makeRequest('post',
       path: '/access_tokens',
       basicAuth: basicAuth,
     );
