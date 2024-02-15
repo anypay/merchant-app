@@ -110,7 +110,9 @@ class _LoginPageState extends State<LoginPage> {
               TextFormField(
                 autofillHints: [AutofillHints.username],
                 controller: email,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(
+                  labelText: 'Email'
+                ),
                 validator: (value) {
                   if (value.isEmpty)
                     return 'Please enter some text';
