@@ -227,8 +227,7 @@ class Client {
           'message': "Something went wrong, please try again later",
           'body': {},
         };
-      } else
-        return {
+      } else return {
           'success': response.statusCode == 200,
           'message': humanize(message ?? ""),
           'body': responseBody,
