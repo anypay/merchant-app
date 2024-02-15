@@ -77,8 +77,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> updateAccount(data) async {
-    return makeRequest('put',
-                       
+    return makeRequest('put',               
       requireAuth: true,
       path: '/account',
       body: data,
