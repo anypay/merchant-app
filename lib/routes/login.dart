@@ -148,9 +148,9 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: _submitting ? 20.0 : 40.0),
-            child: _submitting
-                ? SpinKitCircle(color: AppController.blue)
-                : GestureDetector(
+            child: _submitting? 
+                  SpinKitCircle(color: AppController.blue): 
+                  GestureDetector(
                     child: Text('Login',style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AppController.blue,
