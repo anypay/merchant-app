@@ -177,7 +177,8 @@ class Client {
       },
     );
 
-    if (response['success']) response['invoiceId'] = response['body']['uid'];
+    if (response['success']) 
+      response['invoiceId'] = response['body']['uid'];
 
     return response;
   }
