@@ -39,7 +39,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     ..._Links(),
                     CircleBackButton(
                       margin: EdgeInsets.all(AppController.scale(20.0)),
-                      backPath: '/new-invoice',
+                      backPath: 'new-invoice',
                     ),
                   ],
                 )

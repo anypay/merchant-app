@@ -77,7 +77,7 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
             margin: EdgeInsets.only(top: 10.0, left: 10.0),
             child: (_chosenCurrency == null ?
               CircleBackButton(
-                backPath: '/navigation',
+                backPath: 'navigation',
               ) : SpinKitCircle(color: AppController.randomColor)
             )
           ),

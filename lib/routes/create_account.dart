@@ -61,7 +61,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     ),
                 ),
                 CircleBackButton(
-                  backPath: '/login',
+                  backPath: 'login',
                 ),
               ],
             ),

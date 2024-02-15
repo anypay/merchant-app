@@ -118,7 +118,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                         ),
                         CircleBackButton(
-                          backPath: '/login',
+                          backPath: 'login',
                         ),
                       ],
                     ),

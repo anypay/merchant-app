@@ -45,7 +45,7 @@ class _PaymentPageState extends State<PaymentPage> {
           alignment: Alignment(-0.83, -1),
           child: CircleBackButton(
             margin: EdgeInsets.only(right: 20.0, top: 35 + AppController.topPadding()),
-            backPath: '/payments',
+            backPath: 'payments',
           )
         )
       ),

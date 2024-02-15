@@ -34,7 +34,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           child: SafeArea(
             child: CircleBackButton(
               margin: EdgeInsets.only(right: 20.0, top: 35 + AppController.topPadding()),
-              backPath: '/navigation',
+              backPath: 'navigation',
             )
           )
         )
