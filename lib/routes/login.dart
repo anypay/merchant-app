@@ -161,8 +161,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Container(
             child: GestureDetector(
-                child: Text('Sign Up',
-                    style: TextStyle(
+                child: Text('Sign Up',style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: AppController.blue,
                       fontSize: 18,
