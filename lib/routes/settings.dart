@@ -52,8 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                _successMessage,
+              Text(_successMessage,
                 style: TextStyle(color: AppController.green),
               ),
               Container(
