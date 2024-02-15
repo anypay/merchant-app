@@ -114,8 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: 'Email'
                 ),
                 validator: (value) {
-                  if (value.isEmpty)
-                    return 'Please enter some text';
+                  if (value.isEmpty) return 'Please enter some text';
                   else if (!EmailValidator.validate(value.trim()))
                     return "That doesn't look like an email address";
                 },
