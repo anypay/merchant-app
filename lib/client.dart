@@ -120,10 +120,8 @@ class Client {
     return response;
   }
 
-  static Future<Map<dynamic, dynamic>> setAddress(
-      String code, String chain, String address) async {
-    return makeRequest(
-      'post',
+  static Future<Map<dynamic, dynamic>> setAddress(String code, String chain, String address) async {
+    return makeRequest('post',
       body: {'currency': code, 'chain': chain, 'address': address},
       path: '/api/v1/addresses',
       requireAuth: true,
