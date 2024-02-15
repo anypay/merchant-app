@@ -184,7 +184,8 @@ class _LoginPageState extends State<LoginPage> {
                           )),
                       onTap: () {
                         Navigator.pushNamed(context, '/password-reset');
-                      }),
+                      }
+                  ),
                 ]
             ),
           )
