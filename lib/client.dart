@@ -33,8 +33,8 @@ class Client {
     return response;
   }
 
- static Future<Map<dynamic, dynamic>> fetchCoins() async {
-   return makeRequest('get',
+  static Future<Map<dynamic, dynamic>> fetchCoins() async {
+    return makeRequest('get',
       unauthorized: (() => Authentication.logout()),
       requireAuth: true,
       path: '/coins',
