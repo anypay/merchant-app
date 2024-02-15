@@ -19,14 +19,18 @@ class CircleBackButton extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(size / 2),
-        color: (opaque ?? true) ? Theme.of(context).canvasColor : Color(0x00000000),
+        color: (opaque ?? true)
+            ? Theme.of(context).canvasColor
+            : Color(0x00000000),
       ),
       child: GestureDetector(
-        onTap: onTap ?? (() {
-          if (Navigator.canPop(context))
-            Navigator.pop(context, true);
-          else AppController.closeUntilPath(backPath);
-        }),
+        onTap: onTap ??
+            (() {
+              if (Navigator.canPop(context))
+                Navigator.pop(context, true);
+              else
+                AppController.closeUntilPath(backPath);
+            }),
         child: Image(
           width: size,
           image: AssetImage(imagePath),

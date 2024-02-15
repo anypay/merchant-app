@@ -16,8 +16,6 @@ void main() {
   Firebase.initializeApp();
 }
 
-
-
 class Anypay extends StatelessWidget {
   Anypay(this.isAuthenticated);
 

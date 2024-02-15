@@ -56,16 +56,18 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
     if (Navigator.canPop(context))
       Navigator.pop(context, true);
     else
-      Navigator.pushNamedAndRemoveUntil(context, '/settings', (Route<dynamic> route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/settings', (Route<dynamic> route) => false);
   }
 
   void _filterList(text) {
     setState(() {
       text = text.toLowerCase();
-      visibleCurrencies = Map.from(Currencies.all)..removeWhere((key, value) {
-        return !key.toLowerCase().contains(text) &&
-          !(value['currency_name'] as String).toLowerCase().contains(text);
-      });
+      visibleCurrencies = Map.from(Currencies.all)
+        ..removeWhere((key, value) {
+          return !key.toLowerCase().contains(text) &&
+              !(value['currency_name'] as String).toLowerCase().contains(text);
+        });
     });
   }
 
@@ -76,25 +78,21 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
       child: Row(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 10.0, left: 10.0),
-            child: (_chosenCurrency == null ?
-              CircleBackButton(
-                backPath: '/navigation',
-              ) : SpinKitCircle(color: AppController.randomColor)
-            )
-          ),
+              margin: EdgeInsets.only(top: 10.0, left: 10.0),
+              child: (_chosenCurrency == null
+                  ? CircleBackButton(
+                      backPath: '/navigation',
+                    )
+                  : SpinKitCircle(color: AppController.randomColor))),
           Expanded(
             child: Container(
               margin: EdgeInsets.only(top: 0.0, bottom: 10.0),
               padding: EdgeInsets.all(10.0),
               child: TextField(
-                decoration: InputDecoration(
-                  labelText: 'Search Currencies'
-                ),
-                onChanged: (text) {
-                  _filterList(text);
-                }
-              ),
+                  decoration: InputDecoration(labelText: 'Search Currencies'),
+                  onChanged: (text) {
+                    _filterList(text);
+                  }),
             ),
           ),
         ],
@@ -113,44 +111,45 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
       return Container(
         width: 400,
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColorLight.withOpacity(_chosenCurrency == currency ? 0.1 : 0),
+          color: Theme.of(context)
+              .primaryColorLight
+              .withOpacity(_chosenCurrency == currency ? 0.1 : 0),
           border: Border(
             top: BorderSide(
-              color: Theme.of(context).primaryColorLight,
-              width: 1.0
-            ),
+                color: Theme.of(context).primaryColorLight, width: 1.0),
           ),
         ),
         child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          child: Container(
-            padding: EdgeInsets.all(15.0),
-            child: Text(display.join(' - '),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              padding: EdgeInsets.all(15.0),
+              child: Text(
+                display.join(' - '),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ),
-          ),
-          onTap: () {
-            setState(() { _chosenCurrency = currency; });
-            Authentication.updateAccount({
-              'denomination': currency,
-            }).then((response) {
+            onTap: () {
               setState(() {
-                if (response['success']) _back();
-                else {
-                  _chosenCurrency = null;
-                  _errorMessage = response['message'];
-                }
+                _chosenCurrency = currency;
               });
-            });
-          }
-        ),
+              Authentication.updateAccount({
+                'denomination': currency,
+              }).then((response) {
+                setState(() {
+                  if (response['success'])
+                    _back();
+                  else {
+                    _chosenCurrency = null;
+                    _errorMessage = response['message'];
+                  }
+                });
+              });
+            }),
       );
     }).toList();
   }
 }
-
-

@@ -34,7 +34,8 @@ class Account {
     var codes = coins.map((a) => a['code']);
     if (codes.contains('BSV'))
       return 'BSV';
-    else return codes.first;
+    else
+      return codes.first;
   }
 
   Map<dynamic, dynamic> toMap() {

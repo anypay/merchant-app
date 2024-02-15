@@ -10,7 +10,7 @@ import 'package:app/events.dart';
 import 'dart:convert';
 
 import 'package:url_launcher/url_launcher.dart'
-if (dart.library.html) 'package:app/web_launcher.dart';
+    if (dart.library.html) 'package:app/web_launcher.dart';
 
 class PushNotificationsManager {
   bool _initialized = false;
@@ -19,7 +19,7 @@ class PushNotificationsManager {
 
   factory PushNotificationsManager() => _instance;
   static final PushNotificationsManager _instance =
-  PushNotificationsManager._();
+      PushNotificationsManager._();
 
   Future<void> init() async {
     if (_initialized) return;
@@ -64,8 +64,7 @@ class PushNotificationsManager {
     socket.on('message', _triggerSocketMessage);
   }
 
-  Future<void> _handleMessage(
-      RemoteMessage message) async {
+  Future<void> _handleMessage(RemoteMessage message) async {
     if (message != null) {
       AppController.openPath(message.data['path']);
     }

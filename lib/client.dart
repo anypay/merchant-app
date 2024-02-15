@@ -13,8 +13,7 @@ class Client {
   static String host = "$protocol://$domain";
 
   static String humanize(str) {
-    if (str != null && str.length > 0)
-      return StringUtils.capitalize(str);
+    if (str != null && str.length > 0) return StringUtils.capitalize(str);
   }
 
   static String buildAuthHeader() {
@@ -23,7 +22,8 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchMerchant(id) async {
-    var response = await makeRequest('get',
+    var response = await makeRequest(
+      'get',
       path: "/merchants/${id}",
     );
 

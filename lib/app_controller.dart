@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:app/native_storage.dart'
-  if (dart.library.html) 'package:app/web_storage.dart';
+    if (dart.library.html) 'package:app/web_storage.dart';
 
 class AppController extends StatefulWidget {
   final Function(BuildContext) builder;
@@ -44,7 +44,8 @@ class AppController extends StatefulWidget {
   static Future<void> checkForDarkMode(context) {
     return Storage.read('enableDarkMode').then((darkMode) {
       if (darkMode == null)
-        enableDarkMode = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
+        enableDarkMode = SchedulerBinding.instance.window.platformBrightness ==
+            Brightness.dark;
       else if (darkMode != 'false') enableDarkMode = true;
     });
   }
@@ -52,7 +53,8 @@ class AppController extends StatefulWidget {
   static Future<void> saveDarkModeToDisk() async {
     if (enableDarkMode)
       return await Storage.write('enableDarkMode', 'true');
-    else return await Storage.write('enableDarkMode', 'false');
+    else
+      return await Storage.write('enableDarkMode', 'false');
   }
 
   static double topPadding() {
@@ -84,13 +86,14 @@ class AppController extends StatefulWidget {
 
   static double scale(num value, {num maxValue, num minValue}) {
     var screenData = MediaQuery.of(getCurrentContext());
-    value = value * screenData.size.height/650;
+    value = value * screenData.size.height / 650;
     value = min(value, maxValue ?? double.maxFinite);
     value = max(value, minValue ?? 0);
     return value.toDouble();
   }
 
-  static void openDialog(title, body, {path: null, buttonText: null, buttons: null}) async {
+  static void openDialog(title, body,
+      {path: null, buttonText: null, buttons: null}) async {
     if (dialogIsOpen) return;
     dialogIsOpen = true;
 
@@ -119,8 +122,7 @@ class AppController extends StatefulWidget {
             onPressed: () {
               dialogIsOpen = false;
               Navigator.of(context).pop();
-              if (path != null)
-                openPath(path);
+              if (path != null) openPath(path);
             },
           ),
         ],
@@ -129,7 +131,8 @@ class AppController extends StatefulWidget {
   }
 
   static void closeUntilPath(String path) {
-    Navigator.pushNamedAndRemoveUntil(getCurrentContext(), path, (Route<dynamic> route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        getCurrentContext(), path, (Route<dynamic> route) => false);
   }
 
   static void openPath(String path) async {
@@ -139,9 +142,7 @@ class AppController extends StatefulWidget {
     openedPath = path;
   }
 
-  const AppController(
-      {Key key, this.builder})
-  : super(key: key);
+  const AppController({Key key, this.builder}) : super(key: key);
 
   @override
   AppControllerState createState() => new AppControllerState();
@@ -152,7 +153,6 @@ class AppController extends StatefulWidget {
 }
 
 class AppControllerState extends State<AppController> {
-
   @override
   Widget build(BuildContext context) {
     return widget.builder(context);
@@ -162,4 +162,3 @@ class AppControllerState extends State<AppController> {
     setState(() {});
   }
 }
-

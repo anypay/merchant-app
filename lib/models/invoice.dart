@@ -67,7 +67,8 @@ class Invoice {
   String orderNotes() {
     if (notes != null && notes.length > 0)
       return "Order notes: ${noteText()}";
-    else return "";
+    else
+      return "";
   }
 
   int decimalPlaces() {
@@ -80,7 +81,9 @@ class Invoice {
 
   String amountWithDenomination([amount = null]) {
     var defaultCurrency = Authentication.currentAccount.denomination;
-    var symbol = (Currencies.all[denominationCurrency ?? defaultCurrency] ?? {})['symbol'] ?? "";
+    var symbol = (Currencies.all[denominationCurrency ?? defaultCurrency] ??
+            {})['symbol'] ??
+        "";
     amount ??= denominationAmount;
 
     try {
@@ -89,10 +92,11 @@ class Invoice {
         locale: Platform.localeName,
         symbol: symbol,
       ).format(amount);
-    } catch(e) {
+    } catch (e) {
       // Fallback in case there is an unsupported locale
       var str = amount.toStringAsFixed(decimalPlaces());
-      str = str.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+      str = str.replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
       return "$symbol$str";
     }
   }
@@ -110,8 +114,7 @@ class Invoice {
   }
 
   bool isPaid() {
-    return status == 'paid' ||
-        status == 'overpaid';
+    return status == 'paid' || status == 'overpaid';
   }
 
   bool isExpired() {
@@ -119,18 +122,20 @@ class Invoice {
   }
 
   Map<String, dynamic> get bsvPaymentOption {
-    return paymentOptions.firstWhere((option) => option['currency'] == 'BSV', orElse: () => null);
+    return paymentOptions.firstWhere((option) => option['currency'] == 'BSV',
+        orElse: () => null);
   }
 
   String urlStyleUri([useCurrency]) {
     useCurrency = useCurrency ?? currency;
     String host = Client.host;
     String protocol = {
-      'BTC': 'bitcoin',
-      'BCH': 'bitcoincash',
-      'DASH': 'dash',
-      'BSV': 'pay',
-    }[useCurrency] ?? 'pay';
+          'BTC': 'bitcoin',
+          'BCH': 'bitcoincash',
+          'DASH': 'dash',
+          'BSV': 'pay',
+        }[useCurrency] ??
+        'pay';
 
     return "$protocol:?r=$host/r/$uid";
   }
@@ -144,8 +149,9 @@ class Invoice {
 
   Map<String, dynamic> paymentOptionFor(currency) {
     return paymentOptions.firstWhere((option) {
-      return option['currency'] == currency;
-    }) ?? {};
+          return option['currency'] == currency;
+        }) ??
+        {};
   }
 
   String completedAtTimeAgo() {
@@ -154,15 +160,21 @@ class Invoice {
   }
 
   String formatCompletedAt() {
-    if (completedAt == null) return '';
-    else return DateFormat('E, MMMM d, h:mma').format(completedAt);
+    if (completedAt == null)
+      return '';
+    else
+      return DateFormat('E, MMMM d, h:mma').format(completedAt);
   }
 
   factory Invoice.fromMap(Map<String, dynamic> body) {
     var json = body;
     return Invoice(
-      completedAt: json['completed_at'] == null ? null : DateTime.parse(json['completed_at']).toLocal(),
-      expiry: json['expiry'] == null ? null : DateTime.parse(json['expiry']).toLocal(),
+      completedAt: json['completed_at'] == null
+          ? null
+          : DateTime.parse(json['completed_at']).toLocal(),
+      expiry: json['expiry'] == null
+          ? null
+          : DateTime.parse(json['expiry']).toLocal(),
       denominationAmountPaid: json['denomination_amount_paid'],
       denominationCurrency: json['denomination_currency'],
       denominationAmount: json['denomination_amount'],
@@ -187,4 +199,3 @@ class Invoice {
     return Invoice.fromMap(jsonDecode(body));
   }
 }
-

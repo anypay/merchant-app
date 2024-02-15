@@ -58,8 +58,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   void _closeKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus)
-      currentFocus.unfocus();
+    if (!currentFocus.hasPrimaryFocus) currentFocus.unfocus();
   }
 
   @override
@@ -79,19 +78,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text(_successMessage,
+                        Text(
+                          _successMessage,
                           style: TextStyle(color: AppController.green),
                         ),
-                        Text(_errorMessage,
+                        Text(
+                          _errorMessage,
                           style: TextStyle(color: AppController.red),
                         ),
                         TextFormField(
                           controller: email,
-                          decoration: InputDecoration(
-                            labelText: 'Email'
-                          ),
+                          decoration: InputDecoration(labelText: 'Email'),
                           validator: (value) {
-                            if (value.isEmpty) return 'Please enter some text';
+                            if (value.isEmpty)
+                              return 'Please enter some text';
                             else if (!EmailValidator.validate(value.trim()))
                               return "That doesn't look like an email address";
                           },
@@ -100,18 +100,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           },
                         ),
                         Container(
-                          margin: (_submitting ? 
-                            EdgeInsets.only(top: 10, bottom: 5) :
-                            EdgeInsets.only(top: 20, bottom: 20)),
-                          child: _submitting ? SpinKitCircle(color: AppController.blue) :
-                            GestureDetector(
-                              child: Text('SEND EMAIL', style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppController.blue,
-                                fontSize: 18,
-                              )),
-                              onTap: _submitForm,
-                            ),
+                          margin: (_submitting
+                              ? EdgeInsets.only(top: 10, bottom: 5)
+                              : EdgeInsets.only(top: 20, bottom: 20)),
+                          child: _submitting
+                              ? SpinKitCircle(color: AppController.blue)
+                              : GestureDetector(
+                                  child: Text('SEND EMAIL',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppController.blue,
+                                        fontSize: 18,
+                                      )),
+                                  onTap: _submitForm,
+                                ),
                         ),
                         CircleBackButton(
                           backPath: '/login',
@@ -128,4 +130,3 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 }
-

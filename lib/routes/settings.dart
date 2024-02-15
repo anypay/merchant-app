@@ -70,7 +70,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         margin: EdgeInsets.only(top: 20.0),
                         backPath: '/navigation',
                       )
-
                     ],
                   )),
             ],
@@ -158,6 +157,7 @@ class _SettingsPageState extends State<SettingsPage> {
           }),
     );
   }
+
   Widget _SelectCurrencyLink(context) {
     return Container(
       margin: EdgeInsets.all(10.0),

@@ -16,7 +16,6 @@ import 'package:app/coins.dart';
 import 'dart:async';
 import 'package:url_launcher/url_launcher_string.dart';
 
-
 class ShowInvoice extends StatelessWidget {
   ShowInvoice(this.id);
 
@@ -68,7 +67,7 @@ class _InvoicePageState extends State<InvoicePage> {
     if (bsvPaymentOption == null) return [];
     return (bsvPaymentOption['outputs'] ?? []).map((output) {
       var _output = {};
-      _output['amount'] = output['amount']/100000000;
+      _output['amount'] = output['amount'] / 100000000;
       _output['to'] = output['address'];
       _output['currency'] = 'BSV';
       return _output;
@@ -87,15 +86,13 @@ class _InvoicePageState extends State<InvoicePage> {
       onTap: _closeKeyboard,
       child: Scaffold(
         floatingActionButton: Visibility(
-          visible: _showInvoice(),
-          child: GestureDetector(
-            onTap: _openHelpUrl,
-            child: Image(
-              image: AssetImage(AppController.havingIssuesImagePath()),
-              width: AppController.scale(40),
-            )
-          )
-        ),
+            visible: _showInvoice(),
+            child: GestureDetector(
+                onTap: _openHelpUrl,
+                child: Image(
+                  image: AssetImage(AppController.havingIssuesImagePath()),
+                  width: AppController.scale(40),
+                ))),
         body: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -123,9 +120,9 @@ class _InvoicePageState extends State<InvoicePage> {
 
   void _copyUri() {
     Clipboard.setData(ClipboardData(text: uri));
-    setState(() => _successMessage = "Copied!" );
+    setState(() => _successMessage = "Copied!");
     Timer(Duration(seconds: 2), () {
-      setState(() => _successMessage = "" );
+      setState(() => _successMessage = "");
     });
   }
 
@@ -154,10 +151,13 @@ class _InvoicePageState extends State<InvoicePage> {
         if (response['success']) {
           if (merchant == null && Authentication.isAuthenticated())
             _backToNewInvoice();
-          else setState(() {});
-        } else setState(() => notesError = 'something went wrong!');
+          else
+            setState(() {});
+        } else
+          setState(() => notesError = 'something went wrong!');
       });
-    else _backToNewInvoice();
+    else
+      _backToNewInvoice();
   }
 
   void _backToNewInvoice() {
@@ -168,9 +168,9 @@ class _InvoicePageState extends State<InvoicePage> {
   String get backPath {
     if (invoice != null && !Authentication.isAuthenticated())
       return '/pay/${invoice.accountId}';
-    else return '/new-invoice';
+    else
+      return '/new-invoice';
   }
-
 
   void _toggleUrlStyle() {
     useUrlStyle = !useUrlStyle;
@@ -178,24 +178,20 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   void _chooseCurrency() {
-    if (invoice.paymentOptions.length > 1)
-      choosingCurrency = true;
+    if (invoice.paymentOptions.length > 1) choosingCurrency = true;
     _rebuild();
   }
 
   void _shareUri() async {
     var shareUri = "https://anypayx.com/i/${invoice?.uid}";
 
-    await Share.share(shareUri,
-      sharePositionOrigin: sharePlacement.getRect()
-    );
+    await Share.share(shareUri, sharePositionOrigin: sharePlacement.getRect());
   }
 
   String getFormat() {
     if (usePayProtocol)
       return 'pay';
-    else if (useUrlStyle)
-      return 'url';
+    else if (useUrlStyle) return 'url';
   }
 
   void _rebuild() {
@@ -221,7 +217,8 @@ class _InvoicePageState extends State<InvoicePage> {
             chosenPaymentOption = invoice.paymentOptions.first;
             usePayProtocol = false;
           }
-        } else _errorMessage = response['message'];
+        } else
+          _errorMessage = response['message'];
 
         // Checking if disposed to prevent memory leaks
         if (!_disposed) _rebuild();
@@ -233,9 +230,10 @@ class _InvoicePageState extends State<InvoicePage> {
     super.initState();
     _fetchInvoice();
     qrColor = AppController.randomColor;
-    periodicRequest = Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
+    periodicRequest =
+        Timer.periodic(Duration(seconds: 2), (timer) => _fetchInvoice());
     havingTroubleTimer = Timer(Duration(seconds: 50), () {
-      setState(() => _showLinkToWalletHelp = true );
+      setState(() => _showLinkToWalletHelp = true);
     });
     event = Events.on('invoice.paid', (payload) {
       invoice = Invoice.fromMap(payload);
@@ -245,78 +243,76 @@ class _InvoicePageState extends State<InvoicePage> {
 
   Widget _ChooseCurrencyMenu() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          width: 300,
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            child: _PaymentTitle('anypay'),
-            onTap: () {
-              choosingCurrency = false;
-              usePayProtocol = true;
-              _rebuild();
-            },
-          )
-        ),
-        ...(invoice.paymentOptions.map((option) {
-          return Container(
-            width: 300,
-            margin: EdgeInsets.only(top: 10),
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              child: _PaymentTitle(option['currency'], paymentOption: option),
-              onTap: () {
-                currency = option['currency'];
-                chosenPaymentOption = option;
-                choosingCurrency = false;
-                usePayProtocol = false;
-                useUrlStyle = true;
-                _rebuild();
-              },
-            )
-          );
-        })),
-      ]
-    );
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+              width: 300,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: _PaymentTitle('anypay'),
+                onTap: () {
+                  choosingCurrency = false;
+                  usePayProtocol = true;
+                  _rebuild();
+                },
+              )),
+          ...(invoice.paymentOptions.map((option) {
+            return Container(
+                width: 300,
+                margin: EdgeInsets.only(top: 10),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child:
+                      _PaymentTitle(option['currency'], paymentOption: option),
+                  onTap: () {
+                    currency = option['currency'];
+                    chosenPaymentOption = option;
+                    choosingCurrency = false;
+                    usePayProtocol = false;
+                    useUrlStyle = true;
+                    _rebuild();
+                  },
+                ));
+          })),
+        ]);
   }
 
   Widget _UnderpaidScreen() {
     return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: AppController.red,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            Icons.error_outline,
-            size: 120,
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 20, bottom: 20),
-            child: Text(invoice.amountWithDenomination(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.lineThrough,
-                color: Theme.of(context).primaryColorLight,
-                fontSize: 28,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: AppController.red,
+        ),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.error_outline,
+                size: 120,
               ),
-            ),
-          ),
-          Text(invoice.paidAmountWithDenomination(),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColorLight,
-              fontSize: 28,
-            ),
-          ),
-          _BackButton(),
-        ]
-      )
-    );
+              Container(
+                margin: EdgeInsets.only(top: 20, bottom: 20),
+                child: Text(
+                  invoice.amountWithDenomination(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.lineThrough,
+                    color: Theme.of(context).primaryColorLight,
+                    fontSize: 28,
+                  ),
+                ),
+              ),
+              Text(
+                invoice.paidAmountWithDenomination(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColorLight,
+                  fontSize: 28,
+                ),
+              ),
+              _BackButton(),
+            ]));
   }
 
   Widget _WebShareOptions() {
@@ -324,171 +320,168 @@ class _InvoicePageState extends State<InvoicePage> {
       width: 235,
       margin: EdgeInsets.only(top: 20.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: _copyUri,
-            child: Row(
-              children: <Widget>[
-                Text('Copy', style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                )),
-                Container(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Image(
-                    image: AppController.enableDarkMode ?
-                      AssetImage('assets/images/copy_icon-white.png') :
-                      AssetImage('assets/images/copy_icon.png'),
-                    width: 20,
-                  )
-                )
-              ]
-            )
-          ),
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: _openUri,
-            child: Row(
-              children: <Widget>[
-                Text('Open Wallet', style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                )),
-                Container(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Image(
-                    image: AppController.enableDarkMode ?
-                      AssetImage('assets/images/wallet_icon-white.png') :
-                      AssetImage('assets/images/wallet_icon.png'),
-                    width: 20,
-                  )
-                )
-              ]
-            )
-          ),
-        ]
-      ),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: _copyUri,
+                child: Row(children: <Widget>[
+                  Text('Copy',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  Container(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Image(
+                        image: AppController.enableDarkMode
+                            ? AssetImage('assets/images/copy_icon-white.png')
+                            : AssetImage('assets/images/copy_icon.png'),
+                        width: 20,
+                      ))
+                ])),
+            GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: _openUri,
+                child: Row(children: <Widget>[
+                  Text('Open Wallet',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  Container(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Image(
+                        image: AppController.enableDarkMode
+                            ? AssetImage('assets/images/wallet_icon-white.png')
+                            : AssetImage('assets/images/wallet_icon.png'),
+                        width: 20,
+                      ))
+                ])),
+          ]),
     );
   }
 
   Widget _PaidScreen() {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            child: Image(
-              width: AppController.scale(140),
-              image: AssetImage('assets/images/anypay-logo.png')
-            ),
-          ),
-          ConfettiWidget(
-            confettiController: ConfettiController(
-              duration: Duration(seconds: 1),
-            )..play(),
-            blastDirectionality: BlastDirectionality.explosive,
-            maxBlastForce: 60,
-            minBlastForce: 30,
-            numberOfParticles: 20,
-            shouldLoop: false,
-            colors: AppController.colors,
-          ),
-          Container(
-            child: Text('PAID!',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF34b83a),
-                fontSize: AppController.scale(48, minValue: 44),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                child: Image(
+                    width: AppController.scale(140),
+                    image: AssetImage('assets/images/anypay-logo.png')),
               ),
-            ),
-          ),
-          Container(
-            child: Text(Authentication.currentAccount.businessName ?? "",
-              style: TextStyle(
-                color: Theme.of(context).primaryColorDark,
-                fontSize: 20,
+              ConfettiWidget(
+                confettiController: ConfettiController(
+                  duration: Duration(seconds: 1),
+                )..play(),
+                blastDirectionality: BlastDirectionality.explosive,
+                maxBlastForce: 60,
+                minBlastForce: 30,
+                numberOfParticles: 20,
+                shouldLoop: false,
+                colors: AppController.colors,
               ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: AppController.scale(35), bottom: 5),
-            child: Text(invoice.amountWithDenomination(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColorDark,
-                fontSize: 28,
+              Container(
+                child: Text(
+                  'PAID!',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF34b83a),
+                    fontSize: AppController.scale(48, minValue: 44),
+                  ),
+                ),
               ),
-            ),
-          ),
-          Visibility(
-            visible: (invoice.notes ?? []).length > 0,
-            child: Column(
-              children: [
-                Text("Order Notes:",
-                  textAlign: TextAlign.center,
+              Container(
+                child: Text(
+                  Authentication.currentAccount.businessName ?? "",
                   style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
                     fontSize: 20,
                   ),
                 ),
-                Container(
-                  width: 300,
-                  margin: EdgeInsets.only(top: 5),
-                  child: Text(invoice.noteText(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28,
-                    ),
+              ),
+              Container(
+                margin:
+                    EdgeInsets.only(top: AppController.scale(35), bottom: 5),
+                child: Text(
+                  invoice.amountWithDenomination(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: 28,
                   ),
                 ),
-              ],
-            ),
-          ),
-          Container(
-            width: 300,
-            child: !Authentication.isAuthenticated() ? null : TextFormField(
-              controller: notes,
-              onChanged: (value) {
-                if (value.length > 0 != hasNotes)
-                  setState(() => hasNotes = value.length > 0);
-              },
-              validator: (value) {
-                if (notesError.length > 0)
-                  return notesError;
-              },
-              decoration: InputDecoration(
-                labelText: 'Add note...'
               ),
-            ),
-          ),
-          Visibility(
-            visible: ((merchant == null && Authentication.isAuthenticated()) || hasNotes),
-            maintainAnimation: true,
-            maintainState: true,
-            maintainSize: true,
-            child: Container(
-              margin: EdgeInsets.only(top: AppController.scale(30), bottom: 20),
-              child: _submitting ?
-                SpinKitCircle(
-                    size: AppController.scale(50, minValue: 40),
-                    color: AppController.randomColor,
-                ) : GestureDetector(
-                  onTap: _done,
-                  child: Image(
-                    image: AssetImage('assets/images/next_arrow.png'),
-                    width: 50,
-                  )
+              Visibility(
+                visible: (invoice.notes ?? []).length > 0,
+                child: Column(
+                  children: [
+                    Text(
+                      "Order Notes:",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorDark,
+                        fontSize: 20,
+                      ),
+                    ),
+                    Container(
+                      width: 300,
+                      margin: EdgeInsets.only(top: 5),
+                      child: Text(
+                        invoice.noteText(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 28,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-            )
-          )
-        ]
-      )
-    );
+              ),
+              Container(
+                width: 300,
+                child: !Authentication.isAuthenticated()
+                    ? null
+                    : TextFormField(
+                        controller: notes,
+                        onChanged: (value) {
+                          if (value.length > 0 != hasNotes)
+                            setState(() => hasNotes = value.length > 0);
+                        },
+                        validator: (value) {
+                          if (notesError.length > 0) return notesError;
+                        },
+                        decoration: InputDecoration(labelText: 'Add note...'),
+                      ),
+              ),
+              Visibility(
+                  visible:
+                      ((merchant == null && Authentication.isAuthenticated()) ||
+                          hasNotes),
+                  maintainAnimation: true,
+                  maintainState: true,
+                  maintainSize: true,
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        top: AppController.scale(30), bottom: 20),
+                    child: _submitting
+                        ? SpinKitCircle(
+                            size: AppController.scale(50, minValue: 40),
+                            color: AppController.randomColor,
+                          )
+                        : GestureDetector(
+                            onTap: _done,
+                            child: Image(
+                              image: AssetImage('assets/images/next_arrow.png'),
+                              width: 50,
+                            )),
+                  ))
+            ]));
   }
 
   Widget _ExpiredInvoice() {
@@ -496,21 +489,18 @@ class _InvoicePageState extends State<InvoicePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(bottom: 35),
-          child: Text("Invoice Expired",
-            style: TextStyle(
-              fontSize: 31,
-              color: Theme.of(context).primaryColorLight,
-            )
-          )
-        ),
+            margin: EdgeInsets.only(bottom: 35),
+            child: Text("Invoice Expired",
+                style: TextStyle(
+                  fontSize: 31,
+                  color: Theme.of(context).primaryColorLight,
+                ))),
         GestureDetector(
-          onTap: _done,
-          child: Image(
-            image: AssetImage('assets/images/next_arrow.png'),
-            width: 60,
-          )
-        ),
+            onTap: _done,
+            child: Image(
+              image: AssetImage('assets/images/next_arrow.png'),
+              width: 60,
+            )),
       ],
     );
   }
@@ -523,170 +513,162 @@ class _InvoicePageState extends State<InvoicePage> {
     paymentOption = paymentOption ?? {};
     if (currency == 'anypay' || coinIsSupported || coinDetailsSpecified)
       return Container(
-        child: Row(
-          children: currency == 'anypay' ? [
-            Container(
-              width: 60,
-              child: Image(
-                image: AssetImage('assets/images/anypay-logo.png')
-              ),
-            ),
-            Text('Anypay',
-              style: TextStyle(fontSize: 35),
-            ),
-          ] : [
-            Container(
-              width: 40,
-              height: 40,
-              margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 15, bottom: 15),
-              child: Image.network(paymentOption['currency_logo_url'] ?? Coins.supported[currency]['icon']),
-            ),
-            Text(paymentOption['currency_name'] ?? Coins.supported[currency]['name'],
-              style: TextStyle(fontSize: 40),
-            ),
-          ]
-        )
-      );
-    else return Container();
+          child: Row(
+              children: currency == 'anypay'
+                  ? [
+                      Container(
+                        width: 60,
+                        child: Image(
+                            image: AssetImage('assets/images/anypay-logo.png')),
+                      ),
+                      Text(
+                        'Anypay',
+                        style: TextStyle(fontSize: 35),
+                      ),
+                    ]
+                  : [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        margin: EdgeInsets.only(
+                            left: 10.0, right: 10.0, top: 15, bottom: 15),
+                        child: Image.network(
+                            paymentOption['currency_logo_url'] ??
+                                Coins.supported[currency]['icon']),
+                      ),
+                      Text(
+                        paymentOption['currency_name'] ??
+                            Coins.supported[currency]['name'],
+                        style: TextStyle(fontSize: 40),
+                      ),
+                    ]));
+    else
+      return Container();
   }
 
   bool _showInvoice() {
     return invoice != null &&
-      !invoice.isUnderpaid() &&
-      !invoice.isExpired() &&
-      !invoice.isPaid() &&
-      !choosingCurrency;
+        !invoice.isUnderpaid() &&
+        !invoice.isExpired() &&
+        !invoice.isPaid() &&
+        !choosingCurrency;
   }
 
   Widget _PageContent() {
     if (_showInvoice())
       return _InvoiceComponent();
-    else if (invoice == null)
-      if (_errorMessage != null)
-        return Text(_errorMessage, style: TextStyle(color: AppController.red));
-      else return Container(
-          child: SpinKitCircle(color: qrColor),
-          height: AppController.scale(360),
-        );
+    else if (invoice == null) if (_errorMessage != null)
+      return Text(_errorMessage, style: TextStyle(color: AppController.red));
+    else
+      return Container(
+        child: SpinKitCircle(color: qrColor),
+        height: AppController.scale(360),
+      );
     else if (invoice.isUnderpaid())
       return _UnderpaidScreen();
     else if (invoice.isPaid())
       return _PaidScreen();
     else if (choosingCurrency)
       return _ChooseCurrencyMenu();
-    else if (invoice.isExpired())
-      return _ExpiredInvoice();
+    else if (invoice.isExpired()) return _ExpiredInvoice();
   }
 
   Widget _InvoiceComponent() {
     return AnimatedOpacity(
-      opacity: _invoiceReady ? 1.0 : 0.0,
-      duration: Duration(milliseconds: 300),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text(_successMessage,
-            style: TextStyle(color: AppController.green),
-          ),
-          Visibility(
-            visible: _showLinkToWalletHelp,
-            child: GestureDetector(
-              onTap: _openHelpUrl,
-              child: Text('Having trouble paying?',
-                style: TextStyle(color: AppController.blue)
-              )
-            ),
-          ),
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: _chooseCurrency,
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _PaymentTitle(usePayProtocol ? 'anypay' : currency),
-                  Visibility(
-                    visible: invoice.paymentOptions.length > 1,
-                    child: Container(
-                      width: 40,
-                      height: 42,
-                      margin: EdgeInsets.only(right: 10.0),
-                      child: Icon(Icons.expand_more, size: 50)
-                    )
-                  )
-                ]
+        opacity: _invoiceReady ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 300),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                _successMessage,
+                style: TextStyle(color: AppController.green),
               ),
-            ),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                width: 12.0,
-                color: qrColor,
+              Visibility(
+                visible: _showLinkToWalletHelp,
+                child: GestureDetector(
+                    onTap: _openHelpUrl,
+                    child: Text('Having trouble paying?',
+                        style: TextStyle(color: AppController.blue))),
               ),
-              borderRadius: BorderRadius.all(Radius.circular(18.0)),
-            ),
-            child: Container(
-              color: AppController.white,
-              margin: EdgeInsets.all(12.0),
-              child: GestureDetector(
+              GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTap: _toggleUrlStyle,
-                child: QrImage(
-                  foregroundColor: Color(0xFF404040),
-                  version: QrVersions.auto,
-                  size: AppController.scale(200, maxValue: 280, minValue: 100),
-                  data: uri,
+                onTap: _chooseCurrency,
+                child: Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _PaymentTitle(usePayProtocol ? 'anypay' : currency),
+                        Visibility(
+                            visible: invoice.paymentOptions.length > 1,
+                            child: Container(
+                                width: 40,
+                                height: 42,
+                                margin: EdgeInsets.only(right: 10.0),
+                                child: Icon(Icons.expand_more, size: 50)))
+                      ]),
                 ),
               ),
-            ),
-          ),
-          (sharePlacement = RectGetter.defaultKey(
-            child: Container(
-              width: 235,
-              margin: EdgeInsets.only(top: AppController.scale(20.0)),
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: _shareUri,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Share Payment Request',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      )
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Image(
-                          image: AppController.enableDarkMode ?
-                            AssetImage('assets/images/share-white.png') :
-                            AssetImage('assets/images/share.png'),
-                        width: 20,
-                      )
-                    )
-                  ]
-                )
-              )
-            )
-          )),
-          Container(
-            width: 300,
-            height: 200,
-            child: OverflowBox(
-              alignment: Alignment.topCenter,
-              maxHeight: 300,
-              child: SingleChildScrollView(
-                physics: NeverScrollableScrollPhysics(),
+              Card(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    width: 12.0,
+                    color: qrColor,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                ),
                 child: Container(
-                )
-              )
-            )
-          )
-        ]
-      )
-    );
+                  color: AppController.white,
+                  margin: EdgeInsets.all(12.0),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: _toggleUrlStyle,
+                    child: QrImage(
+                      foregroundColor: Color(0xFF404040),
+                      version: QrVersions.auto,
+                      size: AppController.scale(200,
+                          maxValue: 280, minValue: 100),
+                      data: uri,
+                    ),
+                  ),
+                ),
+              ),
+              (sharePlacement = RectGetter.defaultKey(
+                  child: Container(
+                      width: 235,
+                      margin: EdgeInsets.only(top: AppController.scale(20.0)),
+                      child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: _shareUri,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text('Share Payment Request',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    )),
+                                Container(
+                                    padding: EdgeInsets.only(left: 15),
+                                    child: Image(
+                                      image: AppController.enableDarkMode
+                                          ? AssetImage(
+                                              'assets/images/share-white.png')
+                                          : AssetImage(
+                                              'assets/images/share.png'),
+                                      width: 20,
+                                    ))
+                              ]))))),
+              Container(
+                  width: 300,
+                  height: 200,
+                  child: OverflowBox(
+                      alignment: Alignment.topCenter,
+                      maxHeight: 300,
+                      child: SingleChildScrollView(
+                          physics: NeverScrollableScrollPhysics(),
+                          child: Container())))
+            ]));
   }
 
   Widget _BackButton({margin}) {
@@ -697,21 +679,20 @@ class _InvoicePageState extends State<InvoicePage> {
         _rebuild();
       };
     return Visibility(
-      visible: invoice == null || (!invoice.isExpired() && invoice.isUnpaid()) || invoice.isUnderpaid(),
-      child: CircleBackButton(
-        margin: margin ?? EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
-        backPath: backPath,
-        opaque: false,
-        onTap: onTap,
-      )
-    );
+        visible: invoice == null ||
+            (!invoice.isExpired() && invoice.isUnpaid()) ||
+            invoice.isUnderpaid(),
+        child: CircleBackButton(
+          margin: margin ??
+              EdgeInsets.only(top: AppController.scale(15.0), bottom: 20.0),
+          backPath: backPath,
+          opaque: false,
+          onTap: onTap,
+        ));
   }
 
   void _closeKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus)
-      currentFocus.unfocus();
+    if (!currentFocus.hasPrimaryFocus) currentFocus.unfocus();
   }
 }
-
-

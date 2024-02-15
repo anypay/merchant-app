@@ -1,8 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_controller.dart';
 import 'package:app/client.dart';
 
 class Login extends StatelessWidget {
@@ -27,8 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   String _errorMessage = '';
   bool _submitting = false;
 
-  final email = TextEditingController();
-  final password = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +45,11 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image(
-                    width: 300,
-                    image: AssetImage(AppController.logoImagePath())),
-                _TextFields(),
-                _Links(context),
+                  width: 300,
+                  image: AssetImage(AppController.logoImagePath()),
+                ),
+                _buildTextFields(),
+                _buildLinks(context),
               ],
             ),
           ),
@@ -63,23 +64,26 @@ class _LoginPageState extends State<LoginPage> {
         _submitting = true;
         _errorMessage = "";
       });
-      Client.authenticate(email.text, password.text).then((response) {
-        _submitting = false;
-        if (response['success']) {
-          AppController.closeUntilPath('/new-invoice');
-        } else
-          setState(() {
+      Client.authenticate(emailController.text, passwordController.text)
+          .then((response) {
+        setState(() {
+          _submitting = false;
+          if (response['success']) {
+            AppController.closeUntilPath('/new-invoice');
+          } else {
             _errorMessage = response['message'];
-          });
+          }
+        });
       });
     }
   }
 
   void setDefaultUrl() async {
     final storedUrl = await FlutterSecureStorage(
-        aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    )).read(key: "backend_url");
+      aOptions: AndroidOptions(
+        encryptedSharedPreferences: true,
+      ),
+    ).read(key: "backend_url");
 
     if (storedUrl != null) {
       Uri url = Uri.parse(storedUrl);
@@ -90,57 +94,63 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    password.dispose();
-    email.dispose();
+    passwordController.dispose();
+    emailController.dispose();
     super.dispose();
   }
 
-  Widget _TextFields() {
+  Widget _buildTextFields() {
     return Container(
-        width: 300,
-        margin: EdgeInsets.only(top: 40.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                _errorMessage,
-                style: TextStyle(color: AppController.red),
+      width: 300,
+      margin: EdgeInsets.only(top: 40.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              _errorMessage,
+              style: TextStyle(color: AppController.red),
+            ),
+            TextFormField(
+              autofillHints: [AutofillHints.username],
+              controller: emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter some text';
+                } else if (!EmailValidator.validate(value.trim())) {
+                  return "That doesn't look like an email address";
+                }
+                return null;
+              },
+              onFieldSubmitted: (value) {
+                _submitForm();
+              },
+            ),
+            TextFormField(
+              obscureText: true,
+              controller: passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
               ),
-              TextFormField(
-                autofillHints: [AutofillHints.username],
-                controller: email,
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value.isEmpty)
-                    return 'Please enter some text';
-                  else if (!EmailValidator.validate(value.trim()))
-                    return "That doesn't look like an email address";
-                },
-                onFieldSubmitted: (value) {
-                  _submitForm();
-                },
-              ),
-              TextFormField(
-                obscureText: true,
-                controller: password,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                ),
-                validator: (value) {
-                  if (value.isEmpty) return 'Please enter some text';
-                },
-                onFieldSubmitted: (value) {
-                  _submitForm();
-                },
-              ),
-            ],
-          ),
-        ));
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+              onFieldSubmitted: (value) {
+                _submitForm();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget _Links(context) {
+  Widget _buildLinks(context) {
     return Container(
       margin: EdgeInsets.only(top: _submitting ? 10.0 : 20.0),
       child: Column(
@@ -150,43 +160,52 @@ class _LoginPageState extends State<LoginPage> {
             child: _submitting
                 ? SpinKitCircle(color: AppController.blue)
                 : GestureDetector(
-                    child: Text('Login',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppController.blue,
-                          fontSize: 18,
-                        )),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppController.blue,
+                        fontSize: 18,
+                      ),
+                    ),
                     onTap: _submitForm,
                   ),
           ),
           Container(
             child: GestureDetector(
-                child: Text('Sign Up',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppController.blue,
-                      fontSize: 18,
-                    )),
-                onTap: () {
-                  Navigator.pushNamed(context, '/registration');
-                }),
+              child: Text(
+                'Sign Up',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppController.blue,
+                  fontSize: 18,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/registration');
+              },
+            ),
           ),
           Container(
             margin: EdgeInsets.only(top: 20.0),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                      child: Text('Forgot Password?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppController.blue,
-                            fontSize: 18,
-                          )),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/password-reset');
-                      }),
-                ]),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppController.blue,
+                      fontSize: 18,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/password-reset');
+                  },
+                ),
+              ],
+            ),
           )
         ],
       ),
