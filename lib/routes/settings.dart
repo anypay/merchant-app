@@ -136,25 +136,25 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  margin: EdgeInsets.all(AppController.scale(20.0)),
-                  child: Text("Addresses",style: TextStyle(
-                        fontSize: 22,
-                      ))
-              ),
-              Icon(Icons.edit),
-            ],
-          ),
-          onTap: () {
-            Navigator.pushNamed(context, '/settings/addresses').then((value) {
-              _successMessage = '';
-              _rebuild();
-            });
-          }
+        behavior: HitTestBehavior.translucent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.all(AppController.scale(20.0)),
+              child: Text("Addresses",style: TextStyle(
+                fontSize: 22,
+              ))
+            ),
+            Icon(Icons.edit),
+          ],
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, '/settings/addresses').then((value) {
+            _successMessage = '';
+            _rebuild();
+          });
+        }
       ),
     );
   }
@@ -162,33 +162,33 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  margin: EdgeInsets.all(AppController.scale(20.0)),
-                  child: Row(
-                    children: <Widget>[
-                      Text("Currency ",style: TextStyle(
-                            fontSize: 22,
-                          )),
-                      Text("($symbol$denomination)",style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          )),
-                    ],
-                  )
-              ),
-              Icon(Icons.edit),
-            ],
-          ),
-          onTap: () {
-            Navigator.pushNamed(context, '/settings/currency').then((value) {
-              _successMessage = 'Saved!';
-              _rebuild();
-            });
-          }
+        behavior: HitTestBehavior.translucent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.all(AppController.scale(20.0)),
+              child: Row(
+                children: <Widget>[
+                  Text("Currency ",style: TextStyle(
+                    fontSize: 22,
+                  )),
+                  Text("($symbol$denomination)",style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  )),
+                ],
+              )
+            ),
+            Icon(Icons.edit),
+          ],
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, '/settings/currency').then((value) {
+            _successMessage = 'Saved!';
+            _rebuild();
+          });
+        }
       ),
     );
   }
@@ -197,22 +197,22 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(20.0),
       child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(AppController.scale(20.0)),
-                child: Text("Business Info",style: TextStyle(
-                      fontSize: 22,
-                    )),
-              ),
-              Icon(Icons.edit),
-            ],
-          ),
-          onTap: () {
-            Navigator.pushNamed(context, '/settings/business-info');
-          }
+        behavior: HitTestBehavior.translucent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.all(AppController.scale(20.0)),
+              child: Text("Business Info",style: TextStyle(
+                fontSize: 22,
+              )),
+            ),
+            Icon(Icons.edit),
+          ],
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, '/settings/business-info');
+        }
       ),
    
     );
