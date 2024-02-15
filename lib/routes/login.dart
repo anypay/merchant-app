@@ -46,7 +46,8 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Image(
                     width: 300,
-                    image: AssetImage(AppController.logoImagePath())),
+                    image: AssetImage(AppController.logoImagePath())
+                ),
                 _TextFields(),
                 _Links(context),
               ],
