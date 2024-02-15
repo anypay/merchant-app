@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
@@ -72,7 +71,6 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
   void _rebuild() {
     setState(() {
       address.text = Authentication.currentAccount.physicalAddress ?? 'N\\A';
-      email.text = Authentication.currentAccount.ambassadorEmail?? 'N\\A';
       name.text = Authentication.currentAccount.businessName?? 'N\\A';
     });
   }
@@ -95,7 +93,6 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
     _closeKeyboard();
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       Authentication.updateAccount({
-        'ambassador_email': email.text.toLowerCase(),
         'physical_address': address.text,
         'business_name': name.text,
       }).then((response) {
@@ -140,17 +137,6 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
               labelText: 'Business Street Address (Optional)'
             ),
           ),
-          TextFormField(
-            controller: email,
-            decoration: InputDecoration(
-              labelText: 'Ambassador Email (Optional)'
-            ),
-            validator: (value) {
-              if (value != null && !value.isEmpty && !EmailValidator.validate(value.trim()))
-                return "That doesn't look like an email address";
-              return null;
-            },
-          ),
           Container(
             margin: EdgeInsets.only(top: 40.0),
             child: _submitting ? SpinKitCircle(color: AppController.randomColor) : GestureDetector(
@@ -164,7 +150,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
           ),
           !allowBack ? Container() : CircleBackButton(
             margin: EdgeInsets.only(top: 20.0),
-            backPath: '/settings',
+            backPath: 'settings',
           )
         ],
       ),
