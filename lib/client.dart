@@ -42,7 +42,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchAccountAddresses() async {
-    return makeRequest('get',   
+    return makeRequest('get',
       unauthorized: (() => Authentication.logout()),
       path: '/account_addresses',
       requireAuth: true,
@@ -166,8 +166,8 @@ class Client {
     return response;
   }
 
-  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency,{accountId}) async {
-    var path =accountId == null ? '/invoices' : '/accounts/${accountId}/invoices';
+  static Future<Map<dynamic, dynamic>> createInvoice(amount, currency, {accountId}) async {
+    var path = accountId == null ? '/invoices' : '/accounts/${accountId}/invoices';
     var response = await makeRequest('post',
       requireAuth: accountId == null,
       genericErrorCodes: [400, 500],
@@ -178,7 +178,7 @@ class Client {
       },
     );
 
-    if (response['success']) 
+    if (response['success'])
       response['invoiceId'] = response['body']['uid'];
 
     return response;
@@ -188,14 +188,14 @@ class Client {
     return makeRequest('post',
       path: '/invoices/$invoiceId/notes',
       unauthorized: (() => Authentication.logout()),
-      body: {'note': notes},
+      body: { 'note': notes },
       requireAuth: true,
     );
   }
 
-  static Future<Map<dynamic, dynamic>> makeRequest(method,{path,uri, headers, body, requireAuth,basicAuth,unauthorized,genericErrorCodes}) async {
+  static Future<Map<dynamic, dynamic>> makeRequest(method,{ path, uri, headers, body, requireAuth, basicAuth, unauthorized, genericErrorCodes}) async {
     try {
-      http.Request request =http.Request(method, uri ?? Uri.parse('$host$path'));
+      http.Request request = http.Request(method, uri ?? Uri.parse('$host$path'));
       if (requireAuth ?? false) request.headers['authorization'] = buildAuthHeader();
       if (basicAuth != null) request.headers['authorization'] = basicAuth;
       if (genericErrorCodes == null) genericErrorCodes = [500];
@@ -220,24 +220,24 @@ class Client {
         return {
           'message': 'Unauthorized',
           'success': false,
-          'body': {},
+          'body': { },
         };
       } else if (genericErrorCodes.contains(response.statusCode)) {
         return {
           'success': false,
           'message': "Something went wrong, please try again later",
-          'body': {},
+          'body': { },
         };
       } else return {
-          'success': response.statusCode == 200,
-          'message': humanize(message ?? ""),
-          'body': responseBody,
-        };
+        'success': response.statusCode == 200,
+        'message': humanize(message ?? ""),
+        'body': responseBody,
+      };
     } on SocketException catch (_) {
       return {
         'message': 'Not connected to the internet',
         'success': false,
-        'body': {},
+        'body': { },
       };
     }
   }
