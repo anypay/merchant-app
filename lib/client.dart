@@ -51,8 +51,8 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> setAddressNote(addressId, note) async {
-    return makeRequest(
-      'put',
+    return makeRequest('put',
+                       
       path: '/addresses/$addressId/notes',
       unauthorized: (() => Authentication.logout()),
       body: {'note': note},
