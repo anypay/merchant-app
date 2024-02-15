@@ -177,8 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
-                      child: Text('Forgot Password?',
-                          style: TextStyle(
+                      child: Text('Forgot Password?',style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: AppController.blue,
                             fontSize: 18,
@@ -186,7 +185,8 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         Navigator.pushNamed(context, '/password-reset');
                       }),
-                ]),
+                ]
+            ),
           )
         ],
       ),
