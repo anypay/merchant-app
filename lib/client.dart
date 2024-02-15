@@ -184,8 +184,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> setInvoiceNotes(invoiceId, notes) async {
-    return makeRequest(
-      'post',
+    return makeRequest('post',
       path: '/invoices/$invoiceId/notes',
       unauthorized: (() => Authentication.logout()),
       body: {'note': notes},
