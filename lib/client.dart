@@ -42,8 +42,7 @@ class Client {
   }
 
   static Future<Map<dynamic, dynamic>> fetchAccountAddresses() async {
-      return makeRequest('get',
-                         
+      return makeRequest('get',                         
       unauthorized: (() => Authentication.logout()),
       path: '/account_addresses',
       requireAuth: true,
