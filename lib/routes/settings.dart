@@ -178,7 +178,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             fontSize: 22,
                           )),
                     ],
-                  )),
+                  )
+              ),
               Icon(Icons.edit),
             ],
           ),
@@ -187,7 +188,8 @@ class _SettingsPageState extends State<SettingsPage> {
               _successMessage = 'Saved!';
               _rebuild();
             });
-          }),
+          }
+      ),
     );
   }
 
