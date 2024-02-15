@@ -89,6 +89,8 @@ class Client {
       path: '/firebase_token',
       requireAuth: true,
       body: {'firebase_token': data},
+                       
+     };
     );
   }
 
