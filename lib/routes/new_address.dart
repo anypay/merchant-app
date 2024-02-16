@@ -243,11 +243,11 @@ class _NewAddressPageState extends State<NewAddressPage> {
               bottom: 10.0,
             ),
             child: Image.network(
-              Coins.all[code]['icon']
+              Coins.all[CoinCode(code, chain)]['icon']
             ),
           ),
           Text(
-            Coins.all[code]['name'],
+            Coins.all[CoinCode(code, chain)]['name'],
             style: TextStyle(
               fontSize: 30,
             ),

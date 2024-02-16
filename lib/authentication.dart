@@ -89,7 +89,7 @@ class Authentication {
 
       await Client.fetchAccountAddresses().then((response) {
         response['body']['addresses'].forEach((address) {
-          currentAccount.addresses[address['currency'] + '_' + address['chain']] = Address.fromMap(address);
+          currentAccount.addresses[CoinCode(address['currency'], address['chain'])] = Address.fromMap(address);
         });
       });
     }
