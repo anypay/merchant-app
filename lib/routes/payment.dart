@@ -1,5 +1,4 @@
-import 'package:url_launcher/url_launcher.dart'
-  if (dart.library.html) 'package:app/web_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/models/invoice.dart';
