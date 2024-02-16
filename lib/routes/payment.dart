@@ -36,6 +36,7 @@ class _PaymentPageState extends State<PaymentPage> {
   String _errorMessage = '';
   Invoice? _payment;
   String? _notes;
+  CoinCode? coinCode;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +65,8 @@ class _PaymentPageState extends State<PaymentPage> {
       setState(() {
         if (response['success']) {
           _payment = response['invoice'];
+          var paymentOption = _payment!.paymentOptionFor(_payment!.currency);
+          coinCode = CoinCode(paymentOption['currency'], paymentOption['chain']);
           if (_payment != null) {
             _notes = _payment!.orderNotes();
           }
@@ -77,9 +80,9 @@ class _PaymentPageState extends State<PaymentPage> {
       return SpinKitCircle(color: AppController.blue);
 
     var denominationCurrencyName =
-        (Coins.all[_payment!.currency] ?? {})['name'] ?? '...';
+        (Coins.all[coinCode] ?? {})['name'] ?? '...';
     var denominationCurrencyAmount = (_payment!.invoiceAmountPaid != null
-        ? (_payment!.invoiceAmountPaid! / pow(10, Coins.all[_payment!.currency]['decimals'])).toString()
+        ? (_payment!.invoiceAmountPaid! / pow(10, Coins.all[coinCode]['decimals'])).toString()
         : '...');
     var denominationCurrencyText =
         denominationCurrencyName  + ' ' + denominationCurrencyAmount;
