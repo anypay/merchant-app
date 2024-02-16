@@ -66,12 +66,25 @@ class _LoginPageState extends State<LoginPage> {
       });
       Client.authenticate(email.text, password.text).then((response) {
         _submitting = false;
-        if (response['success'])
+        if (response['success']){
           AppController.closeUntilPath('/new-invoice');
-        else setState(() {
+        }else setState(() {
           _errorMessage = response['message'];
         });
       });
+    }
+  }
+
+  void setDefaultUrl() async {
+    final storedUrl = await FlutterSecureStorage(
+        aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    )).read(key: "backend_url");
+
+    if (storedUrl != null) {
+      Uri url = Uri.parse(storedUrl);
+      Client.protocol = url.scheme;
+      Client.host = url.host;
     }
   }
 
@@ -84,47 +97,47 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _TextFields() {
     return Container(
-      width: 300,
-      margin: EdgeInsets.only(top: 40.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(_errorMessage,
-              style: TextStyle(color: AppController.red),
-            ),
-            TextFormField(
-              autofillHints: [AutofillHints.username],
-              controller: email,
-              decoration: InputDecoration(
-                labelText: 'Email'
+        width: 300,
+        margin: EdgeInsets.only(top: 40.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(_errorMessage,
+                style: TextStyle(color: AppController.red),
               ),
-              validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
-                else if (!EmailValidator.validate(value.trim()))
-                  return "That doesn't look like an email address";
-              },
-              onFieldSubmitted: (value) {
-                _submitForm();
-              },
-            ),
-            TextFormField(
-              obscureText: true,
-              controller: password,
-              decoration: InputDecoration(
-                labelText: 'Password',
+              TextFormField(
+                autofillHints: [AutofillHints.username],
+                controller: email,
+                decoration: InputDecoration(
+                  labelText: 'Email'
+                ),
+                validator: (value) {
+                  if (value.isEmpty) return 'Please enter some text';
+                  else if (!EmailValidator.validate(value.trim()))
+                    return "That doesn't look like an email address";
+                },
+                onFieldSubmitted: (value) {
+                  _submitForm();
+                },
               ),
-              validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
-              },
-              onFieldSubmitted: (value) {
-                _submitForm();
-              },
-            ),
-          ],
-        ),
-      )
+              TextFormField(
+                obscureText: true,
+                controller: password,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                ),
+                validator: (value) {
+                  if (value.isEmpty) return 'Please enter some text';
+                },
+                onFieldSubmitted: (value) {
+                  _submitForm();
+                },
+              ),
+            ],
+          ),
+        )
     );
   }
 
@@ -175,10 +188,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ]
             ),
-          ),
+          )
         ],
       ),
     );
   }
-
 }

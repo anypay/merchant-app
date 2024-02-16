@@ -8,9 +8,9 @@ import 'dart:convert';
 import 'dart:io';
 
 class Client {
-  static final protocol = 'https';
-  static final domain = 'api.anypayx.com';
-  static final host = "$protocol://$domain";
+  static String protocol = 'https';
+  static String domain = 'api.anypayx.com';
+  static String host = "$protocol://$domain";
 
   static String humanize(str) {
     if (str != null && str.length > 0)
