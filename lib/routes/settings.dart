@@ -87,6 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
               margin: EdgeInsets.all(AppController.scale(20.0)),
               child: Text("Addresses", style: TextStyle(
                 fontSize: 22,
+                color: Theme.of(context).primaryColorLight
               ))
             ),
             Icon(Icons.edit),
@@ -116,10 +117,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: <Widget>[
                   Text("Currency ", style: TextStyle(
                     fontSize: 22,
+                    color: Theme.of(context).primaryColorLight
                   )),
                   Text("($symbol$denomination)", style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
+                    color: Theme.of(context).primaryColorLight
                   )),
                 ],
               )
@@ -149,6 +152,7 @@ class _SettingsPageState extends State<SettingsPage> {
               margin: EdgeInsets.all(AppController.scale(20.0)),
               child: Text("Business Info", style: TextStyle(
                 fontSize: 22,
+                color: Theme.of(context).primaryColorLight
               )),
             ),
             Icon(Icons.edit),

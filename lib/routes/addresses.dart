@@ -85,7 +85,10 @@ class _AddressesPageState extends State<AddressesPage> {
                         Expanded(
                           child: Text(
                               Coins.supported[coinCode]['name'],
-                              style: TextStyle(fontSize: 22),
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: Theme.of(context).primaryColorLight
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.fade
                           ),
