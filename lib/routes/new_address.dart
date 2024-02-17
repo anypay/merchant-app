@@ -162,6 +162,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   void _scanAddress() async {
     _scanning = true;
+    _rebuild();
   }
 
   void _setNote() async {
