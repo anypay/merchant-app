@@ -256,8 +256,7 @@ class _InvoicePageState extends State<InvoicePage> {
           )
         ),
         ...(invoice!.paymentOptions!.map((option) {
-          var coinCode = CoinCode.fromString(
-              "${option['currency']}_${option['chain']}");
+          var coinCode = CoinCode(option['currency'], option['chain']);
           return Container(
             width: 300,
             margin: EdgeInsets.only(top: 10),
@@ -530,7 +529,9 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
             ),
             Text('Anypay',
-              style: TextStyle(fontSize: 35),
+              style: TextStyle(fontSize: 35,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
           ] : [
             Container(
@@ -542,9 +543,11 @@ class _InvoicePageState extends State<InvoicePage> {
             ),
             Text(paymentOption['currency_name'] ??
                 Coins.supported[currency]['name'],
-              style: TextStyle(fontSize: 40),
-                ),
-            ]
+              style: TextStyle(fontSize: 40,
+                color: Theme.of(context).primaryColorLight,
+              ),
+            ),
+          ]
           ));
     } else {
       return Container();
@@ -661,6 +664,7 @@ class _InvoicePageState extends State<InvoicePage> {
                     Text('Share Payment Request',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColorLight,
                         fontSize: 13,
                       )
                     ),
