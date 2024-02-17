@@ -86,8 +86,14 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
               margin: EdgeInsets.only(top: 0.0, bottom: 10.0),
               padding: EdgeInsets.all(10.0),
               child: TextField(
+                style: TextStyle(
+                    color: Theme.of(context).primaryColorLight
+                ),
                 decoration: InputDecoration(
-                  labelText: 'Search Currencies'
+                  labelText: 'Search Currencies',
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).primaryColorLight
+                  ),
                 ),
                 onChanged: (text) {
                   _filterList(text);
@@ -126,6 +132,7 @@ class _SetCurrencyPageState extends State<SetCurrencyPage> {
             child: Text(display.join(' - '),
               textAlign: TextAlign.center,
               style: TextStyle(
+                color: Theme.of(context).primaryColorLight,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
