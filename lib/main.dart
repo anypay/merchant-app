@@ -23,20 +23,38 @@ class Anypay extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppController(builder: (context) {
       var theme;
-      var lightTheme = ThemeData(
-        primaryColorDark: Color(0xFF707070),
-        primaryColorLight: Color(0xFF404040),
-        brightness: Brightness.light,
-        accentColor: AppController.blue,
-        fontFamily: 'Ubuntu',
-      );
-      var darkTheme = ThemeData(
-        primaryColorDark: Color(0xffCCCCCC),
-        primaryColorLight: Color(0xFFFFFFFF),
-        accentColor: Color(0xff2196f3),
-        brightness: Brightness.dark,
-        fontFamily: 'Ubuntu',
-      );
+var lightTheme = ThemeData(
+primaryColorDark: Color(0xFF707070),
+primaryColorLight: Color(0xFF404040),
+elevatedButtonTheme: ElevatedButtonThemeData(
+style: ButtonStyle(
+backgroundColor: MaterialStateProperty.all<Color>(
+Colors.black,
+), //button color
+foregroundColor: MaterialStateProperty.all<Color>(
+Colors.white), //text (and icon)
+),
+),
+brightness: Brightness.light,
+accentColor: AppController.blue,
+fontFamily: 'Ubuntu',
+);
+var darkTheme = ThemeData(
+primaryColorDark: Color(0xffCCCCCC),
+primaryColorLight: Color(0xFFFFFFFF),
+elevatedButtonTheme: ElevatedButtonThemeData(
+style: ButtonStyle(
+backgroundColor: MaterialStateProperty.all<Color>(
+Colors.white,
+), //button color
+foregroundColor: MaterialStateProperty.all<Color>(
+Colors.black), //text (and icon)
+),
+),
+accentColor: Color(0xff2196f3),
+brightness: Brightness.dark,
+fontFamily: 'Ubuntu',
+);
 
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
       theme = lightTheme;

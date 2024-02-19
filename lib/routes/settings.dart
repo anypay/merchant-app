@@ -95,7 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   }
                 }),
           ),
-          TextButton(
+          ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   if (await confirm(context,
@@ -115,7 +115,6 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               child: Text(
                 "Save",
-                style: TextStyle(color: Colors.white),
               ))
         ],
       ),
