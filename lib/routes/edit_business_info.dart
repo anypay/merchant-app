@@ -127,9 +127,6 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
           ),
           TextFormField(
             controller: name,
-            style: TextStyle(
-                color: Theme.of(context).primaryColorLight
-            ),
             decoration: InputDecoration(
               labelStyle: TextStyle(
                   color: Theme.of(context).primaryColorLight
@@ -139,9 +136,6 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
           ),
           TextFormField(
             controller: address,
-            style: TextStyle(
-                color: Theme.of(context).primaryColorLight
-            ),
             decoration: InputDecoration(
               labelStyle: TextStyle(
                   color: Theme.of(context).primaryColorLight
