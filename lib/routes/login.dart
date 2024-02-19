@@ -103,14 +103,8 @@ class _LoginPageState extends State<LoginPage> {
             TextFormField(
               autofillHints: [AutofillHints.username],
               controller: email,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColorLight
-              ),
               decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColorLight
-                )
+                labelText: 'Email'
               ),
               validator: (value) {
                 if (value != null && value.isEmpty) return 'Please enter some text';
@@ -125,14 +119,8 @@ class _LoginPageState extends State<LoginPage> {
             TextFormField(
               obscureText: true,
               controller: password,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColorLight
-              ),
               decoration: InputDecoration(
                 labelText: 'Password',
-                labelStyle: TextStyle(
-                  color: Theme.of(context).primaryColorLight
-                )
               ),
               validator: (value) {
                 if (value != null && value.isEmpty) return 'Please enter some text';
