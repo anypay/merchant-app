@@ -128,18 +128,12 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
           TextFormField(
             controller: name,
             decoration: InputDecoration(
-              labelStyle: TextStyle(
-                  color: Theme.of(context).primaryColorLight
-              ),
               labelText: 'Business Name (Optional)'
             ),
           ),
           TextFormField(
             controller: address,
             decoration: InputDecoration(
-              labelStyle: TextStyle(
-                  color: Theme.of(context).primaryColorLight
-              ),
               labelText: 'Business Street Address (Optional)'
             ),
           ),

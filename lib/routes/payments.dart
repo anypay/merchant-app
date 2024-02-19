@@ -187,7 +187,6 @@ class _PaymentsPageState extends State<PaymentsPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text('Payments', style: TextStyle(
-            color: Theme.of(context).primaryColorLight,
             fontWeight: FontWeight.bold,
             fontSize: 40,
           )),

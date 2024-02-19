@@ -250,8 +250,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
           Text(
             Coins.all[CoinCode(code, chain)]['name'],
             style: TextStyle(
-              fontSize: 50,
-              color: Theme.of(context).primaryColorLight
+              fontSize: 30,
             ),
           )
         ]
@@ -282,7 +281,6 @@ class _NewAddressPageState extends State<NewAddressPage> {
             child: Text('Scan',
               style: TextStyle(
                 fontSize: 50,
-                color: Theme.of(context).primaryColorLight
               ),
             )
           ),
@@ -312,7 +310,6 @@ class _NewAddressPageState extends State<NewAddressPage> {
           Text('Paste',
             style: TextStyle(
               fontSize: 50,
-              color: Theme.of(context).primaryColorLight
             ),
           )
         ],

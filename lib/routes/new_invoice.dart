@@ -180,7 +180,6 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
       child: Text(
         _price > 0 ? '$_visiblePrice' : "",
         style: TextStyle(
-          color: Theme.of(context).primaryColorLight,
           fontSize: (40 - 1.5*max(_visiblePrice.length-8, 0)).toDouble(),
         )
       ),
