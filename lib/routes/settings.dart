@@ -24,16 +24,23 @@ class _SettingsPageState extends State<SettingsPage> {
   var _successMessage = '';
   var denomination;
   var symbol;
+  var urlController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   void initState() {
     _rebuild();
     super.initState();
+        setBackendUrl();
     Authentication.getAccount().then((account) {
       _rebuild();
     });
   }
 
+  void setBackendUrl() {
+    urlController.text = Client.host;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
