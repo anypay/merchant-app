@@ -75,6 +75,19 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void setDefaultUrl() async {
+    final storedUrl = await FlutterSecureStorage(
+        aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    )).read(key: "backend_url");
+
+    if (storedUrl != null) {
+      Uri url = Uri.parse(storedUrl);
+      Client.protocol = url.scheme;
+      Client.host = url.host;
+    }
+  }
+  
   @override
   void dispose() {
     password.dispose();

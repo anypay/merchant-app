@@ -46,17 +46,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: TextStyle(color: AppController.green),
               ),
               Container(
-                width: 300,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _SelectCurrencyLink(context),
-                    _BusinessInfoLink(context),
-                    _AddressesLink(context),
-                    CircleBackButton(
-                      margin: EdgeInsets.only(top: 20.0),
-                      backPath: '/navigation',
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _EditUrlLink(),
+                      _SelectCurrencyLink(context),
+                      _BusinessInfoLink(context),
+                      _AddressesLink(context),
+                      CircleBackButton(
+                        margin: EdgeInsets.only(top: 20.0),
+                        backPath: '/navigation',
                     ),
                   ],
                 )
@@ -68,6 +69,52 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+ Widget _EditUrlLink() {
+    return Form(
+      key: _formKey,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+                controller: urlController,
+                decoration: InputDecoration(
+                    labelText: 'Update Backend Url',
+                    hintText: "http:// or https://"),
+                validator: (value) {
+                  if (Uri.parse(value).isAbsolute) {
+                    return null;
+                  } else {
+                    return "Please provide valid url";
+                  }
+                }),
+          ),
+          TextButton(
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  if (await confirm(context,
+                      title: Text("Confirmation"),
+                      content: Text(
+                          "You will be logged out because you changed the API backend url"))) {
+                    final uri = Uri.parse(urlController.text);
+                    await FlutterSecureStorage(
+                        aOptions: AndroidOptions(
+                      encryptedSharedPreferences: true,
+                    )).write(key: "backend_url", value: urlController.text);
+                    Client.protocol = uri.scheme;
+                    Client.domain = uri.host;
+                    Authentication.logout();
+                  }
+                }
+              },
+              child: Text(
+                "Save",
+                style: TextStyle(color: Colors.white),
+              ))
+        ],
+      ),
+    );
+  }
+  
   void _rebuild() {
     setState(() {
       denomination = Authentication.currentAccount.denomination ?? 'USD';
