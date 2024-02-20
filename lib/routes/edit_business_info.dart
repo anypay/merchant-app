@@ -91,7 +91,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
       _successMessage = "";
     });
     _closeKeyboard();
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       Authentication.updateAccount({
         'physical_address': address.text,
         'business_name': name.text,
