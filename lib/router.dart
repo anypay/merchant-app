@@ -1,3 +1,4 @@
+import 'package:app/routes/about_us.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
@@ -79,6 +80,11 @@ class AnyFluroRouter {
     router.define(
       '/settings/addresses',
       handler: newHandler(() => Addresses()),
+      transitionType: TransitionType.inFromBottom,
+    );
+        router.define(
+      '/settings/about_us',
+      handler: newHandler(() => AboutUs()),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(

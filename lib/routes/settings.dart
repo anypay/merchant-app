@@ -1,8 +1,12 @@
 import 'package:app/authentication.dart';
+import 'package:app/client.dart';
+import 'package:app/package_info_helper.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/currencies.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Settings extends StatelessWidget {
   @override
@@ -62,6 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     _SelectCurrencyLink(context),
                     _BusinessInfoLink(context),
                     _AddressesLink(context),
+                    _buildAboutUs(context),
                     CircleBackButton(
                       margin: EdgeInsets.only(top: 20.0),
                       backPath: '/navigation',
@@ -150,8 +155,29 @@ class _SettingsPageState extends State<SettingsPage> {
             _successMessage = '';
             _rebuild();
           });
-        }
-      ),
+          }),
+    );
+  }
+
+  Widget _buildAboutUs(context) {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.all(AppController.scale(20.0)),
+                  child: Text("About Us",
+                      style: TextStyle(
+                        fontSize: 22,
+                      ))),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, '/settings/about_us');
+          }),
     );
   }
 
