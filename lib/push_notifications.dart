@@ -68,7 +68,7 @@ class PushNotificationsManager {
     print("INIT FIREBASE");
     // For iOS request permission first.
     FirebaseMessaging.instance.requestPermission();
-    FirebaseMessaging.instance.getInitialMessage().then((value) => _handleMessage(value));
+    FirebaseMessaging.instance.getInitialMessage().then(_handleMessage);
     FirebaseMessaging.onBackgroundMessage(_handleMessage);
 
     String? token = await FirebaseMessaging.instance.getToken();
