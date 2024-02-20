@@ -53,18 +53,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: TextStyle(color: AppController.green),
               ),
               Container(
-                  width: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      _EditUrlLink(),
-                      _SelectCurrencyLink(context),
-                      _BusinessInfoLink(context),
-                      _AddressesLink(context),
-                      CircleBackButton(
-                        margin: EdgeInsets.only(top: 20.0),
-                        backPath: '/navigation',
+                width: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    _EditUrlLink(),
+                    _SelectCurrencyLink(context),
+                    _BusinessInfoLink(context),
+                    _AddressesLink(context),
+                    CircleBackButton(
+                      margin: EdgeInsets.only(top: 20.0),
+                      backPath: '/navigation',
                     ),
                   ],
                 )
