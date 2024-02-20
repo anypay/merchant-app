@@ -216,12 +216,12 @@ class _NewAddressPageState extends State<NewAddressPage> {
     AppController.closeUntilPath('/new-invoice');
   }
 
-  Color? _messageColor() {
+  Color _messageColor() {
     return {
       'pending': Theme.of(context).primaryColorDark,
       'success': AppController.green,
       'error': AppController.red,
-    }[_messageType];
+    }[_messageType] ?? Colors.white;
   }
 
   void _closeKeyboard() {
