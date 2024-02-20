@@ -11,13 +11,12 @@ class Client {
   static final domain = 'api.anypayx.com';
   static final host = "$protocol://$domain";
 
-  static String humanize(str) {
-    if (str != null && str.length > 0)
-      return StringUtils.capitalize(str);
+  static String humanize(String str) {
+    return StringUtils.capitalize(str);
   }
 
   static String buildAuthHeader() {
-    String token = Authentication.token;
+    String token = Authentication.token ?? '';
     return 'Basic ' + base64.encode(utf8.encode('$token:'));
   }
 
@@ -213,22 +212,22 @@ class Client {
       var code = response.statusCode;
       // For debugging:
       // print("PATH: $path, BODY: ${jsonEncode(body ?? {})}, CODE: $code");
-      if (response.statusCode == 401 && unauthorized != null) {
+      if (code == 401 && unauthorized != null) {
         unauthorized();
         return {
           'message': 'Unauthorized',
           'success': false,
           'body': { },
         };
-      } else if (genericErrorCodes.contains(response.statusCode)) {
+      } else if (genericErrorCodes.contains(code)) {
         return {
           'success': false,
           'message': "Something went wrong, please try again later",
           'body': { },
         };
       } else return {
-        'success': response.statusCode == 200,
-        'message': humanize(message ?? ""),
+        'success': code == 200,
+        'message': humanize(message ?? ''),
         'body': responseBody,
       };
     } on SocketException catch (_) {

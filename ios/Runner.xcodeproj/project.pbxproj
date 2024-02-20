@@ -168,7 +168,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
@@ -218,6 +218,7 @@
 			files = (
 			);
 			inputPaths = (
+				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
 			);
 			name = "Thin Binary";
 			outputPaths = (
@@ -377,6 +378,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NAME)";
 				DEVELOPMENT_TEAM = "$(APPLE_TEAM_ID)";
 				ENABLE_BITCODE = NO;
+				FLUTTER_BUILD_DIR = build;
+				FLUTTER_BUILD_MODE = Debug;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -523,6 +526,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NAME)";
 				DEVELOPMENT_TEAM = 8BS4Z5NKY2;
 				ENABLE_BITCODE = NO;
+				FLUTTER_BUILD_DIR = build;
+				FLUTTER_BUILD_MODE = Debug;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -561,6 +566,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NAME)";
 				DEVELOPMENT_TEAM = "$(APPLE_TEAM_ID)";
 				ENABLE_BITCODE = NO;
+				FLUTTER_BUILD_DIR = build;
+				FLUTTER_BUILD_MODE = Debug;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",

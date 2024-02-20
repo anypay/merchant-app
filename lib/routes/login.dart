@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/app_controller.dart';
@@ -12,7 +14,7 @@ class Login extends StatelessWidget {
 }
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
+  LoginPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -59,17 +61,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submitForm() {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       setState(() {
         _submitting = true;
         _errorMessage = "";
       });
       Client.authenticate(email.text, password.text).then((response) {
         _submitting = false;
-        if (response['success'])
+        if (response['success']) {
           AppController.closeUntilPath('/new-invoice');
+        }
         else setState(() {
-          _errorMessage = response['message'];
+          var body = response['body'];
+          var payload = body['payload'];
+          _errorMessage = payload['message'];
         });
       });
     }
@@ -101,9 +106,10 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: 'Email'
               ),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
-                else if (!EmailValidator.validate(value.trim()))
+                if (value != null && value.isEmpty) return 'Please enter some text';
+                else if (!EmailValidator.validate(value!.trim()))
                   return "That doesn't look like an email address";
+                return null;
               },
               onFieldSubmitted: (value) {
                 _submitForm();
@@ -116,7 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: 'Password',
               ),
               validator: (value) {
-                if (value.isEmpty) return 'Please enter some text';
+                if (value != null && value.isEmpty) return 'Please enter some text';
+                return null;
               },
               onFieldSubmitted: (value) {
                 _submitForm();
@@ -154,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                 fontSize: 18,
               )),
               onTap: () {
-                Navigator.pushNamed(context, '/registration');
+                Navigator.pushNamed(context, 'registration');
               }
             ),
           ),
@@ -170,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 18,
                   )),
                   onTap: () {
-                    Navigator.pushNamed(context, '/password-reset');
+                    Navigator.pushNamed(context, 'password-reset');
                   }
                 ),
               ]

@@ -23,18 +23,40 @@ class Anypay extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppController(builder: (context) {
       var theme;
+
       var lightTheme = ThemeData(
         primaryColorDark: Color(0xFF707070),
         primaryColorLight: Color(0xFF404040),
-        brightness: Brightness.light,
-        accentColor: AppController.blue,
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(color: Color(0xFF404040)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+            background: AppController.white,
+            secondary: AppController.blue,
+            brightness: Brightness.light
+        ),
         fontFamily: 'Ubuntu',
       );
+
       var darkTheme = ThemeData(
         primaryColorDark: Color(0xffCCCCCC),
         primaryColorLight: Color(0xFFFFFFFF),
-        accentColor: Color(0xff2196f3),
-        brightness: Brightness.dark,
+        textTheme: TextTheme(
+          bodyMedium: TextStyle(color: Color(0xFFFFFFFF)),
+          bodyLarge: TextStyle(color: Color(0xFFFFFFFF)),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(color: Color(0xFFFFFFFF)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+        ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+            background: Color(0xff222222),
+            secondary: Color(0xff2196f3),
+            brightness: Brightness.dark
+        ),
         fontFamily: 'Ubuntu',
       );
 
@@ -47,12 +69,16 @@ class Anypay extends StatelessWidget {
       }
 
       return MaterialApp(
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
+          if (child == null) {
+            throw 'MaterialApp builder child is null';
+          }
+
           return SafeArea(
             child: child,
           );
         },
-        initialRoute: isAuthenticated ? '/new-invoice' : '/login',
+        initialRoute: isAuthenticated ? 'new-invoice' : 'login',
         onGenerateRoute: AnyFluroRouter.router.generator,
         navigatorKey: AppController.globalKey,
         title: 'Anypay Cash Register',

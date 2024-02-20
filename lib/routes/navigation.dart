@@ -2,7 +2,6 @@ import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
-import 'package:app/client.dart';
 
 class Navigation extends StatelessWidget {
   @override
@@ -12,7 +11,7 @@ class Navigation extends StatelessWidget {
 }
 
 class NavigationPage extends StatefulWidget {
-  NavigationPage({Key key, this.title}) : super(key: key);
+  NavigationPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -40,7 +39,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     ..._Links(),
                     CircleBackButton(
                       margin: EdgeInsets.all(AppController.scale(20.0)),
-                      backPath: '/new-invoice',
+                      backPath: 'new-invoice',
                     ),
                   ],
                 )
@@ -65,7 +64,7 @@ class _NavigationPageState extends State<NavigationPage> {
             fontSize: 22,
           )),
           onTap: () {
-            Navigator.pushNamed(context, '/payments');
+            Navigator.pushNamed(context, 'payments');
           }
         ),
       ),
@@ -79,7 +78,7 @@ class _NavigationPageState extends State<NavigationPage> {
             fontSize: 22,
           )),
           onTap: () {
-            Navigator.pushNamed(context, '/settings');
+            Navigator.pushNamed(context, 'settings');
           }
         ),
       ),
@@ -116,7 +115,7 @@ class _NavigationPageState extends State<NavigationPage> {
         ),
         onTap: () {
           AppController.toggleDarkMode();
-          AppController.of(context).rebuild();
+          AppController.of(context)!.rebuild();
         }
       ),
     );

@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 
-import 'package:app/native_storage.dart'
-  if (dart.library.html) 'package:app/web_storage.dart';
+import 'package:app/native_storage.dart';
 
 class AppController extends StatefulWidget {
   final Function(BuildContext) builder;
@@ -12,7 +11,7 @@ class AppController extends StatefulWidget {
   static final globalKey = new GlobalKey<NavigatorState>();
   static bool enableDarkMode = false;
   static bool dialogIsOpen = false;
-  static String openedPath;
+  static String? openedPath;
 
   static String logoImagePath() {
     var modifier = enableDarkMode ? '-white' : '';
@@ -44,7 +43,7 @@ class AppController extends StatefulWidget {
   static Future<void> checkForDarkMode(context) {
     return Storage.read('enableDarkMode').then((darkMode) {
       if (darkMode == null)
-        enableDarkMode = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
+        enableDarkMode = SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
       else if (darkMode != 'false') enableDarkMode = true;
     });
   }
@@ -79,10 +78,18 @@ class AppController extends StatefulWidget {
   ].toList();
 
   static BuildContext getCurrentContext() {
-    return globalKey.currentState.overlay.context;
+    if (globalKey.currentState == null) {
+      throw 'GlobalKey current state is not available';
+    }
+
+    if (globalKey.currentState!.overlay == null) {
+      throw 'GlobalKey current state overlay is not available';
+    }
+
+    return globalKey.currentState!.overlay!.context;
   }
 
-  static double scale(num value, {num maxValue, num minValue}) {
+  static double scale(num value, {num? maxValue, num? minValue}) {
     var screenData = MediaQuery.of(getCurrentContext());
     value = value * screenData.size.height/650;
     value = min(value, maxValue ?? double.maxFinite);
@@ -90,12 +97,17 @@ class AppController extends StatefulWidget {
     return value.toDouble();
   }
 
-  static void openDialog(title, body, {path: null, buttonText: null, buttons: null}) async {
-    if (dialogIsOpen) return;
+  static void openDialog(title, body, {path, buttonText, buttons}) async {
+    if (dialogIsOpen) {
+      return;
+    }
+
     dialogIsOpen = true;
 
     var context = getCurrentContext();
+
     buttons ??= [];
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -119,8 +131,9 @@ class AppController extends StatefulWidget {
             onPressed: () {
               dialogIsOpen = false;
               Navigator.of(context).pop();
-              if (path != null)
+              if (path != null) {
                 openPath(path);
+              }
             },
           ),
         ],
@@ -132,21 +145,22 @@ class AppController extends StatefulWidget {
     Navigator.pushNamedAndRemoveUntil(getCurrentContext(), path, (Route<dynamic> route) => false);
   }
 
-  static void openPath(String path) async {
-    if (path != null && openedPath != path)
+  static void openPath(String? path) async {
+    if (path != null && openedPath != path) {
       Navigator.pushNamed(getCurrentContext(), path);
+    }
+
     Timer(Duration(milliseconds: 5000), () => openedPath = null);
+
     openedPath = path;
   }
 
-  const AppController(
-      {Key key, this.builder})
-  : super(key: key);
+  const AppController({Key? key, required this.builder}) : super(key: key);
 
   @override
   AppControllerState createState() => new AppControllerState();
 
-  static AppControllerState of(BuildContext context) {
+  static AppControllerState? of(BuildContext context) {
     return context.findAncestorStateOfType();
   }
 }
