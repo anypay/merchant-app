@@ -20,12 +20,12 @@ class Payment extends StatelessWidget {
 }
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage({Key? key, this.id}) : super(key: key);
+  PaymentPage({Key? key, required this.id}) : super(key: key);
 
-  final String? id;
+  final String id;
 
   @override
-  _PaymentPageState createState() => _PaymentPageState(id ?? '');
+  _PaymentPageState createState() => _PaymentPageState(id);
 }
 
 class _PaymentPageState extends State<PaymentPage> {
