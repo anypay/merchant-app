@@ -72,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
           AppController.closeUntilPath('/new-invoice');
         }
         else setState(() {
-          print(jsonEncode(response));
           var body = response['body'];
           var payload = body['payload'];
           _errorMessage = payload['message'];
