@@ -6,6 +6,10 @@ on:
   pull_request:
     branches:
       - '*'
+env:
+  RELEASE_KEY_ALIAS: mock_alias
+  RELEASE_KEY_PASSWORD: password
+  RELEASE_STORE_PASSWORD: password
 
 jobs:
   build:
@@ -21,4 +25,16 @@ jobs:
         with:
           flutter-version: '3.16.5'
           channel: 'stable'
+      - run:
+          name: Generate keystore
+          command: keytool -genkey -v -keystore android/keystore -alias $RELEASE_KEY_ALIAS -keyalg RSA -keysize 2048 -validity 10000 -storepass $RELEASE_STORE_PASSWORD -keypass $RELEASE_KEY_PASSWORD -dname "cn=Unknown, ou=Unknown, o=Unknown, c=Unknown"
+      - run:
+          name: Configure key.properties
+          command: |
+            printf "
+            keyAlias=%s
+            keyPassword=%s
+            storeFile=%s
+            storePassword=%s
+            " $RELEASE_KEY_ALIAS $RELEASE_KEY_PASSWORD "$(pwd)/android/keystore" $RELEASE_STORE_PASSWORD > android/key.properties
       - run: flutter build apk
