@@ -672,8 +672,7 @@ class _InvoicePageState extends State<InvoicePage> {
                       padding: EdgeInsets.only(left: 15),
                       child: Image(
                           image: AppController.enableDarkMode ?
-                            AssetImage(
-                                'assets/images/share-white.png') :
+                            AssetImage('assets/images/share-white.png') :
                             AssetImage('assets/images/share.png'),
                         width: 20,
                       )
