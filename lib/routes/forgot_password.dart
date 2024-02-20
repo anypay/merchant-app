@@ -13,9 +13,9 @@ class ForgotPassword extends StatelessWidget {
 }
 
 class ForgotPasswordPage extends StatefulWidget {
-  ForgotPasswordPage({Key? key, this.title}) : super(key: key);
+  ForgotPasswordPage({Key? key, required this.title}) : super(key: key);
 
-  final String? title;
+  final String title;
 
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();

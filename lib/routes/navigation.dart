@@ -11,9 +11,9 @@ class Navigation extends StatelessWidget {
 }
 
 class NavigationPage extends StatefulWidget {
-  NavigationPage({Key? key, this.title}) : super(key: key);
+  NavigationPage({Key? key, required this.title}) : super(key: key);
 
-  final String? title;
+  final String title;
 
   @override
   _NavigationPageState createState() => _NavigationPageState();

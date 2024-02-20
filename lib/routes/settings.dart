@@ -12,9 +12,9 @@ class Settings extends StatelessWidget {
 }
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({Key? key, this.title}) : super(key: key);
+  SettingsPage({Key? key, required this.title}) : super(key: key);
 
-  final String? title;
+  final String title;
 
   @override
   _SettingsPageState createState() => _SettingsPageState();

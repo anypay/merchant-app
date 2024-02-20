@@ -13,9 +13,9 @@ class Addresses extends StatelessWidget {
 }
 
 class AddressesPage extends StatefulWidget {
-  AddressesPage({Key? key, this.title}) : super(key: key);
+  AddressesPage({Key? key, required this.title}) : super(key: key);
 
-  final String? title;
+  final String title;
 
   @override
   _AddressesPageState createState() => _AddressesPageState();

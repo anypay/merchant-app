@@ -14,9 +14,9 @@ class Login extends StatelessWidget {
 }
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key, this.title}) : super(key: key);
+  LoginPage({Key? key, required this.title}) : super(key: key);
 
-  final String? title;
+  final String title;
 
   @override
   _LoginPageState createState() => _LoginPageState();

@@ -13,9 +13,9 @@ class CreateAccount extends StatelessWidget {
 }
 
 class CreateAccountPage extends StatefulWidget {
-  CreateAccountPage({Key? key, this.title}) : super(key: key);
+  CreateAccountPage({Key? key, required this.title}) : super(key: key);
 
-  final String? title;
+  final String title;
 
   @override
   _CreateAccountPageState createState() => _CreateAccountPageState();

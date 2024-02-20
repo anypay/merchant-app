@@ -13,9 +13,9 @@ class SetCurrency extends StatelessWidget {
 }
 
 class SetCurrencyPage extends StatefulWidget {
-  SetCurrencyPage({Key? key, this.title}) : super(key: key);
+  SetCurrencyPage({Key? key, required this.title}) : super(key: key);
 
-  final String? title;
+  final String title;
 
   @override
   _SetCurrencyPageState createState() => _SetCurrencyPageState();
