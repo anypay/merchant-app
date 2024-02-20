@@ -16,9 +16,9 @@ class EditBusinessInfo extends StatelessWidget {
 }
 
 class EditBusinessInfoPage extends StatefulWidget {
-  EditBusinessInfoPage({Key? key, this.allowBack}) : super(key: key);
+  EditBusinessInfoPage({Key? key, required this.allowBack}) : super(key: key);
 
-  final bool? allowBack;
+  final bool allowBack;
 
   @override
   _EditBusinessInfoPageState createState() => _EditBusinessInfoPageState(allowBack);
