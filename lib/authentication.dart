@@ -67,7 +67,7 @@ class Authentication {
           var coins = response['body']['coins'] ?? [];
           Coins.all = {};
           coins.forEach((coin) {
-            var coinCode = CoinCode.fromString("${coin['code']}_${coin['chain']}");
+            var coinCode = CoinCode(coin['code'], coin['chain']);
 
             Coins.all[coinCode] = {
               'name': coin['name'],
