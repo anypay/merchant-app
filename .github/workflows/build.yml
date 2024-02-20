@@ -27,7 +27,10 @@ jobs:
           channel: 'stable'
       - run:
           name: Generate keystore
-          command: keytool -genkey -v -keystore android/keystore -alias $RELEASE_KEY_ALIAS -keyalg RSA -keysize 2048 -validity 10000 -storepass $RELEASE_STORE_PASSWORD -keypass $RELEASE_KEY_PASSWORD -dname "cn=Unknown, ou=Unknown, o=Unknown, c=Unknown"
+          command: |
+            keytool -genkey -v -keystore android/keystore -alias $RELEASE_KEY_ALIAS \
+            -keyalg RSA -keysize 2048 -validity 10000 -storepass $RELEASE_STORE_PASSWORD \
+            -keypass $RELEASE_KEY_PASSWORD -dname "cn=Unknown, ou=Unknown, o=Unknown, c=Unknown"
       - run:
           name: Configure key.properties
           command: |
