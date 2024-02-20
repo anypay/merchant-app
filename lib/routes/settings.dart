@@ -70,8 +70,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _rebuild() {
     setState(() {
-      denomination = Authentication.currentAccount.denomination ?? 'USD';
-      symbol = Currencies.all[denomination]!['symbol'];
+      if (Authentication.currentAccount.denomination != null) {
+        denomination = Authentication.currentAccount.denomination;
+        symbol = Currencies.all[denomination]!['symbol'];
+      } else {
+        denomination = 'USD';
+        symbol = '\$';
+      }
     });
   }
 
