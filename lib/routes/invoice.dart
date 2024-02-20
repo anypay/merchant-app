@@ -29,12 +29,12 @@ class ShowInvoice extends StatelessWidget {
 }
 
 class InvoicePage extends StatefulWidget {
-  InvoicePage({Key? key, this.id}) : super(key: key);
+  InvoicePage({Key? key, required this.id}) : super(key: key);
 
-  final String? id;
+  final String id;
 
   @override
-  _InvoicePageState createState() => _InvoicePageState(id ?? '');
+  _InvoicePageState createState() => _InvoicePageState(id);
 }
 
 class _InvoicePageState extends State<InvoicePage> {
@@ -585,9 +585,9 @@ class _InvoicePageState extends State<InvoicePage> {
 
   Widget _InvoiceComponent() {
     return AnimatedOpacity(
-    opacity: _invoiceReady ? 1.0 : 0.0,
-    duration: Duration(milliseconds: 300),
-    child: Column(
+      opacity: _invoiceReady ? 1.0 : 0.0,
+      duration: Duration(milliseconds: 300),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Text(_successMessage,
