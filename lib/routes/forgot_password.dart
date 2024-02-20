@@ -37,7 +37,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   void _submitForm() {
     _closeKeyboard();
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       setState(() {
         _submitting = true;
         _errorMessage = "";
