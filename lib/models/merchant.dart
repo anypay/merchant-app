@@ -3,9 +3,9 @@ import 'dart:convert';
 class Merchant {
   Map<String, dynamic> addresses = {};
   bool fetchingCoins = false;
-  String denomination;
-  int accountId;
-  String name;
+  String? denomination;
+  int? accountId;
+  String? name;
 
   Merchant({
     this.name,

@@ -16,7 +16,7 @@ class Settings extends StatelessWidget {
 }
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({Key key, this.title}) : super(key: key);
+  SettingsPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -69,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     _buildAboutUs(context),
                     CircleBackButton(
                       margin: EdgeInsets.only(top: 20.0),
-                      backPath: '/navigation',
+                      backPath: 'navigation',
                     ),
                   ],
                 )
@@ -128,8 +128,13 @@ class _SettingsPageState extends State<SettingsPage> {
   
   void _rebuild() {
     setState(() {
-      denomination = Authentication.currentAccount.denomination ?? 'USD';
-      symbol = Currencies.all[denomination]['symbol'];
+      if (Authentication.currentAccount.denomination != null) {
+        denomination = Authentication.currentAccount.denomination;
+        symbol = Currencies.all[denomination]!['symbol'];
+      } else {
+        denomination = 'USD';
+        symbol = '\$';
+      }
     });
   }
 
@@ -151,7 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/settings/addresses').then((value) {
+          Navigator.pushNamed(context, 'settings/addresses').then((value) {
             _successMessage = '';
             _rebuild();
           });
@@ -207,7 +212,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/settings/currency').then((value) {
+          Navigator.pushNamed(context, 'settings/currency').then((value) {
             _successMessage = 'Saved!';
             _rebuild();
           });
@@ -234,7 +239,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/settings/business-info');
+          Navigator.pushNamed(context, 'settings/business-info');
         }
       ),
     );

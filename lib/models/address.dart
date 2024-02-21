@@ -7,11 +7,11 @@ import 'dart:convert';
 // import 'dart:io';
 
 class Address {
-  int id;
-  String note;
-  String value;
-  String currency;
-  String paymail;
+  int? id;
+  String? note;
+  String? value;
+  String? currency;
+  String? paymail;
 
   Address({
     this.id,

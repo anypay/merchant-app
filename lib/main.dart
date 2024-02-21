@@ -69,12 +69,16 @@ class Anypay extends StatelessWidget {
       }
 
       return MaterialApp(
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
+          if (child == null) {
+            throw 'MaterialApp builder child is null';
+          }
+
           return SafeArea(
             child: child,
           );
         },
-        initialRoute: isAuthenticated ? '/new-invoice' : '/login',
+        initialRoute: isAuthenticated ? 'new-invoice' : 'login',
         onGenerateRoute: AnyFluroRouter.router.generator,
         navigatorKey: AppController.globalKey,
         title: 'Anypay Cash Register',

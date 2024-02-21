@@ -1,10 +1,8 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/client.dart';
-import "package:intl/intl.dart";
 
 class Payments extends StatelessWidget {
   @override
@@ -14,7 +12,7 @@ class Payments extends StatelessWidget {
 }
 
 class PaymentsPage extends StatefulWidget {
-  PaymentsPage({Key key}) : super(key: key);
+  PaymentsPage({Key? key}) : super(key: key);
 
   @override
   _PaymentsPageState createState() => _PaymentsPageState();
@@ -24,7 +22,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   bool _awaitingResponse = true;
   bool _showMore = false;
   var allInvoices = [];
-  String _errorMessage;
+  String? _errorMessage;
   num page = 0;
 
   @override
@@ -36,7 +34,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           child: SafeArea(
             child: CircleBackButton(
               margin: EdgeInsets.only(right: 20.0, top: 35 + AppController.topPadding()),
-              backPath: '/navigation',
+              backPath: 'navigation',
             )
           )
         )
@@ -81,12 +79,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
   }
 
   void openPayment(id) {
-    Navigator.pushNamed(context, '/payments/$id');
+    Navigator.pushNamed(context, 'payments/$id');
   }
 
   List<Widget> _InvoiceList() {
     if (_errorMessage != null)
-      return [Text(_errorMessage, textAlign: TextAlign.center, style: TextStyle(color: AppController.red))];
+      return [Text(_errorMessage!, textAlign: TextAlign.center, style: TextStyle(color: AppController.red))];
     else if (allInvoices.length == 0)
       return [
         Container(

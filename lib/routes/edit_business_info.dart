@@ -1,10 +1,8 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/authentication.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
-import 'package:app/client.dart';
 
 class EditBusinessInfo extends StatelessWidget {
   EditBusinessInfo({this.allowBack = true});
@@ -18,7 +16,7 @@ class EditBusinessInfo extends StatelessWidget {
 }
 
 class EditBusinessInfoPage extends StatefulWidget {
-  EditBusinessInfoPage({Key key, this.allowBack}) : super(key: key);
+  EditBusinessInfoPage({Key? key, required this.allowBack}) : super(key: key);
 
   final bool allowBack;
 
@@ -72,9 +70,8 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
 
   void _rebuild() {
     setState(() {
-      address.text = Authentication.currentAccount.physicalAddress;
-      email.text = Authentication.currentAccount.ambassadorEmail;
-      name.text = Authentication.currentAccount.businessName;
+      address.text = Authentication.currentAccount.physicalAddress ?? 'N\\A';
+      name.text = Authentication.currentAccount.businessName?? 'N\\A';
     });
   }
 
@@ -94,16 +91,15 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
       _successMessage = "";
     });
     _closeKeyboard();
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       Authentication.updateAccount({
-        'ambassador_email': email.text.toLowerCase(),
         'physical_address': address.text,
         'business_name': name.text,
       }).then((response) {
         setState(() {
           _submitting = false;
           if (!allowBack)
-            Navigator.pushNamedAndRemoveUntil(context, '/settings/addresses', (Route<dynamic> route) => false);
+            Navigator.pushNamedAndRemoveUntil(context, 'settings/addresses', (Route<dynamic> route) => false);
           else if (response['success'])
             _successMessage = "Saved!";
           else _errorMessage = response['message'];
@@ -141,16 +137,6 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
               labelText: 'Business Street Address (Optional)'
             ),
           ),
-          TextFormField(
-            controller: email,
-            decoration: InputDecoration(
-              labelText: 'Ambassador Email (Optional)'
-            ),
-            validator: (value) {
-              if (!value.isEmpty && !EmailValidator.validate(value.trim()))
-                return "That doesn't look like an email address";
-            },
-          ),
           Container(
             margin: EdgeInsets.only(top: 40.0),
             child: _submitting ? SpinKitCircle(color: AppController.randomColor) : GestureDetector(
@@ -164,7 +150,7 @@ class _EditBusinessInfoPageState extends State<EditBusinessInfoPage> {
           ),
           !allowBack ? Container() : CircleBackButton(
             margin: EdgeInsets.only(top: 20.0),
-            backPath: '/settings',
+            backPath: 'settings',
           )
         ],
       ),

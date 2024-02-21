@@ -12,7 +12,7 @@ class Preloader {
     downloadStarted = true;
 
     var context = AppController.getCurrentContext();
-    Coins.all.forEach((code, details) {
+    Coins.all.forEach((CoinCode coinCode, details) {
       var configuration = createLocalImageConfiguration(context);
       NetworkImage(details['icon'])..resolve(configuration);
     });
