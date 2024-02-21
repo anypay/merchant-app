@@ -1,8 +1,12 @@
 import 'package:app/authentication.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/currencies.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../client.dart';
 
 class Settings extends StatelessWidget {
   @override
@@ -31,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     _rebuild();
     super.initState();
-        setBackendUrl();
+    setBackendUrl();
     Authentication.getAccount().then((account) {
       _rebuild();
     });
@@ -40,7 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void setBackendUrl() {
     urlController.text = Client.host;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,26 +53,26 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(_successMessage,
+              Text(
+                _successMessage,
                 style: TextStyle(color: AppController.green),
               ),
               Container(
-                width: 300,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _EditUrlLink(),
-                    _SelectCurrencyLink(context),
-                    _BusinessInfoLink(context),
-                    _AddressesLink(context),
-                    CircleBackButton(
-                      margin: EdgeInsets.only(top: 20.0),
-                      backPath: 'navigation',
-                    ),
-                  ],
-                )
-              ),
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _EditUrlLink(),
+                      _SelectCurrencyLink(context),
+                      _BusinessInfoLink(context),
+                      _AddressesLink(context),
+                      CircleBackButton(
+                        margin: EdgeInsets.only(top: 20.0),
+                        backPath: 'navigation',
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),
@@ -76,7 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
- Widget _EditUrlLink() {
+  Widget _EditUrlLink() {
     return Form(
       key: _formKey,
       child: Row(
@@ -88,40 +92,47 @@ class _SettingsPageState extends State<SettingsPage> {
                     labelText: 'Update Backend Url',
                     hintText: "http:// or https://"),
                 validator: (value) {
-                  if (Uri.parse(value).isAbsolute) {
-                    return null;
+                  if (value != null) {
+                    if (Uri.parse(value).isAbsolute) {
+                      return null;
+                    } else {
+                      return "Please provide valid url";
+                    }
                   } else {
                     return "Please provide valid url";
                   }
                 }),
           ),
-          ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState.validate()) {
-                  bool confirmed = await confirm(context,
-                      title: Text("Confirmation"),
-                      content: Text(
-                          "You will be logged out because you changed the API backend url")); 
-                  if (confirmed) {
-                    final uri = Uri.parse(urlController.text);
-                    await FlutterSecureStorage(
-                        aOptions: AndroidOptions(
-                      encryptedSharedPreferences: true,
-                    )).write(key: "backend_url", value: urlController.text);
-                    Client.protocol = uri.scheme;
-                    Client.domain = uri.host;
-                    Authentication.logout();
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    bool confirmed = await confirm(context,
+                        title: Text("Confirmation"),
+                        content: Text(
+                            "You will be logged out because you changed the API backend url"));
+                    if (confirmed) {
+                      final uri = Uri.parse(urlController.text);
+                      await FlutterSecureStorage(
+                          aOptions: AndroidOptions(
+                        encryptedSharedPreferences: true,
+                      )).write(key: "backend_url", value: urlController.text);
+                      Client.protocol = uri.scheme;
+                      Client.domain = uri.host;
+                      Authentication.logout();
+                    }
                   }
-                }
-              },
-              child: Text(
-                "Save",
-              ))
+                },
+                child: Text(
+                  "Save",
+                )),
+          )
         ],
       ),
     );
   }
-  
+
   void _rebuild() {
     setState(() {
       if (Authentication.currentAccount.denomination != null) {
@@ -138,26 +149,25 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(AppController.scale(20.0)),
-              child: Text("Addresses", style: TextStyle(
-                fontSize: 22,
-              ))
-            ),
-            Icon(Icons.edit),
-          ],
-        ),
-        onTap: () {
-          Navigator.pushNamed(context, 'settings/addresses').then((value) {
-            _successMessage = '';
-            _rebuild();
-          });
-        }
-      ),
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.all(AppController.scale(20.0)),
+                  child: Text("Addresses",
+                      style: TextStyle(
+                        fontSize: 22,
+                      ))),
+              Icon(Icons.edit),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/addresses').then((value) {
+              _successMessage = '';
+              _rebuild();
+            });
+          }),
     );
   }
 
@@ -165,34 +175,34 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(AppController.scale(20.0)),
-              child: Row(
-                children: <Widget>[
-                  Text("Currency ", style: TextStyle(
-                    fontSize: 22,
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.all(AppController.scale(20.0)),
+                  child: Row(
+                    children: <Widget>[
+                      Text("Currency ",
+                          style: TextStyle(
+                            fontSize: 22,
+                          )),
+                      Text("($symbol$denomination)",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          )),
+                    ],
                   )),
-                  Text("($symbol$denomination)", style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  )),
-                ],
-              )
-            ),
-            Icon(Icons.edit),
-          ],
-        ),
-        onTap: () {
-          Navigator.pushNamed(context, 'settings/currency').then((value) {
-            _successMessage = 'Saved!';
-            _rebuild();
-          });
-        }
-      ),
+              Icon(Icons.edit),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/currency').then((value) {
+              _successMessage = 'Saved!';
+              _rebuild();
+            });
+          }),
     );
   }
 
@@ -200,24 +210,23 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(20.0),
       child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(AppController.scale(20.0)),
-              child: Text("Business Info", style: TextStyle(
-                fontSize: 22,
-              )),
-            ),
-            Icon(Icons.edit),
-          ],
-        ),
-        onTap: () {
-          Navigator.pushNamed(context, 'settings/business-info');
-        }
-      ),
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(AppController.scale(20.0)),
+                child: Text("Business Info",
+                    style: TextStyle(
+                      fontSize: 22,
+                    )),
+              ),
+              Icon(Icons.edit),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/business-info');
+          }),
     );
   }
-
 }
