@@ -67,6 +67,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       _SelectCurrencyLink(context),
                       _BusinessInfoLink(context),
                       _AddressesLink(context),
+                      _buildAboutUs(context),
                       CircleBackButton(
                         margin: EdgeInsets.only(top: 20.0),
                         backPath: 'navigation',
@@ -167,6 +168,28 @@ class _SettingsPageState extends State<SettingsPage> {
               _successMessage = '';
               _rebuild();
             });
+          }),
+    );
+  }
+
+  Widget _buildAboutUs(context) {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.all(AppController.scale(20.0)),
+                  child: Text("About Us",
+                      style: TextStyle(
+                        fontSize: 22,
+                      ))),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/about_us');
           }),
     );
   }

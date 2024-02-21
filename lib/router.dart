@@ -15,6 +15,8 @@ import 'package:app/routes/payment.dart';
 import 'package:app/routes/invoice.dart';
 import 'package:app/routes/login.dart';
 
+import 'routes/about_us.dart';
+
 class AnyFluroRouter {
   static FluroRouter router = FluroRouter();
 
@@ -25,7 +27,7 @@ class AnyFluroRouter {
 
       if (klassParams.length == 0) {
         return klass();
-      } else if(klassParams.length == 1) {
+      } else if (klassParams.length == 1) {
         return klass(klassParams[0]);
       } else {
         return klass(klassParams[0], klassParams[1]);
@@ -85,6 +87,11 @@ class AnyFluroRouter {
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
+      'settings/about_us',
+      handler: newHandler(() => AboutUs(), []),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
       'settings/addresses',
       handler: newHandler(() => Addresses(), []),
       transitionType: TransitionType.inFromBottom,
@@ -106,7 +113,8 @@ class AnyFluroRouter {
     );
     router.define(
       'new-address/:code/:chain',
-      handler: newHandler((code, chain) => NewAddress(code, chain), ['code', 'chain']),
+      handler: newHandler(
+          (code, chain) => NewAddress(code, chain), ['code', 'chain']),
       transitionType: TransitionType.inFromBottom,
     );
   }

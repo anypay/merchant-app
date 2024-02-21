@@ -1,4 +1,5 @@
 import 'package:app/authentication.dart';
+import 'package:app/package_info_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:app/router.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  PackageInfoPlusHelper.init();
   Authentication.checkForAuth().then((isAuthenticated) {
     AnyFluroRouter.setupRouter();
     runApp(Anypay(isAuthenticated));
