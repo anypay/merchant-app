@@ -98,10 +98,11 @@ class _SettingsPageState extends State<SettingsPage> {
           ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
-                  if (await confirm(context,
+                  bool confirmed = await confirm(context,
                       title: Text("Confirmation"),
                       content: Text(
-                          "You will be logged out because you changed the API backend url"))) {
+                          "You will be logged out because you changed the API backend url")); 
+                  if (confirmed) {
                     final uri = Uri.parse(urlController.text);
                     await FlutterSecureStorage(
                         aOptions: AndroidOptions(
