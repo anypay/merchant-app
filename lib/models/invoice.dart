@@ -7,27 +7,27 @@ import 'dart:convert';
 import 'dart:io';
 
 class Invoice {
-  String denominationCurrency;
-  num denominationAmountPaid;
-  num denominationAmount;
-  DateTime completedAt;
-  String blockchainUrl;
-  List paymentOptions;
-  String redirectUrl;
-  String accountId;
-  String itemName;
-  String currency;
-  DateTime expiry;
-  String address;
-  bool complete;
-  String status;
-  String hash;
-  List notes;
-  num amount;
-  num invoiceAmount;
-  num invoiceAmountPaid;
-  String uri;
-  String uid;
+  String? denominationCurrency;
+  num? denominationAmountPaid;
+  num? denominationAmount;
+  DateTime? completedAt;
+  String? blockchainUrl;
+  List? paymentOptions;
+  String? redirectUrl;
+  String? accountId;
+  String? itemName;
+  String? currency;
+  DateTime? expiry;
+  String? address;
+  bool? complete;
+  String? status;
+  String? hash;
+  List? notes;
+  num? amount;
+  num? invoiceAmount;
+  num? invoiceAmountPaid;
+  String? uri;
+  String? uid;
 
   Invoice({
     this.denominationAmountPaid,
@@ -53,8 +53,8 @@ class Invoice {
     this.uid,
   });
 
-  String getBlockchainUrl() {
-    if (blockchainUrl != null && blockchainUrl.length > 0)
+  String? getBlockchainUrl() {
+    if (blockchainUrl != null && blockchainUrl!.length > 0)
       return blockchainUrl;
     else if (currency == 'BSV')
       return "https://whatsonchain.com/tx/$hash";
@@ -69,13 +69,20 @@ class Invoice {
   }
 
   String orderNotes() {
-    if (notes != null && notes.length > 0)
+    if (notes != null && notes!.length > 0)
       return "Order notes: ${noteText()}";
     else return "";
   }
 
   int decimalPlaces() {
-    return (Currencies.all[denominationCurrency] ?? {})['decimal_places'] ?? 2;
+    var decimalPlaces = (Currencies.all[denominationCurrency] ??
+        {})['decimal_places'];
+
+    if (decimalPlaces != null) {
+      return decimalPlaces as int;
+    }
+
+    return 2;
   }
 
   String paidAmountWithDenomination() {
@@ -91,7 +98,7 @@ class Invoice {
       return NumberFormat.currency(
         decimalDigits: decimalPlaces(),
         locale: Platform.localeName,
-        symbol: symbol,
+        symbol: symbol as String,
       ).format(amount);
     } catch(e) {
       // Fallback in case there is an unsupported locale
@@ -119,11 +126,7 @@ class Invoice {
   }
 
   bool isExpired() {
-    return expiry.isBefore(DateTime.now());
-  }
-
-  Map<String, dynamic> get bsvPaymentOption {
-    return paymentOptions.firstWhere((option) => option['currency'] == 'BSV', orElse: () => null);
+    return expiry != null && expiry!.isBefore(DateTime.now());
   }
 
   String urlStyleUri([useCurrency]) {
@@ -147,19 +150,19 @@ class Invoice {
   }
 
   Map<String, dynamic> paymentOptionFor(currency) {
-    return paymentOptions.firstWhere((option) {
+    return paymentOptions?.firstWhere((option) {
       return option['currency'] == currency;
     }) ?? {};
   }
 
   String completedAtTimeAgo() {
     if (completedAt == null) return '';
-    return timeago.format(completedAt);
+    return timeago.format(completedAt!);
   }
 
   String formatCompletedAt() {
     if (completedAt == null) return '';
-    else return DateFormat('E, MMMM d, h:mma').format(completedAt);
+    else return DateFormat('E, MMMM d, h:mma').format(completedAt!);
   }
 
   factory Invoice.fromMap(Map<String, dynamic> body) {

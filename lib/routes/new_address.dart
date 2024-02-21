@@ -11,29 +11,33 @@ import 'package:app/coins.dart';
 import 'dart:async';
 
 class NewAddress extends StatelessWidget {
-  NewAddress(this.code);
+  NewAddress(this.code, this.chain);
 
   final String code;
+  final String chain;
 
   @override
   Widget build(BuildContext context) {
-    return NewAddressPage(code: code);
+    return NewAddressPage(code: code, chain: chain);
   }
 }
 
 class NewAddressPage extends StatefulWidget {
-  NewAddressPage({Key key, this.code}) : super(key: key);
+  NewAddressPage({Key? key, required this.code, required this.chain})
+      : super(key: key);
 
   final String code;
+  final String chain;
 
   @override
-  _NewAddressPageState createState() => _NewAddressPageState(code);
+  _NewAddressPageState createState() => _NewAddressPageState(code, chain);
 }
 
 class _NewAddressPageState extends State<NewAddressPage> {
-  _NewAddressPageState(this.code);
+  _NewAddressPageState(this.code, this.chain);
 
   final String code;
+  final String chain;
 
   bool _scanning = false;
   bool _submittingScan = false;
@@ -47,7 +51,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
   String _noteError = '';
   String _message = '';
   String _note = '';
-  Address _address;
+  Address? _address;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
             ),
             CircleBackButton(
               margin: EdgeInsets.only(top: 20.0),
-              backPath: '/settings',
+              backPath: 'settings',
             )
           ]) :
           SingleChildScrollView(
@@ -111,7 +115,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                 ),
                 CircleBackButton(
                   margin: EdgeInsets.only(top: 20.0),
-                  backPath: '/settings',
+                  backPath: 'settings',
                 ),
               ],
             ),
@@ -124,9 +128,9 @@ class _NewAddressPageState extends State<NewAddressPage> {
   void _rebuild() {
     if (!_disposed)
       setState(() {
-        _address = Authentication.currentAccount.addressFor(this.code);
+        _address = Authentication.currentAccount.addressFor(CoinCode(this.code, this.chain));
         _note = _address?.note ?? "";
-        _message = _address?.toString();
+        _message = _address?.toString() ?? "";
         _messageType = 'success';
       });
   }
@@ -145,8 +149,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   void _pasteAddress() async {
-    ClipboardData clipboard = await Clipboard.getData('text/plain');
-    if (clipboard.text == null || clipboard.text == '') {
+    ClipboardData? clipboard = await Clipboard.getData('text/plain');
+    if (clipboard != null && clipboard.text == null || clipboard!.text == '') {
       _message = 'Nothing to paste';
       _messageType = 'error';
       return;
@@ -158,21 +162,24 @@ class _NewAddressPageState extends State<NewAddressPage> {
 
   void _scanAddress() async {
     _scanning = true;
+    _rebuild();
   }
 
   void _setNote() async {
     setState(() {
       _savingNote = true;
     });
-    Client.setAddressNote(_address.id, _note).then((response) {
-      if (!_disposed)
-        setState(() {
-          if (response['success']) {
-            _savingNote = false;
-            _address.note = _note;
-          } else _noteError = response['message'];
-        });
-    });
+    if (_address != null) {
+      Client.setAddressNote(_address!.id, _note).then((response) {
+        if (!_disposed)
+          setState(() {
+            if (response['success']) {
+              _savingNote = false;
+              _address!.note = _note;
+            } else _noteError = response['message'];
+          });
+      });
+    }
   }
 
   void _setAddress(address) async {
@@ -181,19 +188,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
       _message = address;
     });
 
-    var coinCode, coinChain;
-
-    var coinCodename = code.split('_');
-
-    coinCode = coinCodename[0];
-
-    if (coinCodename.length == 1) {
-      coinChain = coinCode;
-    } else {
-      coinChain = coinCodename[1];
-    }
-
-    Client.setAddress(coinCode, coinChain, address).then((response) {
+    Client.setAddress(code, chain, address).then((response) {
       if (!_disposed)
         setState(() {
           _submittingScan = false;
@@ -226,7 +221,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
       'pending': Theme.of(context).primaryColorDark,
       'success': AppController.green,
       'error': AppController.red,
-    }[_messageType];
+    }[_messageType] ?? Colors.white;
   }
 
   void _closeKeyboard() {
@@ -249,11 +244,11 @@ class _NewAddressPageState extends State<NewAddressPage> {
               bottom: 10.0,
             ),
             child: Image.network(
-              Coins.all[code]['icon']
+              Coins.all[CoinCode(code, chain)]['icon']
             ),
           ),
           Text(
-            Coins.all[code]['name'],
+            Coins.all[CoinCode(code, chain)]['name'],
             style: TextStyle(
               fontSize: 30,
             ),
