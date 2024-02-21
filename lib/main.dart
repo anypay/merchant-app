@@ -39,7 +39,7 @@ class Anypay extends StatelessWidget {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
               Colors.black,
-            ), //button color
+            ),
             foregroundColor: MaterialStateProperty.all<Color>(
                 Colors.white), //text (and icon)
           ),
