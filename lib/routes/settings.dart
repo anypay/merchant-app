@@ -5,7 +5,6 @@ import 'package:app/back_button.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/currencies.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import '../client.dart';
 
 class Settings extends StatelessWidget {
