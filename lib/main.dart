@@ -23,6 +23,7 @@ class Anypay extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppController(builder: (context) {
       var theme;
+
       var lightTheme = ThemeData(
         primaryColorDark: Color(0xFF707070),
         primaryColorLight: Color(0xFF404040),
@@ -46,6 +47,7 @@ class Anypay extends StatelessWidget {
         ),
         fontFamily: 'Ubuntu',
       );
+      
       var darkTheme = ThemeData(
         primaryColorDark: Color(0xffCCCCCC),
         primaryColorLight: Color(0xFFFFFFFF),
