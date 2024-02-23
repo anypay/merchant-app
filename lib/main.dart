@@ -26,6 +26,15 @@ class Anypay extends StatelessWidget {
       var lightTheme = ThemeData(
         primaryColorDark: Color(0xFF707070),
         primaryColorLight: Color(0xFF404040),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(color: Color(0xFF404040)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+            background: AppController.white,
+            secondary: AppController.blue,
+            brightness: Brightness.light),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
@@ -35,13 +44,24 @@ class Anypay extends StatelessWidget {
                 Colors.white), //text (and icon)
           ),
         ),
-        brightness: Brightness.light,
-        accentColor: AppController.blue,
         fontFamily: 'Ubuntu',
       );
       var darkTheme = ThemeData(
         primaryColorDark: Color(0xffCCCCCC),
         primaryColorLight: Color(0xFFFFFFFF),
+        textTheme: TextTheme(
+          bodyMedium: TextStyle(color: Color(0xFFFFFFFF)),
+          bodyLarge: TextStyle(color: Color(0xFFFFFFFF)),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(color: Color(0xFFFFFFFF)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+        ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+            background: Color(0xff222222),
+            secondary: Color(0xff2196f3),
+            brightness: Brightness.dark),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
@@ -51,8 +71,6 @@ class Anypay extends StatelessWidget {
                 Colors.black), //text (and icon)
           ),
         ),
-        accentColor: Color(0xff2196f3),
-        brightness: Brightness.dark,
         fontFamily: 'Ubuntu',
       );
 
