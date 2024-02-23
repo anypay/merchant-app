@@ -47,7 +47,6 @@ class Anypay extends StatelessWidget {
         ),
         fontFamily: 'Ubuntu',
       );
-      
       var darkTheme = ThemeData(
         primaryColorDark: Color(0xffCCCCCC),
         primaryColorLight: Color(0xFFFFFFFF),
