@@ -1,5 +1,4 @@
 import 'package:app/authentication.dart';
-import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_controller.dart';
@@ -15,7 +14,7 @@ class EditUrl extends StatelessWidget {
 }
 
 class EditUrlPage extends StatefulWidget {
-  EditUrlPage({Key? key,required this.title}) : super(key: key);
+  EditUrlPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -107,29 +106,32 @@ class _EditUrlPageState extends State<EditUrlPage> {
             child: ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    bool confirmed = await confirm(context,
-                        title: Text("Confirmation",style: TextStyle(color: AppController.enableDarkMode ? Colors.white : Colors.black),),
-                        content: Text(isUserLoggedIn == true
+                    showAlertDialog(
+                        context: context,
+                        title: "Confirmation",
+                        desc: isUserLoggedIn == true
                             ? "You will be logged out because you changed the API backend url"
-                            : "Are you sure you want to change the backend API url?"));
-                    if (confirmed) {
-                      final uri = Uri.parse(urlController.text);
-                      await FlutterSecureStorage(
-                          aOptions: AndroidOptions(
-                        encryptedSharedPreferences: true,
-                      )).write(key: "backend_url", value: urlController.text);
-                      setState(() {
-                        Client.protocol = uri.scheme;
-                        Client.domain = urlController.text
-                            .replaceAll("${uri.scheme}://", "");
-                        Client.host = "${Client.protocol}://${Client.domain}";
-                      });
-                      if (isUserLoggedIn == true) {
-                        Authentication.logout();
-                      } else {
-                        AppController.closeUntilPath('/login');
-                      }
-                    }
+                            : "Are you sure you want to change the backend API url?",
+                        onOkPressed: () async {
+                          final uri = Uri.parse(urlController.text);
+                          await FlutterSecureStorage(
+                              aOptions: AndroidOptions(
+                            encryptedSharedPreferences: true,
+                          )).write(
+                              key: "backend_url", value: urlController.text);
+                          setState(() {
+                            Client.protocol = uri.scheme;
+                            Client.domain = urlController.text
+                                .replaceAll("${uri.scheme}://", "");
+                            Client.host =
+                                "${Client.protocol}://${Client.domain}";
+                          });
+                          if (isUserLoggedIn == true) {
+                            Authentication.logout();
+                          } else {
+                            AppController.closeUntilPath('/login');
+                          }
+                        });
                   }
                 },
                 child: Text(
@@ -153,4 +155,34 @@ class _EditUrlPageState extends State<EditUrlPage> {
     });
   }
 
+  showAlertDialog(
+      {required BuildContext context,
+      required String title,
+      required String desc,
+      required onOkPressed}) {
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: onOkPressed,
+    );
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text(title,style: TextStyle(color: AppController.enableDarkMode ? Colors.white : Colors.black)),
+      content: Text(desc),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }
