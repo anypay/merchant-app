@@ -9,20 +9,20 @@ import '../native_storage.dart';
 class EditBackEndUrl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return EditUrlPage(title: "Edit Url");
+    return EditBackEndUrlPage(title: "Edit Backend Url");
   }
 }
 
-class EditUrlPage extends StatefulWidget {
-  EditUrlPage({Key? key, required this.title}) : super(key: key);
+class EditBackEndUrlPage extends StatefulWidget {
+  EditBackEndUrlPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _EditUrlPageState createState() => _EditUrlPageState();
+  _EditBackEndUrlState createState() => _EditBackEndUrlState();
 }
 
-class _EditUrlPageState extends State<EditUrlPage> {
+class _EditBackEndUrlState extends State<EditBackEndUrlPage> {
   var _successMessage = '';
 
   var denomination;
