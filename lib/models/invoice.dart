@@ -131,7 +131,7 @@ class Invoice {
 
   String urlStyleUri([useCurrency]) {
     useCurrency = useCurrency ?? currency;
-    String host = Client.host;
+    String host = Client.apiUri.toString();
     String protocol = {
       'BTC': 'bitcoin',
       'BCH': 'bitcoincash',
@@ -143,7 +143,7 @@ class Invoice {
   }
 
   String uriFor(currency, {format}) {
-    if (format == 'pay') return "pay:?r=${Client.host}/r/$uid";
+    if (format == 'pay') return "pay:?r=${Client.apiUri.toString()}/r/$uid";
     if (format == 'url') return urlStyleUri(currency);
 
     return paymentOptionFor(currency)['uri'];

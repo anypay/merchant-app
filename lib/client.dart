@@ -7,9 +7,7 @@ import 'dart:convert';
 import 'dart:io';
 
 class Client {
-  static String protocol = 'https';
-  static String domain = 'api.anypayx.com';
-  static String host = "$protocol://$domain";
+  static Uri apiUri = Uri(scheme: 'https', path: 'api.anypayx.com');
 
   static String humanize(String str) {
     return StringUtils.capitalize(str);
@@ -132,7 +130,7 @@ class Client {
 
     var response = await makeRequest('get',
       unauthorized: (() => Authentication.logout()),
-      uri: Uri.https(domain, '/invoices', {
+      uri: Uri.https(apiUri.path, '/invoices', {
         'limit': perPage.toString(),
         'offset': offset.toString(),
         'complete': 'true',
@@ -192,7 +190,7 @@ class Client {
 
   static Future<Map<dynamic, dynamic>> makeRequest(method, {path, uri, headers, body, requireAuth, basicAuth, unauthorized, genericErrorCodes}) async {
     try {
-      http.Request request = http.Request(method, uri ?? Uri.parse('$host$path'));
+      http.Request request = http.Request(method, uri ?? Uri.parse('${apiUri.toString()}$path'));
       if (requireAuth ?? false) request.headers['authorization'] = buildAuthHeader();
       if (basicAuth != null) request.headers['authorization'] = basicAuth;
       if (genericErrorCodes == null) genericErrorCodes = [500];
@@ -226,10 +224,10 @@ class Client {
           'body': { },
         };
       } else return {
-        'success': code == 200,
-        'message': humanize(message ?? ''),
-        'body': responseBody,
-      };
+          'success': code == 200,
+          'message': humanize(message ?? ''),
+          'body': responseBody,
+        };
     } on SocketException catch (_) {
       return {
         'message': 'Not connected to the internet',
@@ -237,5 +235,9 @@ class Client {
         'body': { },
       };
     }
+  }
+
+  static updateUri({required Uri uri}) {
+    apiUri = uri;
   }
 }

@@ -43,7 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void setBackendUrl() {
-    urlController.text = Client.host;
+    urlController.text = Client.apiUri.toString();
   }
 
   @override
@@ -99,7 +99,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           onTap: () {
-            Navigator.pushNamed(context, 'settings/edit_url');
+            Navigator.pushNamed(context, 'settings/backend_url');
           }),
     );
   }

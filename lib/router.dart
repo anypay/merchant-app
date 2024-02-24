@@ -1,4 +1,4 @@
-import 'package:app/routes/edt_url.dart';
+import 'package:app/routes/edit_backend_url.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
@@ -86,8 +86,8 @@ class AnyFluroRouter {
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
-      'settings/edit_url',
-      handler: newHandler(() => EditUrl(), []),
+      'settings/backend_url',
+      handler: newHandler(() => EditBackEndUrl(), []),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(

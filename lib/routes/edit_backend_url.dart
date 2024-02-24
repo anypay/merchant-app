@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/currencies.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../client.dart';
+import '../native_storage.dart';
 
-class EditUrl extends StatelessWidget {
+class EditBackEndUrl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EditUrlPage(title: "Edit Url");
@@ -24,11 +24,17 @@ class EditUrlPage extends StatefulWidget {
 
 class _EditUrlPageState extends State<EditUrlPage> {
   var _successMessage = '';
+
   var denomination;
+
   var symbol;
+
   var urlController = TextEditingController();
+
   GlobalKey<FormState> _formKey = GlobalKey();
+
   bool? isUserLoggedIn;
+
   @override
   void initState() {
     _rebuild();
@@ -43,7 +49,7 @@ class _EditUrlPageState extends State<EditUrlPage> {
   }
 
   void setBackendUrl() {
-    urlController.text = Client.host;
+    urlController.text = Client.apiUri.toString();
   }
 
   @override
@@ -90,12 +96,8 @@ class _EditUrlPageState extends State<EditUrlPage> {
                     labelText: 'Update Backend Url',
                     hintText: "http:// or https://"),
                 validator: (value) {
-                  if (value != null) {
-                    if (Uri.parse(value).isAbsolute) {
-                      return null;
-                    } else {
-                      return "Please provide valid url";
-                    }
+                  if (value != null && Uri.parse(value).isAbsolute) {
+                    return null;
                   } else {
                     return "Please provide valid url";
                   }
@@ -113,18 +115,11 @@ class _EditUrlPageState extends State<EditUrlPage> {
                             ? "You will be logged out because you changed the API backend url"
                             : "Are you sure you want to change the backend API url?",
                         onOkPressed: () async {
-                          final uri = Uri.parse(urlController.text);
-                          await FlutterSecureStorage(
-                              aOptions: AndroidOptions(
-                            encryptedSharedPreferences: true,
-                          )).write(
-                              key: "backend_url", value: urlController.text);
+                          await Storage.write(
+                              "backend_url", urlController.text);
                           setState(() {
-                            Client.protocol = uri.scheme;
-                            Client.domain = urlController.text
-                                .replaceAll("${uri.scheme}://", "");
-                            Client.host =
-                                "${Client.protocol}://${Client.domain}";
+                            Client.updateUri(
+                                uri: Uri.parse(urlController.text));
                           });
                           if (isUserLoggedIn == true) {
                             Authentication.logout();
@@ -171,7 +166,10 @@ class _EditUrlPageState extends State<EditUrlPage> {
       },
     );
     AlertDialog alert = AlertDialog(
-      title: Text(title,style: TextStyle(color: AppController.enableDarkMode ? Colors.white : Colors.black)),
+      title: Text(title,
+          style: TextStyle(
+              color:
+                  AppController.enableDarkMode ? Colors.white : Colors.black)),
       content: Text(desc),
       actions: [
         cancelButton,

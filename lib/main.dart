@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/router.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'client.dart';
+import 'native_storage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  setDefaultUrl();
   Authentication.checkForAuth().then((isAuthenticated) {
     AnyFluroRouter.setupRouter();
     runApp(Anypay(isAuthenticated));
   });
-  setDefaultUrl();
   Firebase.initializeApp();
 }
 
@@ -105,15 +105,10 @@ class Anypay extends StatelessWidget {
     });
   }
 }
-void setDefaultUrl() async {
-  final storedUrl = await FlutterSecureStorage(
-      aOptions: AndroidOptions(
-    encryptedSharedPreferences: true,
-  )).read(key: "backend_url");
 
+void setDefaultUrl() async {
+  final storedUrl = await Storage.read("backend_url");
   if (storedUrl != null) {
-    Uri url = Uri.parse(storedUrl);
-    Client.protocol = url.scheme;
-    Client.domain = storedUrl.replaceAll("${url.scheme}://", "");
+    Client.updateUri(uri: Uri.parse(storedUrl));
   }
 }
