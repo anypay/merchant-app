@@ -29,21 +29,24 @@ class _SettingsPageState extends State<SettingsPage> {
   var symbol;
   var urlController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey();
-
+  bool? isUserLoggedIn;
   @override
   void initState() {
     _rebuild();
     super.initState();
-        setBackendUrl();
-    Authentication.getAccount().then((account) {
-      _rebuild();
-    });
+    setBackendUrl();
+    isUserLoggedIn = Authentication.currentAccount.email != null;
+    if (isUserLoggedIn == true) {
+      Authentication.getAccount().then((account) {
+        _rebuild();
+      });
+    }
   }
 
   void setBackendUrl() {
     urlController.text = Client.host;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,22 +59,21 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: TextStyle(color: AppController.green),
               ),
               Container(
-                width: 300,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _EditUrlLink(),
-                    _SelectCurrencyLink(context),
-                    _BusinessInfoLink(context),
-                    _AddressesLink(context),
-                    CircleBackButton(
-                      margin: EdgeInsets.only(top: 20.0),
-                      backPath: 'navigation',
-                    ),
-                  ],
-                )
-              ),
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _EditUrlLink(),
+                      if (isUserLoggedIn == true) _SelectCurrencyLink(context),
+                      if (isUserLoggedIn == true) _BusinessInfoLink(context),
+                      if (isUserLoggedIn == true) _AddressesLink(context),
+                      CircleBackButton(
+                        margin: EdgeInsets.only(top: 20.0),
+                        backPath: 'navigation',
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),
@@ -79,59 +81,29 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
- Widget _EditUrlLink() {
-    return Form(
-      key: _formKey,
-      child: Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-                controller: urlController,
-                decoration: InputDecoration(
-                    labelText: 'Update Backend Url',
-                    hintText: "http:// or https://"),
-                validator: (value) {
-                  if (value != null) {
-                    if (Uri.parse(value).isAbsolute) {
-                      return null;
-                    } else {
-                      return "Please provide valid url";
-                    }
-                  } else {
-                    return "Please provide valid url";
-                  }
-                }),
+  Widget _EditUrlLink() {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.all(AppController.scale(20.0)),
+                  child: Text("Edit backend URL",
+                      style: TextStyle(
+                        fontSize: 22,
+                      ))),
+              Icon(Icons.edit),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    bool confirmed = await confirm(context,
-                          title: Text("Confirmation"),
-                          content: Text(
-                              "You will be logged out because you changed the API backend url"));
-                    if (confirmed) {
-                      final uri = Uri.parse(urlController.text);
-                      await FlutterSecureStorage(
-                          aOptions: AndroidOptions(
-                        encryptedSharedPreferences: true,
-                      )).write(key: "backend_url", value: urlController.text);
-                      Client.protocol = uri.scheme;
-                      Client.domain = uri.host;
-                      Authentication.logout();
-                    }
-                  }
-                },
-                child: Text(
-                  "Save",
-                )),
-          )
-        ],
-      ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/edit_url');
+          }),
     );
   }
-  
+
   void _rebuild() {
     setState(() {
       if (Authentication.currentAccount.denomination != null) {
@@ -148,25 +120,25 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(AppController.scale(20.0)),
-              child: Text("Addresses", style: TextStyle(
-                fontSize: 22,
-              ))
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.all(AppController.scale(20.0)),
+                  child: Text("Addresses", style: TextStyle(
+                        fontSize: 22,
+                      ))
             ),
-            Icon(Icons.edit),
-          ],
-        ),
-        onTap: () {
-          Navigator.pushNamed(context, 'settings/addresses').then((value) {
-            _successMessage = '';
-            _rebuild();
-          });
-        }
+              Icon(Icons.edit),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/addresses').then((value) {
+              _successMessage = '';
+              _rebuild();
+            });
+          }
       ),
     );
   }
@@ -175,33 +147,33 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(AppController.scale(20.0)),
-              child: Row(
-                children: <Widget>[
-                  Text("Currency ", style: TextStyle(
-                    fontSize: 22,
-                  )),
-                  Text("($symbol$denomination)", style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  )),
-                ],
-              )
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.all(AppController.scale(20.0)),
+                  child: Row(
+                    children: <Widget>[
+                      Text("Currency ", style: TextStyle(
+                            fontSize: 22,
+                          )),
+                      Text("($symbol$denomination)", style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          )),
+                    ],
+                  )
             ),
-            Icon(Icons.edit),
-          ],
-        ),
-        onTap: () {
-          Navigator.pushNamed(context, 'settings/currency').then((value) {
-            _successMessage = 'Saved!';
-            _rebuild();
-          });
-        }
+              Icon(Icons.edit),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/currency').then((value) {
+              _successMessage = 'Saved!';
+              _rebuild();
+            });
+          }
       ),
     );
   }
@@ -210,22 +182,22 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.all(20.0),
       child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(AppController.scale(20.0)),
-              child: Text("Business Info", style: TextStyle(
-                fontSize: 22,
-              )),
-            ),
-            Icon(Icons.edit),
-          ],
-        ),
-        onTap: () {
-          Navigator.pushNamed(context, 'settings/business-info');
-        }
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(AppController.scale(20.0)),
+                child: Text("Business Info", style: TextStyle(
+                      fontSize: 22,
+                    )),
+              ),
+              Icon(Icons.edit),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/business-info');
+          }
       ),
     );
   }

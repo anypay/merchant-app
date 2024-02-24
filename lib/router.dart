@@ -1,3 +1,4 @@
+import 'package:app/routes/edt_url.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
@@ -82,6 +83,11 @@ class AnyFluroRouter {
     router.define(
       'settings/currency',
       handler: newHandler(() => SetCurrency(), []),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      'settings/edit_url',
+      handler: newHandler(() => EditUrl(), []),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
