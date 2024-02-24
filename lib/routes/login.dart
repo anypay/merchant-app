@@ -48,8 +48,8 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image(
-                    width: 300,
-                    image: AssetImage(AppController.logoImagePath())
+                  width: 300,
+                  image: AssetImage(AppController.logoImagePath())
                 ),
                 _TextFields(),
                 _Links(context),
@@ -78,12 +78,12 @@ class _LoginPageState extends State<LoginPage> {
         }
         if (response['success']) {
           AppController.closeUntilPath('/new-invoice');
-        } else
-          setState(() {
-            var body = response['body'];
-            var payload = body['payload'];
-            _errorMessage = payload['message'];
-          });
+        }
+        else setState(() {
+          var body = response['body'];
+          var payload = body['payload'];
+          _errorMessage = payload['message'];
+        });
       });
     }
   }
