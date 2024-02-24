@@ -150,63 +150,64 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 20.0),
-            child: _submitting
-                ? SpinKitCircle(color: AppController.blue)
-                : GestureDetector(
-                    child: Text('Login',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppController.blue,
-                          fontSize: 18,
-                        )),
-                    onTap: _submitForm,
-                  ),
+            child: _submitting ?
+              SpinKitCircle(color: AppController.blue) :
+              GestureDetector(
+                child: Text('Login', style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppController.blue,
+                  fontSize: 18,
+                )),
+                onTap: _submitForm,
+              ),
           ),
           Container(
             child: GestureDetector(
-                child: Text('Sign Up',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppController.blue,
-                      fontSize: 18,
-                    )),
-                onTap: () {
-                  Navigator.pushNamed(context, 'registration');
-                }),
+              child: Text('Sign Up', style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppController.blue,
+                fontSize: 18,
+              )),
+              onTap: () {
+                Navigator.pushNamed(context, 'registration');
+              }
+            ),
           ),
           Container(
             margin: EdgeInsets.only(top: 20.0),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                      child: Text('Forgot Password?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppController.blue,
-                            fontSize: 18,
-                          )),
-                      onTap: () {
-                        Navigator.pushNamed(context, 'password-reset');
-                      }),
-                ]),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  child: Text('Forgot Password?', style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppController.blue,
+                    fontSize: 18,
+                  )),
+                  onTap: () {
+                    Navigator.pushNamed(context, 'password-reset');
+                  }
+                ),
+              ]
+            ),
           ),
           Container(
             margin: EdgeInsets.only(top: 20.0),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  GestureDetector(
-                      child: Text('Settings',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppController.blue,
-                            fontSize: 18,
-                          )),
-                      onTap: () {
-                        Navigator.pushNamed(context, 'settings');
-                      }),
-                ]),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  child: Text('Settings', style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppController.blue,
+                    fontSize: 18,
+                  )),
+                  onTap: () {
+                    Navigator.pushNamed(context, 'settings');
+                  }
+                ),
+              ]
+            ),
           ),
         ],
       ),
