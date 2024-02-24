@@ -224,10 +224,10 @@ class Client {
           'body': { },
         };
       } else return {
-          'success': code == 200,
-          'message': humanize(message ?? ''),
-          'body': responseBody,
-        };
+        'success': code == 200,
+        'message': humanize(message ?? ''),
+        'body': responseBody,
+      };
     } on SocketException catch (_) {
       return {
         'message': 'Not connected to the internet',
