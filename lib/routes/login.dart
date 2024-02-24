@@ -97,50 +97,50 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _TextFields() {
     return Container(
-        width: 300,
-        margin: EdgeInsets.only(top: 40.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                _errorMessage,
-                style: TextStyle(color: AppController.red),
+      width: 300,
+      margin: EdgeInsets.only(top: 40.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(_errorMessage,
+              style: TextStyle(color: AppController.red),
+            ),
+            TextFormField(
+              autofillHints: [AutofillHints.username],
+              controller: email,
+              decoration: InputDecoration(
+                labelText: 'Email'
               ),
-              TextFormField(
-                autofillHints: [AutofillHints.username],
-                controller: email,
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value != null && value.isEmpty)
-                    return 'Please enter some text';
-                  else if (!EmailValidator.validate(value!.trim()))
-                    return "That doesn't look like an email address";
-                  return null;
-                },
-                onFieldSubmitted: (value) {
-                  _submitForm();
-                },
+              validator: (value) {
+                if (value != null && value.isEmpty) return 'Please enter some text';
+                else if (!EmailValidator.validate(value!.trim()))
+                  return "That doesn't look like an email address";
+                return null;
+              },
+              onFieldSubmitted: (value) {
+                _submitForm();
+              },
+            ),
+            TextFormField(
+              obscureText: true,
+              controller: password,
+              decoration: InputDecoration(
+                labelText: 'Password',
               ),
-              TextFormField(
-                obscureText: true,
-                controller: password,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                ),
-                validator: (value) {
-                  if (value != null && value.isEmpty)
-                    return 'Please enter some text';
-                  return null;
-                },
-                onFieldSubmitted: (value) {
-                  _submitForm();
-                },
-              ),
-            ],
-          ),
-        ));
+              validator: (value) {
+                if (value != null && value.isEmpty) return 'Please enter some text';
+                return null;
+              },
+              onFieldSubmitted: (value) {
+                _submitForm();
+              },
+            ),
+          ],
+        ),
+      )
+    );
   }
 
   Widget _Links(context) {
