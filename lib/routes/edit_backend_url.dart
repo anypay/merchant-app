@@ -33,19 +33,11 @@ class _EditBackEndUrlState extends State<EditBackEndUrlPage> {
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  bool? isUserLoggedIn;
 
   @override
   void initState() {
-    _rebuild();
     super.initState();
     setBackendUrl();
-    isUserLoggedIn = Authentication.currentAccount.email != null;
-    if (isUserLoggedIn == true) {
-      Authentication.getAccount().then((account) {
-        _rebuild();
-      });
-    }
   }
 
   void setBackendUrl() {
@@ -87,69 +79,49 @@ class _EditBackEndUrlState extends State<EditBackEndUrlPage> {
   Widget _EditUrlLink() {
     return Form(
       key: _formKey,
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: TextFormField(
-                controller: urlController,
-                decoration: InputDecoration(
-                    labelText: 'Update Backend Url',
-                    hintText: "http:// or https://"),
-                validator: (value) {
-                  if (value != null && Uri.parse(value).isAbsolute) {
-                    return null;
-                  } else {
-                    return "Please provide valid url";
-                  }
-                }),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: ElevatedButton(
-                onPressed: () async {
+          TextFormField(
+              controller: urlController,
+              decoration: InputDecoration(
+                  labelText: 'Update Backend Url',
+                  hintText: "http:// or https://"),
+              validator: (value) {
+                if (value != null && Uri.parse(value).isAbsolute) {
+                  return null;
+                } else {
+                  return "Please provide valid url";
+                }
+              }),
+          Container(
+            margin: EdgeInsets.only(top: 40.0),
+            child: GestureDetector(
+              child: Text('SAVE', style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppController.blue,
+                fontSize: 18,
+              )),
+              onTap: () async {
                   if (_formKey.currentState!.validate()) {
                     showAlertDialog(
                         context: context,
                         title: "Confirmation",
-                        desc: isUserLoggedIn == true
-                            ? "You will be logged out because you changed the API backend url"
-                            : "Are you sure you want to change the backend API url?",
+                        desc: "Are you sure you want to change the backend API url?",
                         onOkPressed: () async {
                           await Storage.write(
                               "backend_url", urlController.text);
-                          setState(() {
                             Client.updateUri(
                                 uri: Uri.parse(urlController.text));
-                          });
-                          if (isUserLoggedIn == true) {
                             Authentication.logout();
-                          } else {
-                            AppController.closeUntilPath('/login');
-                          }
                         });
                   }
                 },
-                child: Text(
-                  "Save",
-                )),
-          )
+            ),
+          ),
         ],
       ),
     );
   }
-
-  void _rebuild() {
-    setState(() {
-      if (Authentication.currentAccount.denomination != null) {
-        denomination = Authentication.currentAccount.denomination;
-        symbol = Currencies.all[denomination]!['symbol'];
-      } else {
-        denomination = 'USD';
-        symbol = '\$';
-      }
-    });
-  }
-
   showAlertDialog(
       {required BuildContext context,
       required String title,
