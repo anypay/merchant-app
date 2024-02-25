@@ -6,10 +6,12 @@ import 'package:app/app_controller.dart';
 import 'package:app/router.dart';
 import 'client.dart';
 import 'native_storage.dart';
+import 'package_info_helper.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setDefaultUrl();
+  PackageInfoPlusHelper.init();
   Authentication.checkForAuth().then((isAuthenticated) {
     AnyFluroRouter.setupRouter();
     runApp(Anypay(isAuthenticated));
