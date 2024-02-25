@@ -26,24 +26,17 @@ class _SettingsPageState extends State<SettingsPage> {
   var _successMessage = '';
   var denomination;
   var symbol;
-  var urlController = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey();
   bool? isUserLoggedIn;
   @override
   void initState() {
     _rebuild();
     super.initState();
-    setBackendUrl();
     isUserLoggedIn = Authentication.currentAccount.email != null;
     if (isUserLoggedIn == true) {
       Authentication.getAccount().then((account) {
         _rebuild();
       });
     }
-  }
-
-  void setBackendUrl() {
-    urlController.text = Client.apiUri.toString();
   }
 
   @override
@@ -63,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    _EditUrlLink(),
+                    _EditUrlLink(context),
                     if (isUserLoggedIn == true) _SelectCurrencyLink(context),
                     if (isUserLoggedIn == true) _BusinessInfoLink(context),
                     if (isUserLoggedIn == true) _AddressesLink(context),
@@ -81,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _EditUrlLink() {
+  Widget _EditUrlLink(context) {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: GestureDetector(
