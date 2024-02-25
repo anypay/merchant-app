@@ -1,3 +1,4 @@
+import 'package:app/routes/edit_backend_url.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
@@ -82,6 +83,11 @@ class AnyFluroRouter {
     router.define(
       'settings/currency',
       handler: newHandler(() => SetCurrency(), []),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      'settings/backend_url',
+      handler: newHandler(() => EditBackEndUrl(), []),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(

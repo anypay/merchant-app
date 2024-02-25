@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/router.dart';
+import 'client.dart';
+import 'native_storage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  setDefaultUrl();
   Authentication.checkForAuth().then((isAuthenticated) {
     AnyFluroRouter.setupRouter();
     runApp(Anypay(isAuthenticated));
@@ -39,13 +42,15 @@ class Anypay extends StatelessWidget {
         ),
         fontFamily: 'Ubuntu',
       );
-
       var darkTheme = ThemeData(
         primaryColorDark: Color(0xffCCCCCC),
         primaryColorLight: Color(0xFFFFFFFF),
         textTheme: TextTheme(
           bodyMedium: TextStyle(color: Color(0xFFFFFFFF)),
           bodyLarge: TextStyle(color: Color(0xFFFFFFFF)),
+        ),
+        dialogTheme: DialogTheme(
+          titleTextStyle: TextStyle(color: Color(0xFFFFFFFF),fontSize: 24),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: TextStyle(color: Color(0xFFFFFFFF)),
@@ -85,5 +90,12 @@ class Anypay extends StatelessWidget {
         theme: theme,
       );
     });
+  }
+}
+
+void setDefaultUrl() async {
+  final storedUrl = await Storage.read("backend_url");
+  if (storedUrl != null) {
+    Client.updateUri(uri: Uri.parse(storedUrl));
   }
 }

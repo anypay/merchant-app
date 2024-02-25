@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:app/app_controller.dart';
 import 'package:app/currencies.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../client.dart';
 
 class Settings extends StatelessWidget {
   @override
@@ -24,14 +26,17 @@ class _SettingsPageState extends State<SettingsPage> {
   var _successMessage = '';
   var denomination;
   var symbol;
-
+  bool? isUserLoggedIn;
   @override
   void initState() {
     _rebuild();
     super.initState();
-    Authentication.getAccount().then((account) {
-      _rebuild();
-    });
+    isUserLoggedIn = Authentication.currentAccount.email != null;
+    if (isUserLoggedIn == true) {
+      Authentication.getAccount().then((account) {
+        _rebuild();
+      });
+    }
   }
 
   @override
@@ -51,9 +56,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    _SelectCurrencyLink(context),
-                    _BusinessInfoLink(context),
-                    _AddressesLink(context),
+                    _EditUrlLink(context),
+                    if (isUserLoggedIn == true) _SelectCurrencyLink(context),
+                    if (isUserLoggedIn == true) _BusinessInfoLink(context),
+                    if (isUserLoggedIn == true) _AddressesLink(context),
                     CircleBackButton(
                       margin: EdgeInsets.only(top: 20.0),
                       backPath: 'navigation',
@@ -65,6 +71,29 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _EditUrlLink(context) {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.all(AppController.scale(20.0)),
+                  child: Text("Backend URL",
+                      style: TextStyle(
+                        fontSize: 22,
+                      ))),
+              Icon(Icons.edit),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, 'settings/backend_url');
+          }),
     );
   }
 

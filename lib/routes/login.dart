@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/app_controller.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,13 @@ class _LoginPageState extends State<LoginPage> {
       });
       Client.authenticate(email.text, password.text).then((response) {
         _submitting = false;
+        if (response['body'] == null || response['body'].isEmpty) {
+          setState(() {
+            _errorMessage =
+                "An unknown error occured, try changing the backend url.";
+          });
+          return;
+        }
         if (response['success']) {
           AppController.closeUntilPath('/new-invoice');
         }
@@ -141,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(bottom: _submitting ? 20.0 : 40.0),
+            margin: EdgeInsets.only(bottom: 20.0),
             child: _submitting ?
               SpinKitCircle(color: AppController.blue) :
               GestureDetector(
@@ -183,9 +191,26 @@ class _LoginPageState extends State<LoginPage> {
               ]
             ),
           ),
+          Container(
+            margin: EdgeInsets.only(top: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  child: Text('Settings', style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppController.blue,
+                    fontSize: 18,
+                  )),
+                  onTap: () {
+                    Navigator.pushNamed(context, 'settings');
+                  }
+                ),
+              ]
+            ),
+          ),
         ],
       ),
     );
   }
-
 }
