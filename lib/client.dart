@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'dart:io';
 
 class Client {
-  static Uri apiUri = Uri(scheme: 'https', path: 'api.anypayx.com');
+  static Uri apiUri = Uri(scheme: 'https', host: 'api.anypayx.com');
 
   static String humanize(String str) {
     return StringUtils.capitalize(str);
@@ -130,7 +130,7 @@ class Client {
 
     var response = await makeRequest('get',
       unauthorized: (() => Authentication.logout()),
-      uri: Uri.https(apiUri.path, '/invoices', {
+      uri: Uri.https(apiUri.host, '/invoices', {
         'limit': perPage.toString(),
         'offset': offset.toString(),
         'complete': 'true',
