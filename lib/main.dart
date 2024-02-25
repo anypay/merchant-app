@@ -59,7 +59,8 @@ class Anypay extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch().copyWith(
             background: Color(0xff222222),
             secondary: Color(0xff2196f3),
-            brightness: Brightness.dark),
+            brightness: Brightness.dark
+        ),
         fontFamily: 'Ubuntu',
       );
 
