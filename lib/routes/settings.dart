@@ -91,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: <Widget>[
               Container(
                   margin: EdgeInsets.all(AppController.scale(20.0)),
-                  child: Text("Edit backend URL",
+                  child: Text("Backend URL",
                       style: TextStyle(
                         fontSize: 22,
                       ))),

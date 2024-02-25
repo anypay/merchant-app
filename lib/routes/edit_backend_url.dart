@@ -23,12 +23,6 @@ class EditBackEndUrlPage extends StatefulWidget {
 }
 
 class _EditBackEndUrlState extends State<EditBackEndUrlPage> {
-  var _successMessage = '';
-
-  var denomination;
-
-  var symbol;
-
   var urlController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey();
@@ -52,10 +46,6 @@ class _EditBackEndUrlState extends State<EditBackEndUrlPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                _successMessage,
-                style: TextStyle(color: AppController.green),
-              ),
               Container(
                   width: 300,
                   child: Column(
@@ -84,7 +74,7 @@ class _EditBackEndUrlState extends State<EditBackEndUrlPage> {
           TextFormField(
               controller: urlController,
               decoration: InputDecoration(
-                  labelText: 'Update Backend Url',
+                  labelText: 'Backend Url',
                   hintText: "http:// or https://"),
               validator: (value) {
                 if (value != null && Uri.parse(value).isAbsolute) {
@@ -138,10 +128,7 @@ class _EditBackEndUrlState extends State<EditBackEndUrlPage> {
       },
     );
     AlertDialog alert = AlertDialog(
-      title: Text(title,
-          style: TextStyle(
-              color:
-                  AppController.enableDarkMode ? Colors.white : Colors.black)),
+      title: Text(title),
       content: Text(desc),
       actions: [
         cancelButton,

@@ -39,15 +39,6 @@ class Anypay extends StatelessWidget {
             background: AppController.white,
             secondary: AppController.blue,
             brightness: Brightness.light),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.black,
-            ), //button color
-            foregroundColor: MaterialStateProperty.all<Color>(
-                Colors.white), //text (and icon)
-          ),
-        ),
         fontFamily: 'Ubuntu',
       );
       var darkTheme = ThemeData(
@@ -56,6 +47,9 @@ class Anypay extends StatelessWidget {
         textTheme: TextTheme(
           bodyMedium: TextStyle(color: Color(0xFFFFFFFF)),
           bodyLarge: TextStyle(color: Color(0xFFFFFFFF)),
+        ),
+        dialogTheme: DialogTheme(
+          titleTextStyle: TextStyle(color: Color(0xFFFFFFFF),fontSize: 24),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: TextStyle(color: Color(0xFFFFFFFF)),
@@ -66,15 +60,6 @@ class Anypay extends StatelessWidget {
             background: Color(0xff222222),
             secondary: Color(0xff2196f3),
             brightness: Brightness.dark),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.white,
-            ), //button color
-            foregroundColor: MaterialStateProperty.all<Color>(
-                Colors.black), //text (and icon)
-          ),
-        ),
         fontFamily: 'Ubuntu',
       );
 
