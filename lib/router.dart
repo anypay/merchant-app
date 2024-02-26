@@ -15,6 +15,7 @@ import 'package:app/routes/payments.dart';
 import 'package:app/routes/payment.dart';
 import 'package:app/routes/invoice.dart';
 import 'package:app/routes/login.dart';
+import 'routes/about.dart';
 
 class AnyFluroRouter {
   static FluroRouter router = FluroRouter();
@@ -93,6 +94,11 @@ class AnyFluroRouter {
     router.define(
       'settings/addresses',
       handler: newHandler(() => Addresses(), []),
+      transitionType: TransitionType.inFromBottom,
+    );
+    router.define(
+      'settings/about',
+      handler: newHandler(() => About(), []),
       transitionType: TransitionType.inFromBottom,
     );
     router.define(
