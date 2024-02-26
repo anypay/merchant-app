@@ -147,14 +147,14 @@ class _SettingsPageState extends State<SettingsPage> {
             children: <Widget>[
               Container(
                   margin: EdgeInsets.all(AppController.scale(20.0)),
-                  child: Text("About Us",
+                  child: Text("About",
                       style: TextStyle(
                         fontSize: 22,
                       ))),
             ],
           ),
           onTap: () {
-            Navigator.pushNamed(context, 'settings/about_us');
+            Navigator.pushNamed(context, 'settings/about');
           }),
     );
   }

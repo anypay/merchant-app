@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:app/back_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AboutUs extends StatelessWidget {
+import '../app_controller.dart';
+
+class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,9 +14,9 @@ class AboutUs extends StatelessWidget {
           child: SafeArea(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                "AnyPay",
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w500),
+              Image(
+                width: 300,
+                image: AssetImage(AppController.logoImagePath())
               ),
               SizedBox(
                 height: 10,
